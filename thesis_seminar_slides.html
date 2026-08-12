@@ -44,39 +44,110 @@
 
 <!-- 2 · Problem: story -->
 <section class="slide">
-  <div class="eyebrow">Problem statement</div>
-  <h2>The front view hides the 3D error.</h2>
+  <div class="eyebrow">Problem statement · game scene setup</div>
+  <h2>Text can name the assets. Spatial intent gets lost.</h2>
   <div class="rule"></div>
-  <div class="case-flow" data-motion-group="scale">
-    <figure class="case-panel">
-      <span class="tag a">Front view · before physics</span>
-      <div class="case-image-frame">
-        <img class="case-image" src="assets/research-cases/simuscene-sc09-front.png" alt="Front view of a SAM3D reconstruction in which a pen appears to sit inside a cup">
-      </div>
-      <figcaption><strong>Looks plausible</strong><br>The pen appears contained by the cup.</figcaption>
+  <div class="spatial-story" data-motion-group="scale">
+    <figure class="scene-plan intended">
+      <span class="tag a">What the designer means</span>
+      <svg viewBox="0 0 430 270" role="img" aria-label="Intended top-down market layout with two stalls around a fountain and a clear route to the gate">
+        <defs>
+          <pattern id="intent-grid" width="22" height="22" patternUnits="userSpaceOnUse">
+            <path d="M22 0H0V22" fill="none" stroke="#d9d7d1" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="430" height="270" rx="5" fill="#f5f4f0"/>
+        <rect width="430" height="270" rx="5" fill="url(#intent-grid)"/>
+        <path d="M18 223H410" stroke="#dbe8f2" stroke-width="56" stroke-linecap="round"/>
+        <path d="M18 223H410" stroke="#6f96b8" stroke-width="2" stroke-dasharray="8 7"/>
+        <text x="170" y="229" fill="#587a99" font-size="11" font-weight="700" letter-spacing="1.5">CLEAR ROUTE</text>
+
+        <g transform="translate(35 38)">
+          <rect width="122" height="58" rx="5" fill="#e8d5ba" stroke="#a8632a" stroke-width="2"/>
+          <path d="M12 12H110M12 29H110M12 46H110" stroke="#b98758" stroke-width="3" opacity=".7"/>
+          <text x="61" y="78" text-anchor="middle" fill="#70441f" font-size="12" font-weight="700">STALL A</text>
+        </g>
+        <g transform="translate(273 38)">
+          <rect width="122" height="58" rx="5" fill="#e8d5ba" stroke="#a8632a" stroke-width="2"/>
+          <path d="M12 12H110M12 29H110M12 46H110" stroke="#b98758" stroke-width="3" opacity=".7"/>
+          <text x="61" y="78" text-anchor="middle" fill="#70441f" font-size="12" font-weight="700">STALL B</text>
+        </g>
+
+        <circle cx="215" cy="99" r="39" fill="#dbe8f2" stroke="#1f4e79" stroke-width="3"/>
+        <circle cx="215" cy="99" r="20" fill="#f5f4f0" stroke="#6f96b8" stroke-width="2"/>
+        <text x="215" y="154" text-anchor="middle" fill="#1f4e79" font-size="12" font-weight="700">FOUNTAIN</text>
+
+        <g transform="translate(43 128)">
+          <rect width="30" height="26" rx="2" fill="#cfaa7c" stroke="#8b5728"/>
+          <rect x="34" width="30" height="26" rx="2" fill="#cfaa7c" stroke="#8b5728"/>
+          <text x="32" y="44" text-anchor="middle" fill="#70441f" font-size="11" font-weight="700">CRATES</text>
+        </g>
+
+        <path d="M414 192v62" stroke="#3d6b4a" stroke-width="8"/>
+        <text x="398" y="184" text-anchor="middle" fill="#3d6b4a" font-size="11" font-weight="700">GATE</text>
+      </svg>
+      <figcaption>Exact placement · scale · orientation · clearance</figcaption>
     </figure>
 
-    <div class="case-reveal" aria-hidden="true">
-      <svg viewBox="0 0 96 128" role="img">
-        <path d="M18 72c0-25 18-44 43-44" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-        <path d="m54 18 15 10-14 11" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M48 57v35" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-        <path d="m38 82 10 12 10-12" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span>orbit<br>+ gravity</span>
+    <div class="prompt-bottleneck">
+      <span class="tag n">Text prompt</span>
+      <blockquote>“Two market stalls around a fountain. Crates beside the left stall. Keep a clear route to the gate.”</blockquote>
+      <div class="prompt-loss">
+        <span>distance <b>?</b></span>
+        <span>rotation <b>?</b></span>
+        <span>scale <b>?</b></span>
+        <span>clearance <b>?</b></span>
+      </div>
+      <div class="guess-arrow" aria-hidden="true">→</div>
+      <small>The model fills in what text leaves open.</small>
     </div>
 
-    <figure class="case-panel failure">
-      <span class="tag r">Same reconstruction · physics on</span>
-      <div class="case-image-frame">
-        <img class="case-image" src="assets/research-cases/simuscene-sc09-physics.png" alt="The same SAM3D reconstruction after gravity reveals the pen outside and behind the cup">
-      </div>
-      <figcaption><strong>Spatially impossible</strong><br>The pen was never stably supported inside.</figcaption>
+    <figure class="scene-plan guessed">
+      <span class="tag r">What the model may guess</span>
+      <svg viewBox="0 0 430 270" role="img" aria-label="AI-guessed market layout with a rotated oversized stall, overlapping fountain, and blocked route">
+        <defs>
+          <pattern id="guess-grid" width="22" height="22" patternUnits="userSpaceOnUse">
+            <path d="M22 0H0V22" fill="none" stroke="#ddd5d2" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="430" height="270" rx="5" fill="#f7f1ef"/>
+        <rect width="430" height="270" rx="5" fill="url(#guess-grid)"/>
+        <path d="M18 223H410" stroke="#f0d9d4" stroke-width="56" stroke-linecap="round"/>
+        <path d="M18 223H410" stroke="#b05a4e" stroke-width="2" stroke-dasharray="8 7"/>
+
+        <g transform="translate(24 35)">
+          <rect width="162" height="76" rx="5" fill="#e8d5ba" stroke="#9c3a2e" stroke-width="3"/>
+          <path d="M14 16H148M14 38H148M14 60H148" stroke="#b98758" stroke-width="4" opacity=".7"/>
+          <text x="81" y="96" text-anchor="middle" fill="#9c3a2e" font-size="11" font-weight="700">WRONG SCALE</text>
+        </g>
+
+        <g transform="translate(275 90) rotate(16 64 30)">
+          <rect width="128" height="60" rx="5" fill="#e8d5ba" stroke="#9c3a2e" stroke-width="3"/>
+          <path d="M12 13H116M12 30H116M12 47H116" stroke="#b98758" stroke-width="3" opacity=".7"/>
+        </g>
+
+        <circle cx="262" cy="145" r="43" fill="#dbe8f2" stroke="#9c3a2e" stroke-width="4"/>
+        <circle cx="262" cy="145" r="22" fill="#f7f1ef" stroke="#b05a4e" stroke-width="2"/>
+        <path d="M299 119l25-20" stroke="#9c3a2e" stroke-width="2"/>
+        <text x="328" y="95" fill="#9c3a2e" font-size="11" font-weight="700">INTERSECTION</text>
+
+        <g transform="translate(326 208)">
+          <rect width="32" height="28" rx="2" fill="#cfaa7c" stroke="#9c3a2e" stroke-width="2"/>
+          <rect x="35" width="32" height="28" rx="2" fill="#cfaa7c" stroke="#9c3a2e" stroke-width="2"/>
+        </g>
+        <path d="M297 223h-66" stroke="#9c3a2e" stroke-width="3"/>
+        <path d="m239 216-10 7 10 7" fill="none" stroke="#9c3a2e" stroke-width="3"/>
+        <text x="266" y="207" text-anchor="middle" fill="#9c3a2e" font-size="11" font-weight="700">PATH BLOCKED</text>
+
+        <path d="M414 192v62" stroke="#3d6b4a" stroke-width="8"/>
+        <text x="398" y="184" text-anchor="middle" fill="#3d6b4a" font-size="11" font-weight="700">GATE</text>
+      </svg>
+      <figcaption>Every asset is valid. The arrangement is not.</figcaption>
     </figure>
   </div>
-  <div class="case-takeaway">
-    <strong>A correct-looking image is not evidence of a correct scene.</strong>
-    <span>Continuous SAM3D result from SimuScene <span class="cite">[23]</span></span>
+  <div class="spatial-takeaway">
+    <strong>A scene needs transforms—not just nouns and prepositions.</strong>
+    <span>where · how large · which way · how far</span>
   </div>
 </section>
 
@@ -710,7 +781,6 @@
     <div class="ref"><b>[20]</b><span>Paas, F. (1992). <em>Training strategies for attaining transfer of problem-solving skill in statistics.</em> Journal of Educational Psychology, 84(4), 429–434.</span></div>
     <div class="ref"><b>[21]</b><span>Lewis, J. R., Utesch, B. S., &amp; Maher, D. E. (2013). <em>UMUX-LITE: When there’s no time for the SUS.</em> CHI ’13, 2099–2102. doi:10.1145/2470654.2481287.</span></div>
     <div class="ref"><b>[22]</b><span>Cherry, E., &amp; Latulipe, C. (2014). <em>Quantifying the creativity support of digital tools through the Creativity Support Index.</em> ACM TOCHI, 21(4), Article 21.</span></div>
-    <div class="ref"><b>[23]</b><span>Lee, I., Baik, S., Kim, S., Kim, H., Cha, H., &amp; Joo, H. (2026). <em>SimuScene: Simulation-ready compositional 3D scene reconstruction from a single image.</em> arXiv:2606.03994.</span></div>
   </div>
 </section>
 

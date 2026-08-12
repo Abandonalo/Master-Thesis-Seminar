@@ -333,17 +333,17 @@
     height: 6px;
   }
 
-  /* Real research case used on the opening problem slide. */
-  .case-flow {
+  /* Opening problem story: spatial intent compressed through text. */
+  .spatial-story {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 92px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) 250px minmax(0, 1fr);
     flex: 1;
     min-height: 0;
     align-items: stretch;
-    gap: 18px;
+    gap: 20px;
   }
 
-  .case-panel {
+  .scene-plan {
     display: flex;
     min-width: 0;
     flex-direction: column;
@@ -353,61 +353,87 @@
     border-radius: 8px;
   }
 
-  .case-panel.failure {
+  .scene-plan.guessed {
     background: var(--red-soft);
     border-color: #e8cfc9;
   }
 
-  .case-image-frame {
-    display: flex;
+  .scene-plan svg {
+    width: 100%;
     flex: 1;
     min-height: 0;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: #fff;
     border: 1px solid var(--rule);
     border-radius: 5px;
   }
 
-  .case-panel.failure .case-image-frame {
+  .scene-plan.guessed svg {
     border-color: #dfbbb4;
   }
 
-  .case-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .case-panel figcaption {
+  .scene-plan figcaption {
     margin-top: 12px;
     color: var(--ink-soft);
     font-size: 15.5px;
     line-height: 1.35;
   }
 
-  .case-reveal {
+  .prompt-bottleneck {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .12em;
-    line-height: 1.45;
     text-align: center;
-    text-transform: uppercase;
   }
 
-  .case-reveal svg {
-    width: 58px;
-    height: 78px;
-    margin-bottom: 6px;
+  .prompt-bottleneck blockquote {
+    margin: 2px 0 14px;
+    padding: 16px 15px;
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.42;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
   }
 
-  .case-takeaway {
+  .prompt-loss {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .prompt-loss span {
+    padding: 6px 5px;
+    color: var(--ink-soft);
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--red-soft);
+    border: 1px solid #ead2cd;
+    border-radius: 4px;
+  }
+
+  .prompt-loss b {
+    color: var(--red);
+  }
+
+  .guess-arrow {
+    margin: 10px 0 2px;
+    color: var(--red);
+    font-size: 31px;
+    line-height: 1;
+  }
+
+  .prompt-bottleneck small {
+    max-width: 200px;
+    color: var(--ink-soft);
+    font-size: 11.5px;
+    line-height: 1.35;
+  }
+
+  .spatial-takeaway {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -421,8 +447,14 @@
     border-radius: 7px;
   }
 
-  .case-takeaway strong {
+  .spatial-takeaway strong {
     font-size: 19px;
+  }
+
+  .spatial-takeaway span {
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: .035em;
   }
 
   .tag {
