@@ -45,40 +45,38 @@
 <!-- 2 · Problem: story -->
 <section class="slide">
   <div class="eyebrow">Problem statement</div>
-  <h2>Looks right in 2D. Breaks in 3D.</h2>
+  <h2>The front view hides the 3D error.</h2>
   <div class="rule"></div>
   <div class="case-flow" data-motion-group="scale">
     <figure class="case-panel">
-      <span class="tag n">1 · Generated image</span>
+      <span class="tag a">Front view · before physics</span>
       <div class="case-image-frame">
-        <img class="case-image" src="assets/research-cases/simuscene-input.png" alt="Prompt-generated image of cosmetic bottles arranged in a wooden organizer">
+        <img class="case-image" src="assets/research-cases/simuscene-sc09-front.png" alt="Front view of a SAM3D reconstruction in which a pen appears to sit inside a cup">
       </div>
-      <figcaption><strong>Visually plausible</strong><br>One view hides depth and support.</figcaption>
+      <figcaption><strong>Looks plausible</strong><br>The pen appears contained by the cup.</figcaption>
     </figure>
 
-    <div class="case-arrow" aria-hidden="true">→</div>
-
-    <figure class="case-panel">
-      <span class="tag a">2 · Lifted preview</span>
-      <div class="case-image-frame">
-        <img class="case-image" src="assets/research-cases/simuscene-lifted-preview.png" alt="SAM3D reconstruction aligned to the input view before physics simulation">
-      </div>
-      <figcaption><strong>Still looks coherent</strong><br>From the chosen camera.</figcaption>
-    </figure>
-
-    <div class="case-arrow failure" aria-hidden="true">→</div>
+    <div class="case-reveal" aria-hidden="true">
+      <svg viewBox="0 0 96 128" role="img">
+        <path d="M18 72c0-25 18-44 43-44" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+        <path d="m54 18 15 10-14 11" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M48 57v35" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+        <path d="m38 82 10 12 10-12" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>orbit<br>+ gravity</span>
+    </div>
 
     <figure class="case-panel failure">
-      <span class="tag r">3 · Physics test</span>
+      <span class="tag r">Same reconstruction · physics on</span>
       <div class="case-image-frame">
-        <img class="case-image" src="assets/research-cases/simuscene-physics-failure.png" alt="Two simulator views showing lifted bottles collapsed through and outside the organizer">
+        <img class="case-image" src="assets/research-cases/simuscene-sc09-physics.png" alt="The same SAM3D reconstruction after gravity reveals the pen outside and behind the cup">
       </div>
-      <figcaption><strong>Spatially impossible</strong><br>Objects penetrate, float, and collapse.</figcaption>
+      <figcaption><strong>Spatially impossible</strong><br>The pen was never stably supported inside.</figcaption>
     </figure>
   </div>
   <div class="case-takeaway">
-    <strong>Visual plausibility ≠ usable 3D.</strong>
-    <span>Real SAM3D failure on a synthetic prompt-generated case <span class="cite">[23]</span></span>
+    <strong>A correct-looking image is not evidence of a correct scene.</strong>
+    <span>Continuous SAM3D result from SimuScene <span class="cite">[23]</span></span>
   </div>
 </section>
 

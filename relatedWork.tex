@@ -1,0 +1,132 @@
+\documentclass[11pt]{report}
+\input{header}
+
+\begin{document}
+\lstset{language=Java, basicstyle=\footnotesize}
+
+\renewcommand{\thepage}{\roman{page}}
+\newcommand{\monthword}[1]{\ifcase#1\or January\or February\or March\or April\or
+                                        May\or June\or July\or August\or
+                                        September\or October\or November\or December\fi} 
+
+\input{titlepage}
+\input{secondpage}
+
+\clearpage
+
+\begingroup
+  \pagestyle{plain}
+
+\setcounter{tocdepth}{2}
+  \addtocontents{toc}{\protect\thispagestyle{plain}}
+  \addtocontents{toc}{\protect\vspace{-.45cm}}
+  \tableofcontents
+  \clearpage
+\endgroup 
+
+\pagestyle{fancy}
+\setcounter{page}{1}
+\renewcommand{\thepage}{\arabic{page}}
+
+\chapter{Related Work}
+\label{chap:related-work}
+
+This chapter situates the work within research on AI-assisted 3D content creation, spatially controllable generation, local 3D editing, and human-centered interaction with generative systems. It argues that text prompts alone are often insufficient for professional 3D scene creation tasks that require precise spatial control: while text can communicate high-level style, theme, and object semantics, it is less effective for specifying precise spatial constraints such as placement, scale, orientation, collision boundaries, occlusion, and local edit regions.
+
+Accordingly, this chapter reviews two connected perspectives. The first concerns generative 3D technology: how text-to-3D, image-to-3D, scene-generation, layout-control, and editing methods produce and modify digital assets. The second concerns interaction design: how users express spatial intent, how direct manipulation supports creative workflows, and how AI automation affects users' sense of agency. Together, these perspectives motivate a Unity-based workflow in which text prompts are augmented with spatial proxy controls and region masks, allowing users to retain a blockout-like design process while using generative AI for visual detailing and local refinement.
+
+\section{Text-to-3D Generation and Interaction-Level Controllability}
+\label{sec:rw-text-to-3d}
+
+Text-to-3D generation has developed from optimization-based methods toward feed-forward and hybrid pipelines. DreamFusion demonstrated that a pretrained text-to-image diffusion model can serve as a 3D prior by optimizing a neural representation whose rendered views match a text-conditioned diffusion distribution \cite{poole2022dreamfusion}. This reduced the need for large paired text-3D datasets, but also exposed limitations for interactive creation: optimization is slow, results can be view-inconsistent, and users mainly control the output through textual prompt engineering rather than direct manipulation of geometry.
+
+Subsequent work improved visual fidelity, multi-view consistency, and generation speed. Magic3D improved asset quality through a coarse-to-fine optimization strategy \cite{lin2023magic3d}, while MVDream addressed multi-view consistency \cite{shi2023mvdream}. Feed-forward systems such as Instant3D and LGM further reduced generation time \cite{li2023instant3d, tang2024lgm}. These advances make generative 3D systems more relevant for game development workflows. However, faster generation does not solve the interaction problem. A model that produces an asset in seconds can still fail if the only control channel is a sentence. The issue is therefore both output quality and whether the input modality can express spatial intent. 
+
+Surveys on text-to-3D generation identify controllability, consistency, efficiency, and applicability as major research challenges \cite{li2023generative, lee2024text, jiang2024survey}. However, controllability is often treated as semantic or stylistic alignment with text, images, or labels. This leaves a gap between algorithmic controllability and interaction-level controllability. Algorithmic controllability concerns whether a generative model can respond to conditions such as depth maps, edge maps, semantic layouts, masks, or geometric primitives \cite{zhang2023controlnet,schult2024controlroom3d,fedele2025spacecontrol}. Interaction-level controllability, by contrast, concerns whether such controls are exposed to users in a form that supports goal formulation, iterative adjustment, feedback, and understanding within an existing creative workflow \cite{norman1986cognitive,shneiderman1983direct,amershi2019guidelines,shi2023hci}. This work focuses on the latter: how spatial proxy controls can be exposed within Unity so that users can specify geometry and local edit regions directly, rather than describing them indirectly in text.
+
+
+\section{Spatial Language and Spatial Proxies}
+\label{sec:rw-spatial-language}
+
+The limitations of text prompts for 3D generation are connected to broader findings in spatial cognition and spatial language. Spatial language often expresses qualitative relations rather than exact metric configurations. Landau and Jackendoff argue that spatial language distinguishes object identity from spatial relations, but does not preserve all geometric details of spatial representations \cite{landau1993what}. Egenhofer and Shariff similarly show that terms such as ``near,'' ``inside,'' and ``overlap'' can involve both topological and metric components whose interpretations depend on context \cite{egenhofer1998metric}. In generative 3D systems, language therefore often leaves the model to resolve spatial details that the user may already have mentally decided. 
+
+This matters because text-to-3D systems must convert under-specified language into fully specified geometry. A text prompt such as ``a chair beside a table'' leaves open many choices: the relative distance, orientation of the chair, table scale, contact points, and camera-relative arrangement. In 2D image generation, such underspecification can still produce a plausible picture. In 3D scene generation, however, the missing spatial decisions become structural commitments. A visually plausible object may still be unusable if it intersects another mesh, violates scale expectations, blocks a navigation path, or fails to align with the intended gameplay layout. SimuScene provides a concrete demonstration of this distinction: single-image reconstructions that look convincing from the input view can nevertheless contain interpenetrating, hovering, or unsupported objects that collapse when gravity and contact are enabled \cite{lee2026simuscene}.
+
+Research on external spatial representations further supports the need for visual and spatial input channels. Maps, diagrams, and spatial visualizations can reduce the burden of translating spatial intent into verbal instructions. Jaeger et al. show that pictures and verbal descriptions support spatial knowledge in complex virtual environments in distinct ways \cite{jaeger2023picture}. Roßner et al. find that spatial layouts can support faster task completion and higher satisfaction in some information tasks \cite{rossner2022spatial}. Although these studies do not address 3D generation directly, they support the broader HCI argument that spatial problems benefit from spatial representations.
+
+In this thesis, spatial proxies are treated as external representations of intent. A primitive cube, sphere, or bounding volume is not only a technical conditioning signal; it also lets users externalize intended scale, placement, and occupied volume in the same 3D workspace where the final object will be used. Users can therefore express part of their intent through the task itself: geometry.
+
+\section{Reconstruction and Spatial Conditioning}
+\label{sec:rw-conditional-control}
+Beyond initial text-to-3D generation, practical workflows also depend on reconstruction methods that convert 2D views into usable 3D assets. Image-to-3D and sparse-view reconstruction methods are relevant to this work because they often function as lifting components in generative pipelines. Here, ``3D lifting'' refers to converting a 2D image into a 3D mesh. TripoSR reconstructs a mesh from a single image using a feed-forward transformer-based architecture \cite{tochilkin2024triposr}. Stable Fast 3D extends this direction by optimizing for rapid reconstruction of textured 3D assets \cite{boss2024sf3d}. Hunyuan3D 2.1 further combines shape generation and texture synthesis components to produce high-resolution textured assets \cite{hunyuan3d2025}.
+
+SimuScene extends this discussion from isolated assets to compositional, simulation-ready scenes \cite{lee2026simuscene}. Its central observation is that image-aligned object meshes can remain geometrically wrong in ways hidden by a single camera: incomplete occluded shapes, incorrect depth, and weak support relations may still yield a plausible projection. SimuScene therefore places a physics simulator inside the reconstruction loop. Penetration-resolving displacement and gravity-induced motion act as diagnostic signals; smaller errors trigger gravity-axis stretching, while larger deviations trigger amodal shape resampling. Objects are processed sequentially so that previously corrected objects become colliders for later ones.
+
+The paper also makes an important evaluation argument for this thesis: visual alignment before simulation and physical stability in isolation are both insufficient. SimuScene evaluates alignment after dynamics settle and combines overlap measures with mean displacement, peak energy, and penetration ratio. This operationalizes the difference between a model that merely looks correct from a selected view and one that remains usable as an interactive 3D scene. However, its contribution is an automated reconstruction method aimed primarily at robotics and embodied simulation. It does not study how a designer should express intended placement, scale, occupied volume, or local preservation constraints inside an authoring tool.
+
+For a Unity extension, lifting methods remain useful because a 2D view can be converted into an editable 3D mesh. However, reconstruction does not remove the need for upstream spatial control. If the generated image does not respect the intended placement, scale, or geometry, the reconstruction stage will usually propagate the mismatch rather than resolve it. SimuScene can diagnose and repair some hidden geometric failures after lifting, but it cannot recover a designer's unobserved intent from the image alone. Image-to-3D reconstruction should therefore be understood as an enabling backend component, not as the primary solution to interaction-level controllability.
+
+A major step toward controllable generation is the use of additional spatial conditions beyond text. ControlNet introduced an architecture for adding conditional control to pretrained text-to-image diffusion models while preserving the base model's capabilities \cite{zhang2023controlnet}. It supports conditions such as edges, depth, segmentation maps, and human pose, allowing text to describe style and content while spatial inputs constrain structure. For this work, ControlNet is important both technically and conceptually. Technically, Unity can render proxy objects into depth maps, edge maps, or masks, which serve as conditioning inputs for a generative backend. Conceptually, ControlNet shows that spatial control can be treated as an explicit input channel rather than being hidden inside the prompt. 
+
+Recent work applies layout and proxy-based control more directly to 3D scene generation. ControlRoom3D generates room meshes from a user-defined semantic proxy room composed of 3D bounding boxes and a textual description \cite{schult2024controlroom3d}. SpaceControl introduces a training-free test-time method that accepts geometric inputs ranging from coarse primitives to detailed meshes \cite{fedele2025spacecontrol}. Scene-level approaches such as CommonScenes and Layout2Scene further show that structured spatial input can improve coherence, object relationships, and placement in 3D scene synthesis \cite{zhai2023commonscenes, chen2025layout2scene}.  These systems demonstrate the value of spatial conditions, but they primarily examine model capabilities. This thesis instead asks how such controls should be presented to users inside an existing creative tool.
+
+\section{3D Game Development and Mixed-Initiative Creation}
+\label{sec:rw-game-workflows}
+
+Game development is a demanding context for AI-assisted 3D generation because generated assets must support interaction, performance, and iteration. In professional-level design, designers commonly use blockouts/greyboxes as early spatial prototypes. This thesis uses ``blockout''/``greyboxing'' to refer to stages in which designers use simple geometry to test scale, navigation, flow, composition, and gameplay constraints before producing final art assets \cite{karlsson2023level,totten2019architectural,barclay2016pillars}. Spatial proxies conform to this practice: they preserve a workflow in which coarse geometry precedes detailed visual realization, rather than replacing it with direct text-to-final-asset generation.
+
+This connects the work to procedural content generation and mixed-initiative design. Procedural content generation for games has long investigated how algorithms can generate levels, environments, and other game content \cite{hendrikx2013procedural}. However, fully automated generation can conflict with the designer's need for authorship and fine-grained control. Mixed-initiative procedural content generation addresses this by framing content creation as collaboration between a human designer and an algorithm \cite{liapis2016mixed}. The algorithm may suggest, complete, repair, or vary content, while the human remains responsible for intent, judgment, and creative direction. User studies of mixed-initiative level-design tools suggest that generated suggestions can support engagement and ideation when they are grounded in the designer's own input \cite{walton2020mixed}.
+
+Generative AI changes the technical basis of mixed-initiative creation, but not the underlying interaction challenge. Instead of search-based or grammar-based procedural generation, the system may use diffusion models, reconstruction networks, and 3D generative models. Still, the central question remains: how does the designer communicate constraints, evaluate suggestions, and maintain control? A text-only workflow often gives the AI substantial control over spatial structure. A proxy-augmented workflow rebalances this relationship: the user defines spatial intent through direct manipulation, while the AI contributes visual and geometric detail.
+
+This distinction is especially relevant inside game engines such as Unity. In a standalone text-to-3D tool, an output may be judged mainly as a visual asset. In Unity, the generated object exists within a broader scene graph, coordinate system, lighting setup, gameplay logic, and asset pipeline. It must occupy a believable volume, align with the ground, avoid unintended intersections, and remain editable after import. As the SimuScene results make visible, input-view alignment can conceal failures that only appear under a changed viewpoint, collision checking, or gravity \cite{lee2026simuscene}. Evaluation should therefore include not only perceptual quality but also spatial fit, edit stability, and workflow continuity.
+
+\section{Region-Based 3D Refinement}
+\label{sec:rw-local-editing}
+
+Initial generation is only one part of creative 3D workflows. Designers rarely accept the first output unchanged; they iteratively refine parts of an asset. Thus, local editing and inpainting are also key to this work. Text-only regeneration is often unstable for local refinement because a small prompt change can affect unrelated parts of the output. If the user intends to modify only the top of an object or add detail to one side, global text prompting may change the entire asset. Region masking offers a more direct alternative: the user specifies where change should occur while preserving the rest.
+
+Several 3D editing methods illustrate the promise and difficulty of localized control. Instruct-NeRF2NeRF edits a NeRF scene by applying an image-conditioned diffusion model to training views and optimizing the underlying 3D representation to reflect the instruction \cite{haque2023instruct}. SKED uses sketches from a small number of views to guide local edits to NeRF representations \cite{mikaeili2023sked}. GaussianEditor extends local editing to 3D Gaussian Splatting and introduces mechanisms for semantic tracing and hierarchical splatting to support precise and efficient edits \cite{chen2024gaussianeditor}. NeRFiller completes missing regions of captured 3D scenes using 2D inpainting diffusion models and distills the result into a consistent 3D scene \cite{weber2024nerfiller}. 
+
+These approaches show that local control is technically feasible, but they leave open how users should define edit regions in an interactive 3D authoring environment. Local editing requires users to specify what should change and what must remain stable. Text is poorly suited to specifying such preservation constraints. A 2D mask drawn from a single camera view may also be ambiguous in 3D. By contrast, a 3D region mask inside Unity can be tied to the object volume or scene region for refinement. Research on local control in diffusion models similarly argues that global conditioning can limit flexibility when users only want to control a specific region and therefore proposes region-specific conditioning mechanisms \cite{zhao2023local}. This work applies this principle to 3D interaction by allowing users to define masks in the Unity viewport and use them to guide refinement.
+
+\section{Direct Manipulation, Human-AI Interaction, and Agency}
+\label{sec:rw-direct-manipulation}
+
+The interaction design rationale for spatial proxies is grounded in direct manipulation and 3D user interface research. Shneiderman's concept of direct manipulation emphasizes continuous representation of objects of interest, physical actions rather than complex syntax, and rapid, reversible operations \cite{shneiderman1983direct}. Hutchins et al. further argue that direct manipulation interfaces reduce the cognitive distance between a user’s goals and the system's required operations \cite{hutchins1985direct}. These ideas apply directly to text-to-3D generation: textual prompt writing introduces an indirect symbolic layer between a spatial goal and a system action, while moving and scaling a proxy lets users operate on a visible representation of the intended result.
+
+Norman's gulf of execution provides a related framing: it describes the gap between what a user wants to do and what actions the system makes available \cite{norman1986cognitive}. In a text-only 3D generation system, users may know exactly where an object should go but lack a precise way to specify that geometry. They must translate the spatial goal into text, inspect the output, and revise the prompt. Spatial proxies reduce this gulf by offering actions that are closer to the user’s intention: place, scale, mask, and regenerate.
+
+3D user interface research also highlights challenges in navigation, selection, manipulation, system control, and symbolic input \cite{bowman2017dui}. Generative AI can amplify these challenges because outputs are probabilistic and may not map transparently to user input. A spatial proxy interface must therefore balance expressiveness with usability. It should not overload users with complex 3D controls, but it should expose enough spatial structure to make the AI response predictable and adjustable.
+
+Human-AI interaction research adds a further concern: users must understand and control AI behavior over time. Amershi et al. emphasize understandable system behavior, efficient correction, and user control in human-AI interaction \cite{amershi2019guidelines}. These principles are especially relevant for generative 3D systems, whose outputs can be opaque and variable. If users cannot understand how their input affects the output, they may experience the system as unpredictable even when visual quality is high.
+
+The sense of agency is therefore central to this thesis. Research on emerging human-machine systems shows that agency is affected when users interact with semi-autonomous systems, especially when behavior is partly unpredictable \cite{cornelio2022agency}. In AI-assisted 3D generation, agency is not simply a matter of clicking the generate button. It concerns whether the final object reflects the user's intention, whether input changes lead to understandable output changes, and whether the user can intervene when the result deviates from the goal. Heer's concept of ``agency plus automation'' argues that AI should augment human intent rather than replace decision-making \cite{heer2019agency}. This motivates the thesis hypothesis: placing proxies may increase physical effort, but it may also increase perceived agency because users can see a direct relationship between their actions and the generated result.
+
+\section{Positioning of This Work}
+\label{sec:rw-positioning}
+
+The literature review identifies a clear research gap. Text-to-3D systems are becoming technically powerful, but their dominant interaction modality remains too limited for precise spatial work. Spatially conditioned generation shows promise, but is usually studied as a model capability rather than as a user-facing workflow. SimuScene shows that physics-aware reconstruction can diagnose and correct hidden shape and support errors, but it still begins from an already specified image and optimizes the result automatically rather than eliciting the creator's spatial intent \cite{lee2026simuscene}. Game designers already use coarse spatial representations during blockout and greyboxing, but current generative AI tools often bypass this stage.
+
+This thesis addresses this gap by treating spatial proxies not as a new generative model, but as an interaction mechanism that makes existing generative models more usable for spatial creative work. In this sense, the thesis is complementary to SimuScene: SimuScene asks how a system can detect and repair physically invalid geometry after single-image lifting, while this thesis asks how designers can communicate spatial requirements before generation and preserve local intent during refinement. The generation-stage comparison between primitive placeholders and text-only prompting investigates whether coarse geometry improves geometric fidelity and reduces the cognitive burden of spatial description. The refinement-stage comparison between region masking and text-based regeneration examines whether explicit local control enhances creative flexibility while preserving scene stability. By evaluating user performance, workload, agency, and creative flexibility, this thesis contributes a human-centered understanding of how spatial proxy controls affect AI-assisted 3D scene generation in Unity.
+
+
+
+
+%Please ensure that the bibliography is consistent! That means (amonst other things): 
+%- Conferences should always be named the same. I.e., if you cite papers that appeared at the same conference series, check that the names are identical in these two entries (besides the year)
+%- If one of your titles is capitalized, ensure that all of them are capitalized. 
+%- The same pieces of information should be denoted for every entry. I.e., if you have provided the publisher in one entry, you should show the publisher for every entry. You have used the DOI at least once? Then use it for every entry.
+
+
+\clearpage
+\begingroup
+  \pagestyle{plain}
+  \bibliographystyle{SIGCHI-Reference-Format}
+   \phantomsection
+	\addcontentsline{toc}{section}{Bibliography}
+	\bibliography{references,related-work-additions}\emph{}	
+	\vfill
+  \clearpage
+\endgroup 
+\end{document}

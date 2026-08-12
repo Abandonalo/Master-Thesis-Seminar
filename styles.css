@@ -336,11 +336,11 @@
   /* Real research case used on the opening problem slide. */
   .case-flow {
     display: grid;
-    grid-template-columns: .86fr 34px .9fr 34px 1.55fr;
+    grid-template-columns: minmax(0, 1fr) 92px minmax(0, 1fr);
     flex: 1;
     min-height: 0;
     align-items: stretch;
-    gap: 12px;
+    gap: 18px;
   }
 
   .case-panel {
@@ -377,7 +377,7 @@
   .case-image {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
   }
 
   .case-panel figcaption {
@@ -387,16 +387,24 @@
     line-height: 1.35;
   }
 
-  .case-arrow {
+  .case-reveal {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     color: var(--accent);
-    font-size: 31px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    line-height: 1.45;
+    text-align: center;
+    text-transform: uppercase;
   }
 
-  .case-arrow.failure {
-    color: var(--red);
+  .case-reveal svg {
+    width: 58px;
+    height: 78px;
+    margin-bottom: 6px;
   }
 
   .case-takeaway {
@@ -414,7 +422,7 @@
   }
 
   .case-takeaway strong {
-    font-size: 20px;
+    font-size: 19px;
   }
 
   .tag {
