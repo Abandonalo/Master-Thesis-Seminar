@@ -1,0 +1,630 @@
+  /* ================================================================
+     1. THEME TOKENS
+     Change colors, typography, spacing, and motion from one place.
+     ================================================================ */
+  :root {
+    --stage-bg: #f7f6f3;
+    --slide-bg: #ffffff;
+    --ink: #1c1c1a;
+    --ink-soft: #4a4a45;
+    --ink-faint: #8a8a82;
+    --rule: #e2e0da;
+
+    --accent: #1f4e79;
+    --accent-soft: #e8eef4;
+    --warm: #a8632a;
+    --warm-soft: #f6ede4;
+    --green: #3d6b4a;
+    --green-soft: #e8f0ea;
+    --red: #9c3a2e;
+    --red-soft: #f7e9e6;
+
+    --font-body: "IBM Plex Sans", sans-serif;
+    --font-display: "Source Serif 4", serif;
+    --slide-padding-x: 70px;
+    --slide-padding-top: 56px;
+    --slide-padding-bottom: 50px;
+
+    --motion-duration: 450ms;
+    --motion-stagger: 40ms;
+    --motion-distance: 10px;
+    --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
+  }
+
+  /* ================================================================
+     2. RESET AND FIXED 16:9 VIEWPORT
+     The authored 1280×720 slide is scaled 1.5× inside a 1920×1080 stage.
+     The whole stage then scales uniformly to any browser viewport.
+     ================================================================ */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--stage-bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+  }
+
+  .deck-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--stage-bg);
+  }
+
+  .deck-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--slide-bg);
+  }
+
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1280px;
+    height: 720px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: var(--slide-padding-top) var(--slide-padding-x) var(--slide-padding-bottom);
+    transform: scale(1.5);
+    transform-origin: 0 0;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--slide-bg);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    box-shadow: 0 18px 50px -30px rgb(0 0 0 / 45%);
+  }
+
+  .slide.active,
+  .slide.visible {
+    z-index: 1;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .slide::after {
+    content: attr(data-slide-number);
+    position: absolute;
+    right: 28px;
+    bottom: 18px;
+    color: var(--accent);
+    font-size: 11.5px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .08em;
+  }
+
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* ================================================================
+     3. TYPOGRAPHY
+     ================================================================ */
+  h1,
+  h2,
+  .card h3,
+  .quote {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  h1 {
+    font-size: 46px;
+    line-height: 1.14;
+  }
+
+  h2 {
+    font-size: 33px;
+    line-height: 1.2;
+  }
+
+  p {
+    color: var(--ink-soft);
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .eyebrow {
+    margin-bottom: 12px;
+    color: var(--accent);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  .rule {
+    width: 52px;
+    height: 2px;
+    margin: 12px 0 22px;
+    background: var(--accent);
+  }
+
+  .sub {
+    color: var(--ink-soft);
+    font-size: 19px;
+    line-height: 1.5;
+  }
+
+  .cite {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .note {
+    color: var(--ink-faint);
+    font-size: 14.5px;
+    line-height: 1.4;
+  }
+
+  /* ================================================================
+     4. LAYOUT PRIMITIVES
+     Use these classes before adding one-off inline layout rules.
+     ================================================================ */
+  .cols,
+  .row {
+    display: flex;
+  }
+
+  .cols {
+    flex: 1;
+    min-height: 0;
+    gap: 30px;
+  }
+
+  .row {
+    gap: 20px;
+    align-items: center;
+  }
+
+  .col,
+  .grow {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .title-wrap {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .meta {
+    margin-top: 34px;
+    color: var(--ink-soft);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .meta b {
+    color: var(--ink);
+  }
+
+  /* ================================================================
+     5. CONTENT COMPONENTS
+     ================================================================ */
+  ul {
+    list-style: none;
+  }
+
+  ul li {
+    position: relative;
+    margin-bottom: 11px;
+    padding-left: 24px;
+    color: var(--ink-soft);
+    font-size: 17.5px;
+    line-height: 1.45;
+  }
+
+  ul li::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 2px;
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  ul.sub-list li {
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  ul.sub-list li::before {
+    top: 11px;
+    width: 5px;
+    height: 5px;
+    background: var(--ink-faint);
+  }
+
+  .card {
+    padding: 20px 22px;
+    background: var(--stage-bg);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+  }
+
+  .card.accent {
+    background: var(--accent-soft);
+    border-color: #cddbe8;
+  }
+
+  .card.warm {
+    background: var(--warm-soft);
+    border-color: #ecdcc9;
+  }
+
+  .card.green {
+    background: var(--green-soft);
+    border-color: #cfe0d5;
+  }
+
+  .card.red {
+    background: var(--red-soft);
+    border-color: #e8cfc9;
+  }
+
+  .card h3 {
+    margin-bottom: 8px;
+    font-size: 20px;
+  }
+
+  .card p,
+  .card li {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .card li {
+    margin-bottom: 7px;
+    padding-left: 19px;
+  }
+
+  .card li::before {
+    top: 8px;
+    width: 6px;
+    height: 6px;
+  }
+
+  .tag {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 4px 9px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border-radius: 3px;
+  }
+
+  .tag.a { background: var(--accent); color: #fff; }
+  .tag.w { background: var(--warm); color: #fff; }
+  .tag.g { background: var(--green); color: #fff; }
+  .tag.r { background: var(--red); color: #fff; }
+  .tag.n { background: #dedcd5; color: var(--ink-soft); }
+
+  .quote {
+    margin: 6px 0;
+    padding-left: 24px;
+    color: var(--ink);
+    font-size: 27px;
+    line-height: 1.4;
+    border-left: 3px solid var(--accent);
+  }
+
+  table {
+    width: 100%;
+    font-size: 16.5px;
+    border-collapse: collapse;
+  }
+
+  th {
+    padding: 0 12px 9px 0;
+    color: var(--ink-faint);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .09em;
+    text-align: left;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  td {
+    padding: 11px 12px 11px 0;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    vertical-align: top;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  td.k {
+    width: 23%;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .status {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    margin-bottom: 11px;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    flex: none;
+    margin-top: 6px;
+    border-radius: 50%;
+  }
+
+  .dot.done { background: var(--green); }
+  .dot.wip { background: var(--warm); }
+  .dot.todo { background: #cfcdc5; }
+
+  .status-body {
+    color: var(--ink-soft);
+    font-size: 16.5px;
+    line-height: 1.4;
+  }
+
+  .status-body b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ================================================================
+     6. SVG DIAGRAM SYSTEM
+     ================================================================ */
+  svg text {
+    font-family: var(--font-body);
+  }
+
+  .sv-box {
+    fill: #f7f6f3;
+    stroke: #d8d6cf;
+    stroke-width: 1;
+    rx: 8;
+  }
+
+  .sv-box-a { fill: var(--accent-soft); stroke: #c3d3e2; }
+  .sv-box-w { fill: var(--warm-soft); stroke: #e4d2bd; }
+  .sv-box-g { fill: var(--green-soft); stroke: #c5d8cb; }
+  .sv-box-r { fill: var(--red-soft); stroke: #e2c6bf; }
+
+  .sv-t {
+    fill: #1c1c1a;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .sv-d { fill: #6d6d66; font-size: 12.5px; }
+  .sv-small { fill: #8a8a82; font-size: 11.5px; }
+
+  .sv-lane {
+    fill: #8a8a82;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: .12em;
+  }
+
+  .sv-arr {
+    fill: none;
+    stroke: #1f4e79;
+    stroke-width: 2;
+    marker-end: url(#ah);
+  }
+
+  .sv-arr-g {
+    stroke: #3d6b4a;
+    marker-end: url(#ahg);
+  }
+
+  .sv-arr-r {
+    stroke: #9c3a2e;
+    stroke-dasharray: 6 5;
+    marker-end: url(#ahr);
+  }
+
+  /* ================================================================
+     7. REFERENCES
+     ================================================================ */
+  .refs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-content: start;
+    gap: 12px 34px;
+  }
+
+  .ref {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 8px;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    line-height: 1.34;
+  }
+
+  .ref b { color: var(--accent); }
+  .ref em { color: var(--ink); }
+
+  /* ================================================================
+     8. DECK CHROME
+     ================================================================ */
+  .deck-progress {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    width: 0;
+    height: 3px;
+    background: var(--accent);
+    transition: width 250ms ease;
+  }
+
+  /* ================================================================
+     9. MOTION HOOKS
+     The controller assigns fade-up to each slide's top-level children.
+     Override with data-motion="fade-left|fade-right|scale|draw|none".
+     Use data-motion-group on a container to stagger its children.
+     ================================================================ */
+  [data-motion]:not([data-motion="none"]) {
+    opacity: 0;
+  }
+
+  .slide.visible [data-motion="fade-up"] {
+    animation: motion-fade-up var(--motion-duration) var(--ease-out-expo) both;
+    animation-delay: calc(var(--motion-order, 0) * var(--motion-stagger));
+  }
+
+  .slide.visible [data-motion="fade-left"] {
+    animation: motion-fade-left var(--motion-duration) var(--ease-out-expo) both;
+    animation-delay: calc(var(--motion-order, 0) * var(--motion-stagger));
+  }
+
+  .slide.visible [data-motion="fade-right"] {
+    animation: motion-fade-right var(--motion-duration) var(--ease-out-expo) both;
+    animation-delay: calc(var(--motion-order, 0) * var(--motion-stagger));
+  }
+
+  .slide.visible [data-motion="scale"] {
+    animation: motion-scale var(--motion-duration) var(--ease-out-expo) both;
+    animation-delay: calc(var(--motion-order, 0) * var(--motion-stagger));
+  }
+
+  [data-motion="draw"] {
+    opacity: 1;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  .slide.visible [data-motion="draw"] {
+    animation: motion-draw 700ms var(--ease-out-expo) both;
+    animation-delay: calc(var(--motion-order, 0) * var(--motion-stagger));
+  }
+
+  .motion-slow { --motion-duration: 800ms; }
+  .motion-fast { --motion-duration: 260ms; }
+
+  @keyframes motion-fade-up {
+    from { opacity: 0; transform: translateY(var(--motion-distance)); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes motion-fade-left {
+    from { opacity: 0; transform: translateX(calc(-1 * var(--motion-distance))); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes motion-fade-right {
+    from { opacity: 0; transform: translateX(var(--motion-distance)); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes motion-scale {
+    from { opacity: 0; transform: scale(.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes motion-draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* ================================================================
+     10. ACCESSIBILITY AND PRINT
+     ================================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: .01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: .2s !important;
+    }
+  }
+
+  @media print {
+    html,
+    body {
+      width: 1920px;
+      height: auto;
+      overflow: visible;
+      background: #fff;
+    }
+
+    .deck-viewport,
+    .deck-stage {
+      position: static;
+      width: 1920px;
+      height: auto;
+      overflow: visible;
+      transform: none !important;
+      background: #fff;
+    }
+
+    .slide {
+      position: relative;
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      break-after: page;
+      page-break-after: always;
+    }
+
+    .slide:last-child {
+      break-after: auto;
+      page-break-after: auto;
+    }
+
+    .deck-progress {
+      display: none;
+    }
+  }

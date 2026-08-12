@@ -1,10 +1,10 @@
 # Master’s Thesis Seminar Slides
 
-A zero-build HTML presentation for the master’s thesis seminar:
+A browser-based presentation for the master’s thesis seminar:
 
 > Augmenting Text Prompts with Spatial Proxy Controls in AI-Assisted 3D Scene Generation within Unity
 
-The complete deck—content, styling, diagrams, navigation, and motion—lives in [`thesis_seminar_slides.html`](thesis_seminar_slides.html). Keeping it self-contained makes the presentation easy to archive, email, or open on another computer.
+The project separates slide content, presentation styling, and typed interaction logic while keeping a compiled browser build in the repository. The deck therefore opens directly for presenting, but remains easy to maintain and extend.
 
 ## Run the deck
 
@@ -13,6 +13,8 @@ Open the HTML file in a modern browser:
 ```bash
 open thesis_seminar_slides.html
 ```
+
+The committed files in `dist/` mean no install or build is required just to present the deck.
 
 Navigation:
 
@@ -23,20 +25,41 @@ Navigation:
 - Swipe or mouse wheel: previous / next slide
 - A direct URL hash such as `#15` opens slide 15
 
-## File organization
+## Project structure
 
-The HTML is deliberately divided into stable layers:
+```text
+thesis_seminar_slides.html  Slide content and SVG diagrams
+styles.css                 Theme, layout, components, and motion hooks
+src/presentation.ts        Typed presentation controller
+dist/presentation.js       Compiled browser script (committed)
+dist/presentation.js.map   Source map for browser debugging
+package.json               Build and watch commands
+tsconfig.json              Strict TypeScript configuration
+```
 
-1. **Theme tokens** — colors, typography, spacing, and motion timing
-2. **Viewport and slide stage** — fixed 16:9 presentation behavior
-3. **Typography and layout primitives** — reusable visual rules
-4. **Components** — cards, tags, status markers, tables, and references
-5. **SVG diagram system** — shared diagram styles and arrow markers
-6. **Motion hooks** — reusable entrance effects
-7. **Slide content** — one commented `<section>` per slide
-8. **`SlidePresentation` controller** — scaling, navigation, numbering, and events
+The CSS is divided into numbered sections for theme tokens, viewport behavior, typography, layout, components, diagrams, references, deck chrome, motion, and accessibility. The HTML has a numbered comment before every slide, such as `<!-- 14 · Study design -->`.
 
-Search for the numbered CSS section comments or slide comments such as `<!-- 14 · Study design -->` to jump directly to the relevant code.
+## Development
+
+Install the local TypeScript compiler once:
+
+```bash
+npm install
+```
+
+Compile after changing `src/presentation.ts`:
+
+```bash
+npm run build
+```
+
+Or keep the compiler running during development:
+
+```bash
+npm run watch
+```
+
+Commit the regenerated `dist/presentation.js` and source map whenever the TypeScript source changes.
 
 ## Add or change a slide
 
@@ -85,11 +108,11 @@ For an SVG line-draw animation, normalize the path length and use the `draw` hoo
 <path pathLength="1" data-motion="draw" d="..." />
 ```
 
-For custom JavaScript motion, listen for lifecycle events without changing navigation code:
+For custom TypeScript motion, listen for lifecycle events without changing navigation code:
 
-```javascript
-document.addEventListener("slide:enter", (event) => {
-  const { index, slide } = event.detail;
+```typescript
+document.addEventListener("slide:enter", (event: Event) => {
+  const { index, slide } = (event as CustomEvent).detail;
   // Start slide-specific motion here.
 });
 
@@ -111,9 +134,8 @@ The repository uses the `main` branch. A simple editing cycle is:
 ```bash
 git status
 git diff
-git add thesis_seminar_slides.html README.md
+git add thesis_seminar_slides.html styles.css src dist package.json package-lock.json tsconfig.json README.md
 git commit -m "Describe the slide update"
 ```
 
 The adjacent thesis PDFs are intentionally ignored so this repository stays focused on the presentation source.
-

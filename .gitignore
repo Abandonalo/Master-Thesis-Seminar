@@ -11,3 +11,5 @@
 /renders/
 /exports/
 
+# Local TypeScript dependencies (compiled deck output in /dist is committed)
+/node_modules/
