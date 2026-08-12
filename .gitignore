@@ -1,0 +1,13 @@
+# Workspace and operating-system files
+.DS_Store
+/AGENTS.md
+
+# Thesis source material is kept beside the deck, but outside this focused repo
+/*.pdf
+
+# Local previews, screenshots, and export artifacts
+/.frontend-slides/
+/.qa/
+/renders/
+/exports/
+
