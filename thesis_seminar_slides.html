@@ -45,47 +45,41 @@
 <!-- 2 · Problem: story -->
 <section class="slide">
   <div class="eyebrow">Problem statement</div>
-  <h2>A story every studio knows by now</h2>
+  <h2>Looks right in 2D. Breaks in 3D.</h2>
   <div class="rule"></div>
-  <div data-motion-group="scale" style="display:flex;gap:22px;flex:1;align-items:stretch">
-    <div class="card" style="flex:1;display:flex;flex-direction:column">
-      <span class="tag n">1 · The wish</span>
-      <svg viewBox="0 0 200 110" style="width:100%;height:110px">
-        <rect x="30" y="14" width="140" height="76" rx="6" class="sv-box"/>
-        <text x="100" y="46" text-anchor="middle" class="sv-d" style="font-style:italic;font-size:13px">"a medieval market,</text>
-        <text x="100" y="64" text-anchor="middle" class="sv-d" style="font-style:italic;font-size:13px">stalls around a fountain"</text>
-        <rect x="30" y="14" width="140" height="18" rx="6" fill="#1f4e79" opacity=".12"/>
-        <circle cx="42" cy="23" r="3" fill="#9c3a2e" opacity=".55"/><circle cx="52" cy="23" r="3" fill="#a8632a" opacity=".55"/><circle cx="62" cy="23" r="3" fill="#3d6b4a" opacity=".55"/>
-      </svg>
-      <p style="margin-top:8px">A designer asks AI to <strong>fill a blockout</strong>.</p>
-    </div>
-    <div class="card" style="flex:1;display:flex;flex-direction:column">
-      <span class="tag n">2 · The render</span>
-      <svg viewBox="0 0 200 110" style="width:100%;height:110px">
-        <rect x="30" y="10" width="140" height="84" rx="6" class="sv-box sv-box-g"/>
-        <path d="M60 80 L85 48 L105 68 L125 40 L150 80 Z" fill="#3d6b4a" opacity=".5"/>
-        <circle cx="70" cy="34" r="9" fill="#a8632a" opacity=".55"/>
-        <rect x="112" y="60" width="22" height="20" fill="#1f4e79" opacity=".4"/>
-        <text x="100" y="105" text-anchor="middle" class="sv-small">looks great in the preview ✓</text>
-      </svg>
-      <p style="margin-top:8px"><strong>Visually plausible.</strong> Right style, right mood.</p>
-    </div>
-    <div class="card red" style="flex:1;display:flex;flex-direction:column">
-      <span class="tag r">3 · In the engine</span>
-      <svg viewBox="0 0 200 110" style="width:100%;height:110px">
-        <rect x="30" y="10" width="140" height="84" rx="6" class="sv-box sv-box-r"/>
-        <rect x="55" y="42" width="34" height="34" fill="#9c3a2e" opacity=".45" transform="rotate(-8 72 59)"/>
-        <rect x="76" y="50" width="34" height="34" fill="#1f4e79" opacity=".45"/>
-        <text x="93" y="40" text-anchor="middle" font-size="17" fill="#9c3a2e" font-weight="700">✕</text>
-        <rect x="122" y="30" width="16" height="52" fill="#a8632a" opacity=".5"/>
-        <text x="130" y="24" text-anchor="middle" class="sv-small" fill="#9c3a2e">2× too tall</text>
-        <path d="M45 88 h110" stroke="#9c3a2e" stroke-width="2" stroke-dasharray="5 4" opacity=".6"/>
-        <text x="100" y="105" text-anchor="middle" class="sv-small" fill="#9c3a2e">nav path blocked ✕</text>
-      </svg>
-      <p style="margin-top:8px"><strong>Intersections. Wrong scale. Blocked path.</strong></p>
-    </div>
+  <div class="case-flow" data-motion-group="scale">
+    <figure class="case-panel">
+      <span class="tag n">1 · Generated image</span>
+      <div class="case-image-frame">
+        <img class="case-image" src="assets/research-cases/simuscene-input.png" alt="Prompt-generated image of cosmetic bottles arranged in a wooden organizer">
+      </div>
+      <figcaption><strong>Visually plausible</strong><br>One view hides depth and support.</figcaption>
+    </figure>
+
+    <div class="case-arrow" aria-hidden="true">→</div>
+
+    <figure class="case-panel">
+      <span class="tag a">2 · Lifted preview</span>
+      <div class="case-image-frame">
+        <img class="case-image" src="assets/research-cases/simuscene-lifted-preview.png" alt="SAM3D reconstruction aligned to the input view before physics simulation">
+      </div>
+      <figcaption><strong>Still looks coherent</strong><br>From the chosen camera.</figcaption>
+    </figure>
+
+    <div class="case-arrow failure" aria-hidden="true">→</div>
+
+    <figure class="case-panel failure">
+      <span class="tag r">3 · Physics test</span>
+      <div class="case-image-frame">
+        <img class="case-image" src="assets/research-cases/simuscene-physics-failure.png" alt="Two simulator views showing lifted bottles collapsed through and outside the organizer">
+      </div>
+      <figcaption><strong>Spatially impossible</strong><br>Objects penetrate, float, and collapse.</figcaption>
+    </figure>
   </div>
-  <p style="margin-top:20px;font-size:21px"><strong>The missing information is spatial.</strong> The prompt cannot carry it precisely.</p>
+  <div class="case-takeaway">
+    <strong>Visual plausibility ≠ usable 3D.</strong>
+    <span>Real SAM3D failure on a synthetic prompt-generated case <span class="cite">[23]</span></span>
+  </div>
 </section>
 
 <!-- 3 · Problem: why + gap -->
@@ -718,6 +712,7 @@
     <div class="ref"><b>[20]</b><span>Paas, F. (1992). <em>Training strategies for attaining transfer of problem-solving skill in statistics.</em> Journal of Educational Psychology, 84(4), 429–434.</span></div>
     <div class="ref"><b>[21]</b><span>Lewis, J. R., Utesch, B. S., &amp; Maher, D. E. (2013). <em>UMUX-LITE: When there’s no time for the SUS.</em> CHI ’13, 2099–2102. doi:10.1145/2470654.2481287.</span></div>
     <div class="ref"><b>[22]</b><span>Cherry, E., &amp; Latulipe, C. (2014). <em>Quantifying the creativity support of digital tools through the Creativity Support Index.</em> ACM TOCHI, 21(4), Article 21.</span></div>
+    <div class="ref"><b>[23]</b><span>Lee, I., Baik, S., Kim, S., Kim, H., Cha, H., &amp; Joo, H. (2026). <em>SimuScene: Simulation-ready compositional 3D scene reconstruction from a single image.</em> arXiv:2606.03994.</span></div>
   </div>
 </section>
 
