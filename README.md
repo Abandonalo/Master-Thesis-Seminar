@@ -75,7 +75,7 @@ Add a new section inside `#deckStage`:
 </section>
 ```
 
-Slide numbers and the total are generated automatically. The controller also uses the first `h1` or `h2` as the slide’s accessibility label.
+Slide numbers and the total are generated automatically. A slide marked with the `hero` class is excluded from visible numbering; the opening slide uses this marker. The controller also uses the first `h1` or `h2` as the slide’s accessibility label.
 
 ## Motion system
 

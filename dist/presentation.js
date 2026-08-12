@@ -18,12 +18,20 @@ class SlidePresentation {
     }
     /** Add numbering, accessibility labels, and default motion metadata. */
     prepareSlides() {
-        const total = String(this.slides.length).padStart(2, "0");
+        const numberedSlides = this.slides.filter((slide) => !slide.classList.contains("hero"));
+        const total = String(numberedSlides.length).padStart(2, "0");
+        let numberedIndex = 0;
         this.slides.forEach((slide, slideIndex) => {
             const heading = slide.querySelector("h1, h2");
             const label = heading?.textContent?.trim() || `Slide ${slideIndex + 1}`;
             slide.dataset.slideIndex = String(slideIndex);
-            slide.dataset.slideNumber = `${String(slideIndex + 1).padStart(2, "0")} / ${total}`;
+            if (slide.classList.contains("hero")) {
+                slide.dataset.slideNumber = "";
+            }
+            else {
+                numberedIndex += 1;
+                slide.dataset.slideNumber = `${String(numberedIndex).padStart(2, "0")} / ${total}`;
+            }
             slide.setAttribute("role", "group");
             slide.setAttribute("aria-roledescription", "slide");
             slide.setAttribute("aria-label", `${slideIndex + 1} of ${this.slides.length}: ${label}`);
