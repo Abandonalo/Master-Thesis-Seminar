@@ -1,4 +1,7 @@
+import { MarketSceneComparison } from "./market-scenes";
+
 type MotionType = "fade-up" | "fade-left" | "fade-right" | "scale" | "draw" | "none";
+type RelatedWorkInsightState = "overview" | "language" | "implication";
 
 interface ShowSlideOptions {
   updateHash?: boolean;
@@ -32,6 +35,7 @@ class SlidePresentation {
     this.slides = Array.from(document.querySelectorAll<HTMLElement>(".slide"));
 
     this.prepareSlides();
+    this.prepareRelatedWorkInsights();
     this.bindNavigation();
     this.fitStage();
     this.showSlide(this.readHash());
@@ -117,6 +121,72 @@ class SlidePresentation {
     document.addEventListener("touchend", (event) => this.handleTouchEnd(event), { passive: true });
   }
 
+  /**
+   * Squeeze a third column into the related-work map in two stages: first
+   * expose the language/geometry gap, then derive the design implication.
+   */
+  private prepareRelatedWorkInsights(): void {
+    document.querySelectorAll<HTMLElement>("[data-related-work-insights]").forEach((slide) => {
+      const panel = slide.querySelector<HTMLElement>(".related-work-insight");
+      const finding = slide.querySelector<HTMLElement>("[data-insight-content='language']");
+      const implication = slide.querySelector<HTMLElement>("[data-insight-content='implication']");
+      const reset = slide.querySelector<HTMLButtonElement>("[data-insight-reset]");
+      const triggers = Array.from(
+        slide.querySelectorAll<HTMLButtonElement>("[data-insight-trigger]")
+      );
+
+      if (!panel || !finding || !implication || !reset || triggers.length === 0) {
+        throw new Error("The related-work insight controls are incomplete.");
+      }
+
+      const setState = (state: RelatedWorkInsightState, animate = true): void => {
+        if (!animate) slide.classList.add("no-insight-motion");
+
+        slide.dataset.insightState = state;
+        panel.setAttribute("aria-hidden", String(state === "overview"));
+        finding.setAttribute("aria-hidden", String(state === "overview"));
+        implication.setAttribute("aria-hidden", String(state !== "implication"));
+
+        triggers.forEach((trigger) => {
+          const triggerState = trigger.dataset.insightTrigger as RelatedWorkInsightState;
+          const expanded = triggerState === state ||
+            (triggerState === "language" && state === "implication");
+          trigger.setAttribute("aria-expanded", String(expanded));
+        });
+
+        if (!animate) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => slide.classList.remove("no-insight-motion"));
+          });
+        }
+      };
+
+      triggers.forEach((trigger) => {
+        trigger.addEventListener("click", (event) => {
+          const state = trigger.dataset.insightTrigger as RelatedWorkInsightState;
+          setState(state, event.detail !== 0);
+        });
+      });
+
+      reset.addEventListener("click", (event) => {
+        setState("overview", event.detail !== 0);
+        triggers[0].focus({ preventScroll: true });
+      });
+
+      slide.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || slide.dataset.insightState === "overview") return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        setState("overview", false);
+        triggers[0].focus({ preventScroll: true });
+      });
+
+      slide.addEventListener("slide:leave", () => setState("overview", false));
+      setState("overview", false);
+    });
+  }
+
   private showSlide(index: number, { updateHash = true }: ShowSlideOptions = {}): void {
     const nextIndex = this.clamp(index, 0, this.slides.length - 1);
     const previousIndex = this.currentIndex;
@@ -168,6 +238,9 @@ class SlidePresentation {
   }
 
   private handleKeydown(event: KeyboardEvent): void {
+    const target = event.target instanceof Element ? event.target : null;
+    if (this.isInteractiveTarget(target)) return;
+
     const nextKeys = ["ArrowRight", "PageDown", " "];
     const previousKeys = ["ArrowLeft", "PageUp"];
 
@@ -188,16 +261,15 @@ class SlidePresentation {
 
   private handleClick(event: MouseEvent): void {
     const target = event.target instanceof Element ? event.target : null;
-    const interactiveTarget = target?.closest(
-      "a, button, input, textarea, select, [contenteditable='true']"
-    );
-    if (interactiveTarget) return;
+    if (this.isInteractiveTarget(target)) return;
 
     const direction = event.clientX < window.innerWidth * 0.25 ? -1 : 1;
     this.showSlide(this.currentIndex + direction);
   }
 
   private handleWheel(event: WheelEvent): void {
+    const target = event.target instanceof Element ? event.target : null;
+    if (this.isInteractiveTarget(target)) return;
     if (this.wheelLocked || Math.abs(event.deltaY) < 18) return;
 
     this.wheelLocked = true;
@@ -206,10 +278,20 @@ class SlidePresentation {
   }
 
   private handleTouchStart(event: TouchEvent): void {
+    const target = event.target instanceof Element ? event.target : null;
+    if (this.isInteractiveTarget(target)) {
+      this.touchStartX = null;
+      return;
+    }
     this.touchStartX = event.changedTouches[0].clientX;
   }
 
   private handleTouchEnd(event: TouchEvent): void {
+    const target = event.target instanceof Element ? event.target : null;
+    if (this.isInteractiveTarget(target)) {
+      this.touchStartX = null;
+      return;
+    }
     if (this.touchStartX === null) return;
 
     const distance = event.changedTouches[0].clientX - this.touchStartX;
@@ -238,6 +320,12 @@ class SlidePresentation {
     );
   }
 
+  private isInteractiveTarget(target: Element | null): boolean {
+    return Boolean(target?.closest(
+      "a, button, input, textarea, select, [contenteditable='true'], [data-market-scene-viewport]"
+    ));
+  }
+
   private requireElement<T extends HTMLElement>(id: string): T {
     const element = document.getElementById(id);
     if (!(element instanceof HTMLElement)) {
@@ -251,4 +339,6 @@ class SlidePresentation {
   }
 }
 
+const marketSceneComparison = MarketSceneComparison.mount();
+marketSceneComparison?.initialize();
 new SlidePresentation();

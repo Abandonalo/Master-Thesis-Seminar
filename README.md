@@ -28,26 +28,28 @@ Navigation:
 ## Project structure
 
 ```text
-thesis_seminar_slides.html  Slide content and SVG diagrams
-styles.css                 Theme, layout, components, and motion hooks
-src/presentation.ts        Typed presentation controller
-dist/presentation.js       Compiled browser script (committed)
-dist/presentation.js.map   Source map for browser debugging
-package.json               Build and watch commands
-tsconfig.json              Strict TypeScript configuration
+thesis_seminar_slides.html   Slide content, diagrams, and canvas hooks
+styles.css                  Theme, layout, components, and motion hooks
+src/presentation.ts         Typed deck controller and slide interactions
+src/market-scenes.ts        Paired Three.js market-scene comparison
+assets/market-scene/        CC0 KayKit GLBs and retained license
+dist/presentation.js        Bundled browser script (committed)
+dist/presentation.js.map    Source map for browser debugging
+package.json                Type-check, bundle, and watch commands
+tsconfig.json               Strict TypeScript configuration
 ```
 
 The CSS is divided into numbered sections for theme tokens, viewport behavior, typography, layout, components, diagrams, references, deck chrome, motion, and accessibility. The HTML has a numbered comment before every slide, such as `<!-- 14 · Study design -->`.
 
 ## Development
 
-Install the local TypeScript compiler once:
+Install the local TypeScript, esbuild, and Three.js dependencies once:
 
 ```bash
 npm install
 ```
 
-Compile after changing `src/presentation.ts`:
+Type-check and bundle after changing TypeScript source:
 
 ```bash
 npm run build
@@ -60,6 +62,8 @@ npm run watch
 ```
 
 Commit the regenerated `dist/presentation.js` and source map whenever the TypeScript source changes.
+The three `.glb` files are imported from TypeScript and embedded as data URLs by esbuild,
+so the interactive comparison also works offline when the HTML is opened through `file://`.
 
 ## Add or change a slide
 
