@@ -9,6 +9,7 @@
     "watch": "esbuild src/presentation.ts --bundle --format=iife --target=es2020 --sourcemap --minify --loader:.glb=dataurl --outfile=dist/presentation.js --watch"
   },
   "dependencies": {
+    "gsap": "3.15.0",
     "three": "0.185.1"
   },
   "devDependencies": {

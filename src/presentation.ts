@@ -1,4 +1,5 @@
 import { MarketSceneComparison } from "./market-scenes";
+import { SlideMotionController } from "./slide-motion";
 
 type MotionType = "fade-up" | "fade-left" | "fade-right" | "scale" | "draw" | "none";
 type RelatedWorkInsightState = "overview" | "language" | "implication";
@@ -102,6 +103,7 @@ class SlidePresentation {
 
   private setMotionOrder(element: HTMLElement, fallbackOrder: number): void {
     const order = element.dataset.motionOrder || String(fallbackOrder);
+    element.dataset.motionOrder = order;
     element.style.setProperty("--motion-order", order);
   }
 
@@ -338,6 +340,9 @@ class SlidePresentation {
     return Math.max(minimum, Math.min(value, maximum));
   }
 }
+
+const slideMotionController = SlideMotionController.mount();
+slideMotionController?.initialize();
 
 const marketSceneComparison = MarketSceneComparison.mount();
 marketSceneComparison?.initialize();

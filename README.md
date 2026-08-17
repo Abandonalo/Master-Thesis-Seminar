@@ -31,6 +31,7 @@ Navigation:
 thesis_seminar_slides.html   Slide content, diagrams, and canvas hooks
 styles.css                  Theme, layout, components, and motion hooks
 src/presentation.ts         Typed deck controller and slide interactions
+src/slide-motion.ts         Scoped GSAP timelines and hover interactions
 src/market-scenes.ts        Paired Three.js market-scene comparison
 assets/market-scene/        CC0 KayKit GLBs and retained license
 dist/presentation.js        Bundled browser script (committed)
@@ -43,7 +44,7 @@ The CSS is divided into numbered sections for theme tokens, viewport behavior, t
 
 ## Development
 
-Install the local TypeScript, esbuild, and Three.js dependencies once:
+Install the local TypeScript, esbuild, GSAP, and Three.js dependencies once:
 
 ```bash
 npm install
@@ -83,7 +84,7 @@ Slide numbers and the total are generated automatically. A slide marked with the
 
 ## Motion system
 
-Top-level elements automatically receive the deck’s default `fade-up` entrance. To override a particular element, add one of these hooks:
+Top-level elements automatically receive the deck’s default `fade-up` entrance. GSAP rebuilds a scoped timeline on every `slide:enter`, then reverts it on `slide:leave`; the CSS keyframes remain as a no-script fallback. To override a particular element, add one of these hooks:
 
 ```html
 <div data-motion="fade-left">...</div>
@@ -129,7 +130,7 @@ document.addEventListener("deck:change", (event) => {
 });
 ```
 
-The presentation honors `prefers-reduced-motion` automatically.
+SVG boxes, labels, pipeline arrows, and elements marked with `data-gsap-bar` receive diagram-aware choreography automatically. Cards also get a restrained pointer hover lift on fine-pointer devices. The presentation honors `prefers-reduced-motion` automatically.
 
 ## Git workflow
 

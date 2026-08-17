@@ -111,6 +111,24 @@
     content: none;
   }
 
+  .hero-background-logo {
+    position: absolute;
+    z-index: 0;
+    top: 38px;
+    right: 48px;
+    width: 220px;
+    height: auto;
+    opacity: .12;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero .title-wrap {
+    position: relative;
+    z-index: 1;
+  }
+
   img,
   video,
   canvas,
@@ -1109,6 +1127,21 @@
      ================================================================ */
   [data-motion]:not([data-motion="none"]) {
     opacity: 0;
+  }
+
+  /* GSAP owns active-slide motion when JavaScript is available. Keeping the
+     keyframes below as a no-script fallback preserves direct-file portability. */
+  html.gsap-motion [data-motion]:not([data-motion="none"]) {
+    opacity: 1;
+  }
+
+  html.gsap-motion .slide.visible [data-motion]:not([data-motion="none"]) {
+    animation: none;
+  }
+
+  html.gsap-motion [data-motion="draw"] {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
   }
 
   .slide.visible [data-motion="fade-up"] {
