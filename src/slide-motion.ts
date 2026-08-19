@@ -30,6 +30,10 @@ export class SlideMotionController {
   private activeSlide: HTMLElement | null = null;
   private activeContext: gsap.Context | null = null;
   private activeTimeline: gsap.core.Timeline | null = null;
+  private activeProgressiveTimeline: gsap.core.Timeline | null = null;
+  private activeProgressiveTween: gsap.core.Tween | null = null;
+  private progressiveStep = 0;
+  private progressiveStepCount = 0;
   private hoverCleanups: Array<() => void> = [];
   private inlineStyleCleanups: Array<() => void> = [];
   private allowMotion = true;
@@ -80,17 +84,52 @@ export class SlideMotionController {
     );
   }
 
+  /**
+   * Advances one click-controlled reveal on the active slide. Returning true
+   * tells the deck to consume the navigation input instead of changing slides.
+   */
+  advanceActiveSequence(): boolean {
+    const timeline = this.activeProgressiveTimeline;
+    if (!timeline) return false;
+    if (this.activeProgressiveTween?.isActive()) {
+      this.activeProgressiveTween.progress(1);
+      this.activeProgressiveTween = null;
+    }
+    if (this.progressiveStep >= this.progressiveStepCount) return false;
+
+    const nextStep = this.progressiveStep + 1;
+    const label = `step-${nextStep}`;
+    this.progressiveStep = nextStep;
+
+    if (!this.allowMotion) {
+      timeline.seek(label, false);
+      return true;
+    }
+
+    this.activeProgressiveTween = timeline.tweenTo(label, {
+      duration: 0.46,
+      ease: "power2.inOut",
+      onComplete: () => { this.activeProgressiveTween = null; }
+    });
+    return true;
+  }
+
   private play(slide: HTMLElement): void {
     this.teardownActiveMotion();
-    if (!this.allowMotion) return;
+    const isProgressiveArchitecture = slide.classList.contains("generation-architecture-slide");
+    if (!this.allowMotion && !isProgressiveArchitecture) return;
 
     this.activeContext = gsap.context(() => {
-      const timeline = gsap.timeline({
-        defaults: { duration: 0.56, ease: "power3.out" }
-      });
+      if (this.allowMotion) {
+        const timeline = gsap.timeline({
+          defaults: { duration: 0.56, ease: "power3.out" }
+        });
 
-      this.activeTimeline = timeline;
-      this.buildEntranceTimeline(timeline, slide);
+        this.activeTimeline = timeline;
+        this.buildEntranceTimeline(timeline, slide);
+      }
+
+      if (isProgressiveArchitecture) this.setupGenerationArchitectureSequence(slide);
       if (this.allowHover) this.bindCardHover(slide);
     }, slide);
   }
@@ -102,6 +141,8 @@ export class SlideMotionController {
       this.addTitleSequence(timeline, slide, handled);
     } else {
       this.addSlideChrome(timeline, slide, handled);
+      if (slide.classList.contains("generation-architecture-slide")) return;
+
       timeline.addLabel("content", 0.24);
 
       if (slide.querySelector(".spatial-story")) {
@@ -222,6 +263,169 @@ export class SlideMotionController {
         { scaleX: 1, duration: 0.55, ease: "power3.inOut", clearProps: "transform,transformOrigin" },
         0.12
       );
+    }
+  }
+
+  /** Builds the eleven click stops requested for the generation architecture. */
+  private setupGenerationArchitectureSequence(slide: HTMLElement): void {
+    const unityTier = slide.querySelector<HTMLElement>(".unity-tier");
+    const serviceTier = slide.querySelector<HTMLElement>(".service-tier");
+    const proxy = slide.querySelector<HTMLElement>(".proxy-cell");
+    const textualPrompt = slide.querySelector<HTMLElement>(".textual-prompt-cell");
+    const constraints = slide.querySelector<HTMLElement>(".constraints-cell");
+    const result = slide.querySelector<HTMLElement>(".result-cell");
+    const policy = slide.querySelector<HTMLElement>(".policy-cell");
+    const imageGeneration = slide.querySelector<HTMLElement>(".image-generation-cell");
+    const extraction = slide.querySelector<HTMLElement>(".extraction-cell");
+    const lifting = slide.querySelector<HTMLElement>(".lifting-cell");
+    const fit = slide.querySelector<HTMLElement>(".fit-cell");
+    const promptFlow = slide.querySelector<HTMLElement>(".prompt-flow");
+    const constraintsFlow = slide.querySelector<HTMLElement>(".constraints-flow");
+    const upFlow = slide.querySelector<HTMLElement>(".up-flow");
+
+    const required = [
+      unityTier,
+      serviceTier,
+      proxy,
+      textualPrompt,
+      constraints,
+      result,
+      policy,
+      imageGeneration,
+      extraction,
+      lifting,
+      fit,
+      promptFlow,
+      constraintsFlow,
+      upFlow
+    ];
+    if (required.some((element) => !element)) return;
+
+    const cards = [
+      proxy,
+      textualPrompt,
+      constraints,
+      result,
+      policy,
+      imageGeneration,
+      extraction,
+      lifting,
+      fit
+    ] as HTMLElement[];
+    const horizontalArrowSources = [
+      proxy,
+      textualPrompt,
+      policy,
+      imageGeneration,
+      extraction,
+      lifting
+    ] as HTMLElement[];
+    const transfers = [promptFlow, constraintsFlow, upFlow] as HTMLElement[];
+
+    gsap.set([unityTier, serviceTier], {
+      autoAlpha: 0,
+      y: 8,
+      scale: 0.99,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(cards, {
+      autoAlpha: 0,
+      y: 8,
+      scale: 0.98,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(horizontalArrowSources, { "--flow-arrow-opacity": 0 } as gsap.TweenVars);
+    transfers.forEach((transfer) => this.prepareTransferReveal(transfer));
+
+    const progressive = gsap.timeline({
+      paused: true,
+      defaults: { duration: 0.42, ease: "power3.out" }
+    });
+    this.activeProgressiveTimeline = progressive;
+    this.progressiveStep = 0;
+    this.progressiveStepCount = 11;
+
+    const revealCard = { autoAlpha: 1, y: 0, scale: 1 };
+    const revealTier = { autoAlpha: 1, y: 0, scale: 1, duration: 0.48 };
+    const revealArrow = { "--flow-arrow-opacity": 1, duration: 0.24 } as gsap.TweenVars;
+
+    progressive.addLabel("step-0", 0);
+
+    progressive.to(unityTier as HTMLElement, revealTier, "step-0");
+    progressive.addLabel("step-1");
+
+    progressive.to(proxy as HTMLElement, revealCard, "step-1");
+    progressive.addLabel("step-2");
+
+    progressive.to(textualPrompt as HTMLElement, revealCard, "step-2");
+    progressive.to(proxy as HTMLElement, revealArrow, "step-2+=0.12");
+    progressive.addLabel("step-3");
+
+    progressive.to(constraints as HTMLElement, revealCard, "step-3");
+    progressive.to(textualPrompt as HTMLElement, revealArrow, "step-3+=0.12");
+    progressive.addLabel("step-4");
+
+    progressive.to(serviceTier as HTMLElement, revealTier, "step-4");
+    progressive.addLabel("step-5");
+
+    progressive.to(policy as HTMLElement, revealCard, "step-5");
+    this.addTransferReveal(progressive, promptFlow as HTMLElement, "step-5", "down");
+    progressive.addLabel("step-6");
+
+    progressive.to(imageGeneration as HTMLElement, revealCard, "step-6");
+    progressive.to(policy as HTMLElement, revealArrow, "step-6+=0.12");
+    this.addTransferReveal(progressive, constraintsFlow as HTMLElement, "step-6", "down");
+    progressive.addLabel("step-7");
+
+    progressive.to(extraction as HTMLElement, revealCard, "step-7");
+    progressive.to(imageGeneration as HTMLElement, revealArrow, "step-7+=0.12");
+    progressive.addLabel("step-8");
+
+    progressive.to(lifting as HTMLElement, revealCard, "step-8");
+    progressive.to(extraction as HTMLElement, revealArrow, "step-8+=0.12");
+    progressive.addLabel("step-9");
+
+    progressive.to(fit as HTMLElement, revealCard, "step-9");
+    progressive.to(lifting as HTMLElement, revealArrow, "step-9+=0.12");
+    progressive.addLabel("step-10");
+
+    progressive.to(result as HTMLElement, revealCard, "step-10");
+    this.addTransferReveal(progressive, upFlow as HTMLElement, "step-10", "up");
+    progressive.addLabel("step-11");
+  }
+
+  private prepareTransferReveal(transfer: HTMLElement): void {
+    const line = transfer.querySelector<HTMLElement>("i");
+    const label = transfer.querySelector<HTMLElement>("span");
+    gsap.set(transfer, { autoAlpha: 0 });
+    if (line) gsap.set(line, { scaleY: 0 });
+    if (label) gsap.set(label, { autoAlpha: 0, y: 3 });
+  }
+
+  private addTransferReveal(
+    timeline: gsap.core.Timeline,
+    transfer: HTMLElement,
+    position: string,
+    direction: "down" | "up"
+  ): void {
+    const line = transfer.querySelector<HTMLElement>("i");
+    const label = transfer.querySelector<HTMLElement>("span");
+
+    timeline.set(transfer, { autoAlpha: 1 }, position);
+    if (line) {
+      timeline.to(
+        line,
+        {
+          scaleY: 1,
+          duration: 0.38,
+          ease: "power2.inOut",
+          transformOrigin: direction === "up" ? "center bottom" : "center top"
+        },
+        position
+      );
+    }
+    if (label) {
+      timeline.to(label, { autoAlpha: 1, y: 0, duration: 0.26 }, `${position}+=0.08`);
     }
   }
 
@@ -463,7 +667,7 @@ export class SlideMotionController {
 
   private bindCardHover(slide: HTMLElement): void {
     const cards = Array.from(slide.querySelectorAll<HTMLElement>(".card")).filter(
-      (card) => !card.classList.contains("related-work-card") && !card.closest(".spatial-story")
+      (card) => !card.closest(".spatial-story")
     );
 
     cards.forEach((card) => {
@@ -509,6 +713,12 @@ export class SlideMotionController {
 
   private teardownActiveMotion(): void {
     this.hoverCleanups.splice(0).forEach((cleanup) => cleanup());
+    this.activeProgressiveTween?.kill();
+    this.activeProgressiveTween = null;
+    this.activeProgressiveTimeline?.kill();
+    this.activeProgressiveTimeline = null;
+    this.progressiveStep = 0;
+    this.progressiveStepCount = 0;
     this.activeTimeline?.kill();
     this.activeTimeline = null;
     this.activeContext?.revert();

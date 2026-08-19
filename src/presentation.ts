@@ -2,7 +2,6 @@ import { MarketSceneComparison } from "./market-scenes";
 import { SlideMotionController } from "./slide-motion";
 
 type MotionType = "fade-up" | "fade-left" | "fade-right" | "scale" | "draw" | "none";
-type RelatedWorkInsightState = "overview" | "language" | "implication";
 
 interface ShowSlideOptions {
   updateHash?: boolean;
@@ -36,7 +35,6 @@ class SlidePresentation {
     this.slides = Array.from(document.querySelectorAll<HTMLElement>(".slide"));
 
     this.prepareSlides();
-    this.prepareRelatedWorkInsights();
     this.bindNavigation();
     this.fitStage();
     this.showSlide(this.readHash());
@@ -123,72 +121,6 @@ class SlidePresentation {
     document.addEventListener("touchend", (event) => this.handleTouchEnd(event), { passive: true });
   }
 
-  /**
-   * Squeeze a third column into the related-work map in two stages: first
-   * expose the language/geometry gap, then derive the design implication.
-   */
-  private prepareRelatedWorkInsights(): void {
-    document.querySelectorAll<HTMLElement>("[data-related-work-insights]").forEach((slide) => {
-      const panel = slide.querySelector<HTMLElement>(".related-work-insight");
-      const finding = slide.querySelector<HTMLElement>("[data-insight-content='language']");
-      const implication = slide.querySelector<HTMLElement>("[data-insight-content='implication']");
-      const reset = slide.querySelector<HTMLButtonElement>("[data-insight-reset]");
-      const triggers = Array.from(
-        slide.querySelectorAll<HTMLButtonElement>("[data-insight-trigger]")
-      );
-
-      if (!panel || !finding || !implication || !reset || triggers.length === 0) {
-        throw new Error("The related-work insight controls are incomplete.");
-      }
-
-      const setState = (state: RelatedWorkInsightState, animate = true): void => {
-        if (!animate) slide.classList.add("no-insight-motion");
-
-        slide.dataset.insightState = state;
-        panel.setAttribute("aria-hidden", String(state === "overview"));
-        finding.setAttribute("aria-hidden", String(state === "overview"));
-        implication.setAttribute("aria-hidden", String(state !== "implication"));
-
-        triggers.forEach((trigger) => {
-          const triggerState = trigger.dataset.insightTrigger as RelatedWorkInsightState;
-          const expanded = triggerState === state ||
-            (triggerState === "language" && state === "implication");
-          trigger.setAttribute("aria-expanded", String(expanded));
-        });
-
-        if (!animate) {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => slide.classList.remove("no-insight-motion"));
-          });
-        }
-      };
-
-      triggers.forEach((trigger) => {
-        trigger.addEventListener("click", (event) => {
-          const state = trigger.dataset.insightTrigger as RelatedWorkInsightState;
-          setState(state, event.detail !== 0);
-        });
-      });
-
-      reset.addEventListener("click", (event) => {
-        setState("overview", event.detail !== 0);
-        triggers[0].focus({ preventScroll: true });
-      });
-
-      slide.addEventListener("keydown", (event) => {
-        if (event.key !== "Escape" || slide.dataset.insightState === "overview") return;
-
-        event.preventDefault();
-        event.stopPropagation();
-        setState("overview", false);
-        triggers[0].focus({ preventScroll: true });
-      });
-
-      slide.addEventListener("slide:leave", () => setState("overview", false));
-      setState("overview", false);
-    });
-  }
-
   private showSlide(index: number, { updateHash = true }: ShowSlideOptions = {}): void {
     const nextIndex = this.clamp(index, 0, this.slides.length - 1);
     const previousIndex = this.currentIndex;
@@ -248,6 +180,7 @@ class SlidePresentation {
 
     if (nextKeys.includes(event.key)) {
       event.preventDefault();
+      if (slideMotionController?.advanceActiveSequence()) return;
       this.showSlide(this.currentIndex + 1);
     } else if (previousKeys.includes(event.key)) {
       event.preventDefault();
@@ -264,6 +197,7 @@ class SlidePresentation {
   private handleClick(event: MouseEvent): void {
     const target = event.target instanceof Element ? event.target : null;
     if (this.isInteractiveTarget(target)) return;
+    if (slideMotionController?.advanceActiveSequence()) return;
 
     const direction = event.clientX < window.innerWidth * 0.25 ? -1 : 1;
     this.showSlide(this.currentIndex + direction);
@@ -273,6 +207,7 @@ class SlidePresentation {
     const target = event.target instanceof Element ? event.target : null;
     if (this.isInteractiveTarget(target)) return;
     if (this.wheelLocked || Math.abs(event.deltaY) < 18) return;
+    if (event.deltaY > 0 && slideMotionController?.advanceActiveSequence()) return;
 
     this.wheelLocked = true;
     this.showSlide(this.currentIndex + (event.deltaY > 0 ? 1 : -1));
@@ -298,6 +233,10 @@ class SlidePresentation {
 
     const distance = event.changedTouches[0].clientX - this.touchStartX;
     if (Math.abs(distance) > 45) {
+      if (distance < 0 && slideMotionController?.advanceActiveSequence()) {
+        this.touchStartX = null;
+        return;
+      }
       this.showSlide(this.currentIndex + (distance < 0 ? 1 : -1));
     }
     this.touchStartX = null;

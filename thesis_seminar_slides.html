@@ -6,7 +6,7 @@
 <title>Augmenting Text Prompts with Spatial Proxy Controls — Seminar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;family=Source+Serif+4:opsz,wght@8..60,600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -20,11 +20,11 @@
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-      <path d="M0,0 L8,4.5 L0,9 z" fill="#1f4e79"/></marker>
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#0a2540"/></marker>
     <marker id="ahg" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-      <path d="M0,0 L8,4.5 L0,9 z" fill="#3d6b4a"/></marker>
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#0e9f6e"/></marker>
     <marker id="ahr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-      <path d="M0,0 L8,4.5 L0,9 z" fill="#9c3a2e"/></marker>
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#dc2626"/></marker>
   </defs>
 </svg>
 
@@ -34,11 +34,10 @@
   <div class="title-wrap">
     <div class="eyebrow">Master's Thesis Seminar &middot; Saarland University</div>
     <h1>Augmenting Text Prompts with<br>Spatial Proxy Controls in<br>AI-Assisted 3D Scene Generation within Unity</h1>
-    <div class="rule"></div>
     <div class="meta">
       <b>Luojinxuan Wang</b><br>
       Advisor: Dr. Michael Schmitz<br>
-      July 2026
+      August 2026
     </div>
   </div>
 </section>
@@ -47,7 +46,7 @@
 <section class="slide">
   <div class="eyebrow">Problem statement · game scene setup</div>
   <h2>A story every studio knows by now</h2>
-  <div class="rule"></div>
+
   <div class="spatial-story" data-motion-group="scale">
     <figure class="scene-plan intended">
       <span class="tag a">What the designer means</span>
@@ -60,12 +59,11 @@
           <span data-market-scene-status-text>Loading medieval assets</span>
         </div>
       </div>
-      <figcaption>Exact placement · scale · orientation · clearance</figcaption>
     </figure>
 
     <div class="prompt-bottleneck">
       <span class="tag n">Text prompt</span>
-      <blockquote>“Two market stalls around a well. Crates beside the left stall. Keep a clear route to the gate.”</blockquote>
+      <blockquote>&quot;Two market stalls around a well. Crates beside the left stall. Keep a clear route to the gate.&quot;</blockquote>
       <div class="prompt-loss">
         <span>distance <b>?</b></span>
         <span>rotation <b>?</b></span>
@@ -73,10 +71,6 @@
         <span>clearance <b>?</b></span>
       </div>
       <div class="guess-arrow" aria-hidden="true">→</div>
-      <button class="market-scene-reset" type="button" data-market-scene-reset>
-        <span aria-hidden="true">↺</span> Reset 3D view
-      </button>
-      <small>The model fills in what text leaves open.</small>
     </div>
 
     <figure class="scene-plan guessed">
@@ -90,255 +84,302 @@
           <span data-market-scene-status-text>Loading medieval assets</span>
         </div>
       </div>
-      <figcaption>Every asset is valid. The arrangement is not.</figcaption>
     </figure>
   </div>
 </section>
 
-<!-- 3 · Motivation: pipeline visual -->
-<section class="slide">
-  <div class="eyebrow">Motivation</div>
-  <h2>Designers already have the right pipeline — keep it</h2>
-  <div class="rule"></div>
-  <svg viewBox="0 0 1140 380" style="width:100%;flex:1">
-    <text x="0" y="20" class="sv-lane">ESTABLISHED PIPELINE</text>
-    <rect x="0"   y="34" width="240" height="86" rx="8" class="sv-box"/>
-    <text x="120" y="70" text-anchor="middle" class="sv-t">Concept</text>
-    <text x="120" y="92" text-anchor="middle" class="sv-d">idea, references, layout sketch</text>
-    <rect x="300" y="34" width="240" height="86" rx="8" class="sv-box sv-box-a"/>
-    <text x="420" y="64" text-anchor="middle" class="sv-t">Blockout / Greybox</text>
-    <text x="420" y="84" text-anchor="middle" class="sv-d">primitives validate scale, flow,</text>
-    <text x="420" y="100" text-anchor="middle" class="sv-d">composition, gameplay constraints</text>
-    <rect x="600" y="34" width="240" height="86" rx="8" class="sv-box"/>
-    <text x="720" y="70" text-anchor="middle" class="sv-t">Detailing</text>
-    <text x="720" y="92" text-anchor="middle" class="sv-d">art assets replace primitives</text>
-    <rect x="900" y="34" width="240" height="86" rx="8" class="sv-box"/>
-    <text x="1020" y="70" text-anchor="middle" class="sv-t">Polish</text>
-    <text x="1020" y="92" text-anchor="middle" class="sv-d">lighting, fx, iteration</text>
-    <line x1="240" y1="77" x2="296" y2="77" class="sv-arr"/>
-    <line x1="540" y1="77" x2="596" y2="77" class="sv-arr"/>
-    <line x1="840" y1="77" x2="896" y2="77" class="sv-arr"/>
-    <text x="60" y="152" class="sv-lane" fill="#9c3a2e">TEXT-TO-3D TODAY</text>
-    <path d="M120 160 C 300 215, 640 215, 715 165" class="sv-arr sv-arr-r"/>
-    <text x="420" y="230" text-anchor="middle" class="sv-t" fill="#9c3a2e">skips spatial validation</text>
-    <text x="60" y="290" class="sv-lane" fill="#3d6b4a">THIS THESIS — HYBRID WORKFLOW</text>
-    <rect x="240" y="302" width="360" height="64" rx="8" class="sv-box sv-box-g"/>
-    <text x="420" y="328" text-anchor="middle" class="sv-t" fill="#3d6b4a">Designer keeps the blockout</text>
-    <text x="420" y="348" text-anchor="middle" class="sv-d">proxies = spatial intent, made machine-readable</text>
-    <rect x="660" y="302" width="360" height="64" rx="8" class="sv-box sv-box-g"/>
-    <text x="840" y="328" text-anchor="middle" class="sv-t" fill="#3d6b4a">AI takes over the detailing</text>
-    <text x="840" y="348" text-anchor="middle" class="sv-d">generation conditioned on the proxies</text>
-    <line x1="600" y1="334" x2="656" y2="334" class="sv-arr sv-arr-g"/>
-  </svg>
-  <p class="note" style="margin-top:8px">Blockout + mixed-initiative workflow <span class="cite">[3,4]</span></p>
-</section>
+<!-- 3 · Related work: human foundations -->
+<section class="slide human-foundations-slide">
+  <div class="eyebrow">Related work · Human foundations</div>
+  <h2>Designers need visible, metric control</h2>
 
-<!-- 4 · RQ -->
-<section class="slide">
-  <div class="eyebrow">Research questions</div>
-  <h2> Do spatial proxies improve control of AI-assisted 3D creation in Unity?</h2>
-  <div class="rule"></div>
-  <div class="cols" style="flex:none">
-    <div class="col"><div class="card accent" style="height:100%">
-      <span class="tag a">RQ1 · Creation stage</span>
-      <h3>Primitive proxies vs. text</h3>
-      <p>Better <strong>spatial fidelity</strong>? Lower <strong>mental effort</strong>?</p>
-    </div></div>
-    <div class="col"><div class="card warm" style="height:100%">
-      <span class="tag w">RQ2 · Refinement stage</span>
-      <h3>3D region mask vs. regeneration</h3>
-      <p>More <strong>local control</strong>? Better <strong>scene preservation</strong>?</p>
-    </div></div>
+  <div class="human-foundations-flow" data-motion-group="fade-up">
+    <article class="human-foundation language">
+      <span class="tag w">Spatial language</span>
+      <div class="human-foundation-visual language-visual" aria-hidden="true">
+        <span>“beside”</span>
+        <i></i>
+        <b>?</b>
+      </div>
+      <h3>Meaning, not space</h3>
+      <p>A relation is named, but distance, orientation and clearance remain unspecified. <span class="cite">[1,2]</span></p>
+    </article>
+
+    <article class="human-foundation blockout">
+      <span class="tag a">Blockout</span>
+      <div class="human-foundation-visual blockout-visual" aria-hidden="true">
+        <span class="blockout-object one"></span>
+        <span class="blockout-object two"></span>
+        <span class="blockout-path"></span>
+      </div>
+      <h3>Visible spatial constraints</h3>
+      <p>Primitives externalize scale, flow and composition before detail. <span class="cite">[3,4]</span></p>
+    </article>
+
+    <article class="human-foundation manipulation">
+      <span class="tag g">Direct manipulation</span>
+      <div class="human-foundation-visual manipulation-visual" aria-hidden="true">
+        <span class="manipulation-object"></span>
+      </div>
+      <h3>Under designer control</h3>
+      <p>Visible actions preserve agency and support iteration. <span class="cite">[5,14–16,23,24]</span></p>
+    </article>
+  </div>
+
+  <div class="human-foundation-requirement" data-motion="scale">
+    <span>Human-side requirement</span>
+    <strong>Spatial intent must be explicit, visible and editable.</strong>
   </div>
 </section>
 
-<!-- 5 · Related work overview -->
-<section class="slide related-work-slide" data-related-work-insights data-insight-state="overview">
-  <div class="eyebrow">Related work</div>
-  <h2>Where this thesis sits</h2>
-  <div class="rule"></div>
-  <div class="related-work-map" data-motion-group="fade-up">
-    <div class="related-work-column model-capability-column">
-      <span class="tag a" style="margin-bottom:0">Model capability</span>
-      <div class="card related-work-summary-card"><span class="related-work-icon accent" aria-hidden="true">◈</span><div><h3>3D generation</h3><p>Fast output; coarse control <span class="cite">[6,12,13]</span></p></div></div>
-      <div class="card related-work-summary-card"><span class="related-work-icon accent" aria-hidden="true">▦</span><div><h3>Spatial conditioning</h3><p>Depth, edges, layouts, proxies <span class="cite">[7–9]</span></p></div></div>
-      <div class="card related-work-summary-card"><span class="related-work-icon accent" aria-hidden="true">◩</span><div><h3>Local 3D editing</h3><p>Masks and sketches localize change <span class="cite">[10,11]</span></p></div></div>
-    </div>
-    <div class="related-work-column human-workflow-column">
-      <span class="tag w" style="margin-bottom:0">Human workflow</span>
-      <button class="card related-work-card" type="button" data-insight-trigger="language" aria-controls="relatedWorkInsight" aria-expanded="false">
-        <span class="related-work-icon" aria-hidden="true">“ ”</span>
-        <span class="related-work-card-copy"><strong>Spatial language</strong><span>Qualitative, not metric <span class="cite">[1,2]</span></span></span>
-        <span class="related-work-cue" aria-hidden="true">Unpack finding <b>→</b></span>
-      </button>
-      <div class="card related-work-summary-card"><span class="related-work-icon" aria-hidden="true">▱</span><div><h3>Game workflows</h3><p>Blockout carries intent <span class="cite">[3,4]</span></p></div></div>
-      <button class="card related-work-card" type="button" data-insight-trigger="implication" aria-controls="relatedWorkInsight" aria-expanded="false">
-        <span class="related-work-icon" aria-hidden="true">↔</span>
-        <span class="related-work-card-copy"><strong>Direct manipulation</strong><span>Visible action preserves agency <span class="cite">[5,14–16]</span></span></span>
-        <span class="related-work-cue" aria-hidden="true">Derive implication <b>→</b></span>
-        <span class="related-work-next" aria-hidden="true">Next</span>
-      </button>
-    </div>
+<!-- 4 · Related work: AI system landscape -->
+<section class="slide ai-landscape-slide">
+  <div class="eyebrow">Related work · AI system landscape</div>
+  <h2>How can AI help?</h2>
 
-    <aside id="relatedWorkInsight" class="related-work-insight" data-motion="none" aria-live="polite" aria-hidden="true">
-      <button type="button" class="related-work-reset" data-insight-reset aria-label="Return to the related-work overview">← Overview</button>
-      <div class="related-work-finding" data-insight-content="language" aria-hidden="true">
-        <div class="related-work-insight-label">Finding from spatial language</div>
-        <h3>Text carries semantics, not geometry</h3>
-        <div class="related-work-comparison">
-          <div class="related-work-evidence good">
-            <span>Language communicates</span>
-            <strong>Identity · style · mood</strong>
-            <em>“medieval market”</em>
-          </div>
-          <div class="related-work-evidence gap">
-            <span>Geometry still needs</span>
-            <strong>Distance · rotation · boundaries</strong>
-            <em>“near” is qualitative, not metric <span class="cite">[1,2]</span></em>
-          </div>
+  <div class="ai-landscape-layout">
+    <section class="ai-capability-stack" data-motion-group="fade-left" aria-label="Model capabilities">
+      <div class="ai-landscape-label">What models can do</div>
+      <article class="ai-capability-row">
+        <span class="ai-capability-icon" aria-hidden="true">◈</span>
+        <div><h3>Reconstruct 3D</h3><p>Fast assets from text or images</p></div>
+        <span class="cite">[6,12,13]</span>
+      </article>
+      <article class="ai-capability-row">
+        <span class="ai-capability-icon" aria-hidden="true">▦</span>
+        <div><h3>Follow geometry</h3><p>Explicit structure can condition generation</p></div>
+        <span class="cite">[7–9]</span>
+      </article>
+      <article class="ai-capability-row">
+        <span class="ai-capability-icon" aria-hidden="true">◩</span>
+        <div><h3>Refine locally</h3><p>One region can change while the rest remains</p></div>
+        <span class="cite">[10,11,30]</span>
+      </article>
+    </section>
+
+    <section class="ai-system-routes" data-motion-group="fade-right" aria-label="Current system strategies">
+      <div class="ai-landscape-label">How current systems use it</div>
+      <article class="ai-system-route layout-route">
+        <header><span class="tag a">2D layout input</span><strong><span class="cite">[25]</span></strong></header>
+        <div class="ai-route-diagram">
+          <span class="ai-route-input sketch-input" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="ai-route-arrow" aria-hidden="true">→</span>
+          <span class="ai-route-output">3D volume<br><b>inferred</b></span>
         </div>
-      </div>
-      <div class="related-work-implication" data-insight-content="implication" aria-hidden="true">
-        <div class="related-work-therefore"><span>therefore</span></div>
-        <div class="card accent">
-          <span class="tag a">Design implication</span>
-          <p>Keep text for semantics. Let designers author spatial conditions through
-            <strong>direct manipulation in Unity</strong> <span class="cite">[5,7–9,14–16]</span>.</p>
+        <p>The layout is visible;<br>depth and volume are still chosen by the system.</p>
+      </article>
+      <article class="ai-system-route agent-route">
+        <header><span class="tag w">Autonomous generation + repair</span><strong><span class="cite">[26–28]</span></strong></header>
+        <div class="ai-route-diagram">
+          <span class="ai-route-input agent-input" aria-hidden="true">AI</span>
+          <span class="ai-route-arrow" aria-hidden="true">→</span>
+          <span class="ai-route-output">Designer intent<br><b>inferred</b></span>
         </div>
-      </div>
-    </aside>
+        <p>The system can repair invalid output without exposing the intended geometry.</p>
+      </article>
+    </section>
+  </div>
+
+  <div class="ai-landscape-gap" data-motion="scale">
+    <span>Open gap</span>
+    <strong>Usage of AI lacks editable, designer-authored metric constraints.</strong>
   </div>
 </section>
 
-<!-- 6 · Hypotheses from related-work synthesis -->
-<section class="slide">
-  <div class="eyebrow">Related work · Synthesis</div>
-  <h2>From the evidence to testable expectations</h2>
-  <div class="rule"></div>
-  <p class="note" style="margin:0 0 20px">If spatial representations externalize intent and direct manipulation preserves agency, then:</p>
-  <div style="display:flex;gap:22px;flex:1">
-    <div class="card" style="flex:1">
-      <span class="tag a">H1 · Creation</span>
-      <h3>Closer spatial fit</h3>
-      <p style="margin-top:16px;font-size:21px"><strong>↓ Chamfer Distance<br>↑ 3D IoU</strong></p>
-    </div>
-    <div class="card" style="flex:1">
-      <span class="tag a">H2 · Interaction</span>
-      <h3>More control, less translation</h3>
-      <p style="margin-top:16px;font-size:21px"><strong>↓ mental effort<br>↑ perceived control</strong></p>
-    </div>
-    <div class="card" style="flex:1">
-      <span class="tag a">H3 · Refinement</span>
-      <h3>More local change</h3>
-      <p style="margin-top:16px;font-size:21px"><strong>↓ change outside mask<br>↑ preference</strong></p>
-    </div>
+<!-- 5 · Research opportunity: convergence -->
+<section class="slide research-opportunity-slide">
+  <div class="eyebrow">Research opportunity · Convergence</div>
+  <h2>Connect designer control with model capability</h2>
+
+  <div class="research-convergence" data-motion-group="scale">
+    <section class="convergence-source human-source">
+      <span class="tag w">Human requirement</span>
+      <h3>Keep intent editable</h3>
+      <div class="convergence-source-items">
+        <span>Semantic prompt</span>
+        <span>Metric 3D proxy</span>
+        <span>Direct manipulation</span>
+      </div>
+    </section>
+
+    <div class="convergence-arrow human-arrow" aria-hidden="true">→</div>
+
+    <section class="thesis-control-layer">
+      <header>
+        <span class="tag g">This thesis</span>
+        <h3>Editable Unity control layer</h3>
+      </header>
+      <div class="thesis-control-phases">
+        <article class="thesis-phase creation-phase">
+          <span class="thesis-phase-index">RQ1</span>
+          <div><strong>Creation</strong><p>Proxy → generate → fit</p></div>
+        </article>
+        <article class="thesis-phase refinement-phase">
+          <span class="thesis-phase-index">RQ2</span>
+          <div><strong>Refinement</strong><p>Region → regenerate → preserve</p></div>
+        </article>
+      </div>
+    </section>
+
+    <div class="convergence-arrow model-arrow" aria-hidden="true">←</div>
+
+    <section class="convergence-source model-source">
+      <span class="tag a">Model capability</span>
+      <h3>Generate and update detail</h3>
+      <div class="convergence-source-items">
+        <span>3D reconstruction</span>
+        <span>Spatial conditioning</span>
+        <span>Local refinement</span>
+      </div>
+    </section>
+  </div>
+
+  <div class="research-opportunity-principle" data-motion="fade-up">
+    <span>Control principle</span>
+    <strong>The designer defines the geometry. AI supplies and updates the detail.</strong>
+  </div>
+</section>
+
+<!-- 6 · Research questions -->
+<section class="slide research-questions-slide">
+  <div class="eyebrow">Research questions · What to test</div>
+  <h2>Do spatial proxies improve control over AI-assisted 3D scene generation in Unity?</h2>
+
+  <div class="rq-split" data-motion-group="fade-up">
+      <div>
+        <span class="tag a">Generation stage</span>
+        <h3>Primitive proxies vs. Textual prompts</h3>
+        <p>Do proxies improve <strong>spatial fit</strong> and reduce <strong>translation effort</strong>?</p>
+      </div>
+      <div>
+        <span class="tag w">Refinement stage</span>
+        <h3>Spatial mask vs. Global regeneration</h3>
+        <p>Does the mask make local edits more <strong>predictable</strong> and preserve the rest of the scene?</p>
+      </div>
   </div>
 </section>
 
 <!-- 7 · Architecture: generation -->
-<section class="slide">
-  <div class="eyebrow">Implementation · Creation architecture</div>
+<section class="slide generation-architecture-slide">
+  <div class="eyebrow">Implementation · Generation architecture</div>
   <h2>From spatial proxy to a fitted mesh</h2>
-  <div class="rule"></div>
-  <svg viewBox="0 0 1140 430" style="width:100%;flex:1" aria-label="Creation pipeline from proxy authoring to mesh import">
-    <rect x="0" y="8" width="1140" height="150" rx="10" fill="none" stroke="#e2e0da" stroke-dasharray="4 4"/>
-    <text x="16" y="32" class="sv-lane">UNITY · AUTHORING + CAPTURE</text>
-    <rect x="28" y="48" width="245" height="84" rx="8" class="sv-box sv-box-a"/>
-    <text x="150" y="76" text-anchor="middle" class="sv-t">Occupy proxy + subject</text>
-    <text x="150" y="99" text-anchor="middle" class="sv-d">place · scale · rotate primitive</text>
-    <text x="150" y="116" text-anchor="middle" class="sv-d">“house”</text>
-    <rect x="332" y="48" width="245" height="84" rx="8" class="sv-box sv-box-a"/>
-    <text x="455" y="76" text-anchor="middle" class="sv-t">Render constraints</text>
-    <text x="455" y="99" text-anchor="middle" class="sv-d">linear depth</text>
-    <text x="455" y="116" text-anchor="middle" class="sv-d">+ depth-derived edge map</text>
-    <rect x="868" y="48" width="244" height="84" rx="8" class="sv-box sv-box-g"/>
-    <text x="990" y="76" text-anchor="middle" class="sv-t">Editable mesh in scene</text>
-    <text x="990" y="99" text-anchor="middle" class="sv-d">levelled · yaw-aligned</text>
-    <text x="990" y="116" text-anchor="middle" class="sv-d">scaled to fill the proxy</text>
-    <line x1="273" y1="90" x2="328" y2="90" class="sv-arr"/>
 
-    <rect x="0" y="194" width="1140" height="218" rx="10" fill="none" stroke="#e2e0da" stroke-dasharray="4 4"/>
-    <text x="16" y="218" class="sv-lane">FASTAPI ROUTER + COMFYUI · PROMPT POLICY OWNED BY THE ROUTER</text>
-    <rect x="24" y="238" width="205" height="142" rx="8" class="sv-box"/>
-    <text x="127" y="267" text-anchor="middle" class="sv-t">Prompt policy</text>
-    <text x="127" y="292" text-anchor="middle" class="sv-d">positive: short</text>
-    <text x="127" y="310" text-anchor="middle" class="sv-d" font-weight="600">low poly 3D model of {subject}</text>
-    <text x="127" y="331" text-anchor="middle" class="sv-small">+ framing cue on TripoSR path</text>
-    <text x="127" y="352" text-anchor="middle" class="sv-d">negative: scene · occlusion · wrong view</text>
-    <rect x="269" y="238" width="214" height="142" rx="8" class="sv-box sv-box-w"/>
-    <text x="376" y="267" text-anchor="middle" class="sv-t">DreamShaper 8 + ControlNet [7]</text>
-    <text x="376" y="292" text-anchor="middle" class="sv-d">Stable Diffusion 1.5</text>
-    <rect x="296" y="314" width="74" height="35" rx="6" fill="#fff" stroke="#c3d3e2"/>
-    <text x="333" y="328" text-anchor="middle" class="sv-small">DEPTH</text>
-    <text x="333" y="342" text-anchor="middle" class="sv-d" font-weight="600">0.45</text>
-    <rect x="382" y="314" width="74" height="35" rx="6" fill="#fff" stroke="#c3d3e2"/>
-    <text x="419" y="328" text-anchor="middle" class="sv-small">CANNY</text>
-    <text x="419" y="342" text-anchor="middle" class="sv-d" font-weight="600">0.20</text>
-    <rect x="523" y="238" width="170" height="142" rx="8" class="sv-box"/>
-    <text x="608" y="267" text-anchor="middle" class="sv-t">Isolated image</text>
-    <rect x="565" y="286" width="86" height="63" rx="5" fill="#fff" stroke="#d8d6cf"/>
-    <path d="M578 338 L589 305 L609 291 L630 307 L641 338 Z" fill="#1f4e79" opacity=".48"/>
-    <rect x="600" y="319" width="17" height="19" fill="#fff" opacity=".82"/>
-    <text x="608" y="368" text-anchor="middle" class="sv-small">image = 3D specification</text>
-    <rect x="733" y="238" width="178" height="142" rx="8" class="sv-box sv-box-w"/>
-    <text x="822" y="267" text-anchor="middle" class="sv-t">3D lifting</text>
-    <rect x="753" y="286" width="138" height="29" rx="5" fill="#fff" stroke="#d8d6cf"/>
-    <text x="822" y="305" text-anchor="middle" class="sv-d" font-weight="600">TripoSR [12]</text>
-    <rect x="753" y="325" width="138" height="29" rx="5" fill="#fff" stroke="#d8d6cf"/>
-    <text x="822" y="344" text-anchor="middle" class="sv-d" font-weight="600">Hunyuan3D 2.1 [13]</text>
-    <rect x="951" y="238" width="165" height="142" rx="8" class="sv-box sv-box-g"/>
-    <text x="1034" y="267" text-anchor="middle" class="sv-t">Recover + fit</text>
-    <text x="1034" y="295" text-anchor="middle" class="sv-d">orientation recovery</text>
-    <text x="1034" y="313" text-anchor="middle" class="sv-d">for TripoSR path</text>
-    <text x="1034" y="341" text-anchor="middle" class="sv-d">proxy-volume fitting</text>
-    <line x1="229" y1="309" x2="265" y2="309" class="sv-arr"/>
-    <line x1="483" y1="309" x2="519" y2="309" class="sv-arr"/>
-    <line x1="693" y1="309" x2="729" y2="309" class="sv-arr"/>
-    <line x1="911" y1="309" x2="947" y2="309" class="sv-arr"/>
-    <path d="M455 132 C455 176 126 180 126 234" class="sv-arr"/>
-    <path d="M1034 234 C1034 190 990 180 990 136" class="sv-arr sv-arr-g"/>
-  </svg>
-  <p class="note"><strong>Design principle:</strong> spatial constraints come from geometry; the prompt names the subject and visual idiom.</p>
+  <div class="generation-arch two-layer-arch" data-motion-group="fade-up"
+    aria-label="Two-layer generation architecture connecting Unity and the FastAPI plus ComfyUI service">
+    <section class="generation-arch-tier unity-tier">
+      <header class="generation-tier-name">
+        <span>Unity</span>
+      </header>
+      <div class="generation-tier-cells flow-grid">
+        <article class="generation-arch-cell proxy-cell">
+          <h3>Proxy placement</h3>
+          <p>Position<br>volume<br>rotation</p>
+        </article>
+        <article class="generation-arch-cell textual-prompt-cell">
+          <h3>Textual prompt</h3>
+          <div class="generation-prompt-value">
+            <span>Scene style</span><code>“cute”</code>
+          </div>
+          <div class="generation-prompt-value">
+            <span>Object</span><code>“pink house”</code>
+          </div>
+        </article>
+        <article class="generation-arch-cell constraints-cell">
+          <h3>Render constraints</h3>
+          <p>Linear depth</p>
+          <p>Depth-derived edge map</p>
+        </article>
+        <article class="generation-arch-cell result-cell">
+          <h3>Editable 3D mesh</h3>
+          <p>Ready in the scene</p>
+        </article>
+      </div>
+    </section>
+
+    <div class="generation-layer-transfer" aria-hidden="true">
+      <div class="generation-layer-transfer-track">
+        <div class="generation-transfer-item down-flow prompt-flow">
+          <span>Text prompt</span><i></i>
+        </div>
+        <div class="generation-transfer-item down-flow constraints-flow">
+          <span>Depth + edge</span><i></i>
+        </div>
+        <div class="generation-transfer-item up-flow">
+          <span>Fitted mesh</span><i></i>
+        </div>
+      </div>
+    </div>
+
+    <section class="generation-arch-tier service-tier">
+      <header class="generation-tier-name">
+        <span>ComfyUI</span>
+      </header>
+      <div class="generation-tier-cells flow-grid">
+        <article class="generation-arch-cell policy-cell">
+          <h3>Prompt policy</h3>
+          <p><strong>Positive</strong> · low-poly 3D model</p>
+          <p><strong>Negative</strong> · scene · occlusion · wrong view</p>
+        </article>
+        <article class="generation-arch-cell image-generation-cell">
+          <h3>2D image generation</h3>
+          <p>Depth + edge controlled</p>
+        </article>
+        <article class="generation-arch-cell extraction-cell">
+          <h3>Object extraction</h3>
+          <p>Isolated object image</p>
+        </article>
+        <article class="generation-arch-cell lifting-cell">
+          <h3>3D mesh lifting</h3>
+          <p>Image → mesh</p>
+        </article>
+        <article class="generation-arch-cell fit-cell">
+          <h3>Orient + fit</h3>
+          <p>Upright correction</p>
+          <p>Fit to proxy volume</p>
+        </article>
+      </div>
+    </section>
+  </div>
 </section>
 
 <!-- 8 · Generation engineering detail -->
-<section class="slide">
+<section class="slide generation-detail-slide">
   <div class="eyebrow">Implementation · Single-view handoff</div>
-  <h2>The source image is a specification, not a beauty render</h2>
-  <div class="rule"></div>
+  <h2>Treat the source image as an asset specification</h2>
+
   <svg viewBox="0 0 1140 424" style="width:100%;flex:1" aria-label="Image-style failures and TripoSR orientation recovery">
     <rect x="0" y="8" width="340" height="174" rx="10" class="sv-box-r"/>
-    <text x="22" y="35" class="sv-lane" fill="#9c3a2e">NAIVE · PHOTOGRAPH</text>
-    <rect x="24" y="51" width="118" height="88" rx="6" fill="#fff" stroke="#e2c6bf"/>
-    <path d="M35 130 L47 93 L66 78 L89 92 L103 130 Z" fill="#9c3a2e" opacity=".42"/>
-    <circle cx="45" cy="112" r="16" fill="#3d6b4a" opacity=".55"/>
-    <circle cx="116" cy="107" r="20" fill="#3d6b4a" opacity=".4"/>
-    <text x="162" y="72" class="sv-t">Scene cues survive</text>
+    <text x="22" y="35" class="sv-lane" fill="#dc2626">NAIVE · PHOTOGRAPH</text>
+    <rect x="24" y="51" width="118" height="88" rx="6" fill="#fff" stroke="#f2c5c5"/>
+    <path d="M35 130 L47 93 L66 78 L89 92 L103 130 Z" fill="#dc2626" opacity=".42"/>
+    <circle cx="45" cy="112" r="16" fill="#0e9f6e" opacity=".55"/>
+    <circle cx="116" cy="107" r="20" fill="#0e9f6e" opacity=".4"/>
+    <text x="162" y="72" class="sv-t">Scene cues enter the mesh</text>
     <text x="162" y="96" class="sv-d">foreground plants + shadows</text>
     <text x="162" y="114" class="sv-d">become reconstructed geometry</text>
-    <text x="162" y="146" class="sv-d" fill="#9c3a2e" font-weight="600">isolated mesh fails</text>
+    <text x="162" y="146" class="sv-d" fill="#dc2626" font-weight="600">the mesh is not isolated</text>
 
     <rect x="400" y="8" width="340" height="174" rx="10" class="sv-box-g"/>
-    <text x="422" y="35" class="sv-lane" fill="#3d6b4a">ADOPTED · LOW-POLY ASSET RENDER</text>
-    <rect x="424" y="51" width="118" height="88" rx="6" fill="#fff" stroke="#c5d8cb"/>
-    <path d="M441 130 L451 91 L478 72 L514 93 L526 130 Z" fill="#1f4e79" opacity=".52"/>
+    <text x="422" y="35" class="sv-lane" fill="#0e9f6e">ADOPTED · LOW-POLY ASSET RENDER</text>
+    <rect x="424" y="51" width="118" height="88" rx="6" fill="#fff" stroke="#bfe6d8"/>
+    <path d="M441 130 L451 91 L478 72 L514 93 L526 130 Z" fill="#0a2540" opacity=".52"/>
     <rect x="477" y="108" width="19" height="22" fill="#fff" opacity=".86"/>
-    <text x="562" y="72" class="sv-t">Convention does the work</text>
+    <text x="562" y="72" class="sv-t">A simple convention helps</text>
     <text x="562" y="96" class="sv-d">whole · centred · unoccluded</text>
     <text x="562" y="114" class="sv-d">plain background · even light</text>
-    <text x="562" y="146" class="sv-d" fill="#3d6b4a" font-weight="600">reconstructable source</text>
+    <text x="562" y="146" class="sv-d" fill="#0e9f6e" font-weight="600">clean source for lifting</text>
 
     <rect x="800" y="8" width="340" height="174" rx="10" class="sv-box-w"/>
-    <text x="822" y="35" class="sv-lane" fill="#a8632a">SYSTEMATIC COST · 3/4 VIEW</text>
-    <line x1="867" y1="139" x2="867" y2="53" stroke="#8a8a82" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <text x="822" y="35" class="sv-lane" fill="#d97706">KNOWN COST · 3/4 VIEW</text>
+    <line x1="867" y1="139" x2="867" y2="53" stroke="#8898aa" stroke-width="1.5" stroke-dasharray="4 3"/>
     <g transform="rotate(6 890 98)">
-      <path d="M842 136 L851 93 L881 72 L918 95 L929 136 Z" fill="#a8632a" opacity=".5"/>
-      <line x1="881" y1="72" x2="881" y2="136" stroke="#a8632a" stroke-width="2"/>
+      <path d="M842 136 L851 93 L881 72 L918 95 L929 136 Z" fill="#d97706" opacity=".5"/>
+      <line x1="881" y1="72" x2="881" y2="136" stroke="#d97706" stroke-width="2"/>
     </g>
-    <path d="M868 58 A40 40 0 0 1 891 62" fill="none" stroke="#9c3a2e" stroke-width="2"/>
-    <text x="899" y="64" class="sv-d" fill="#9c3a2e" font-weight="600">3–7° tilt</text>
-    <text x="952" y="96" class="sv-t">baked into vertices</text>
-    <text x="952" y="120" class="sv-d">prompting harder risks</text>
+    <path d="M868 58 A40 40 0 0 1 891 62" fill="none" stroke="#dc2626" stroke-width="2"/>
+    <text x="899" y="64" class="sv-d" fill="#dc2626" font-weight="600">3–7° tilt</text>
+    <text x="952" y="96" class="sv-t">tilt is baked into the mesh</text>
+    <text x="952" y="120" class="sv-d">stricter prompts can trigger</text>
     <text x="952" y="138" class="sv-d">the blueprint failure</text>
 
     <text x="0" y="222" class="sv-lane">GEOMETRIC RECOVERY · TRIPOSR PATH ONLY</text>
@@ -346,61 +387,60 @@
     <text x="103" y="271" text-anchor="middle" class="sv-t">1 · Estimate up</text>
     <text x="103" y="297" text-anchor="middle" class="sv-d">wall normals → smallest</text>
     <text x="103" y="315" text-anchor="middle" class="sv-d">eigenvector of scatter matrix</text>
-    <text x="103" y="340" text-anchor="middle" class="sv-small">decline if underdetermined</text>
+    <text x="103" y="340" text-anchor="middle" class="sv-small">skip if underdetermined</text>
     <rect x="235" y="242" width="180" height="116" rx="8" class="sv-box"/>
-    <text x="325" y="271" text-anchor="middle" class="sv-t">2 · Square yaw</text>
+    <text x="325" y="271" text-anchor="middle" class="sv-t">2 · Align yaw</text>
     <text x="325" y="297" text-anchor="middle" class="sv-d">minimum-area footprint</text>
     <text x="325" y="315" text-anchor="middle" class="sv-d" font-weight="600">search bounded to ±45°</text>
     <rect x="445" y="242" width="225" height="116" rx="8" class="sv-box sv-box-w"/>
-    <text x="558" y="271" text-anchor="middle" class="sv-t">3 · Correct transform order</text>
-    <rect x="478" y="290" width="160" height="44" rx="5" fill="#fff" stroke="#e4d2bd"/>
+    <text x="558" y="271" text-anchor="middle" class="sv-t">3 · Apply transforms in order</text>
+    <rect x="478" y="290" width="160" height="44" rx="5" fill="#fff" stroke="#f0d0a8"/>
     <text x="558" y="307" text-anchor="middle" class="sv-d">rotate mesh children</text>
     <text x="558" y="325" text-anchor="middle" class="sv-d">then scale the root</text>
     <rect x="700" y="242" width="180" height="116" rx="8" class="sv-box sv-box-g"/>
     <text x="790" y="271" text-anchor="middle" class="sv-t">4 · Fill proxy</text>
-    <text x="790" y="297" text-anchor="middle" class="sv-d">non-uniform scale now acts</text>
-    <text x="790" y="315" text-anchor="middle" class="sv-d">on upright geometry</text>
-    <rect x="910" y="230" width="230" height="140" rx="10" fill="#3d6b4a"/>
+    <text x="790" y="297" text-anchor="middle" class="sv-d">non-uniform scaling uses</text>
+    <text x="790" y="315" text-anchor="middle" class="sv-d">upright geometry</text>
+    <rect x="910" y="230" width="230" height="140" rx="10" fill="#0e9f6e"/>
     <text x="1025" y="263" text-anchor="middle" font-size="12" letter-spacing=".12em" fill="#dfeae2">MEASURED ON REAL OUTPUTS</text>
     <text x="1025" y="312" text-anchor="middle" font-size="34" font-weight="600" fill="#fff">3.26° → 0.24°</text>
-    <text x="1025" y="341" text-anchor="middle" font-size="14" fill="#e8f0ea">3.61° → 0.33°</text>
+    <text x="1025" y="341" text-anchor="middle" font-size="14" fill="#ecfdf5">3.61° → 0.33°</text>
     <line x1="205" y1="300" x2="231" y2="300" class="sv-arr"/>
     <line x1="415" y1="300" x2="441" y2="300" class="sv-arr"/>
     <line x1="670" y1="300" x2="696" y2="300" class="sv-arr"/>
     <line x1="880" y1="300" x2="906" y2="300" class="sv-arr sv-arr-g"/>
   </svg>
-  <p class="note">The correction is validated on actual generated GLBs; clean synthetic boxes hid the failure modes.</p>
 </section>
 
 <!-- 9 · Refinement inference architecture -->
-<section class="slide">
+<section class="slide refinement-architecture-slide">
   <div class="eyebrow">Implementation · Refinement architecture</div>
   <h2>Four views inform one local replacement</h2>
-  <div class="rule"></div>
+
   <svg viewBox="0 0 1140 430" style="width:100%;flex:1" aria-label="Multi-view local refinement inference pipeline">
-    <rect x="0" y="8" width="1140" height="156" rx="10" fill="none" stroke="#e2e0da" stroke-dasharray="4 4"/>
+    <rect x="0" y="8" width="1140" height="156" rx="10" fill="none" stroke="#dfe5ec" stroke-dasharray="4 4"/>
     <text x="16" y="32" class="sv-lane">UNITY · REGION CAPTURE</text>
     <rect x="24" y="49" width="190" height="88" rx="8" class="sv-box sv-box-a"/>
-    <text x="119" y="78" text-anchor="middle" class="sv-t">Refinement OBB</text>
+    <text x="119" y="78" text-anchor="middle" class="sv-t">Select refinement OBB</text>
     <text x="119" y="101" text-anchor="middle" class="sv-d">select region + edit prompt</text>
-    <text x="119" y="119" text-anchor="middle" class="sv-d">hard boundary for locality</text>
+    <text x="119" y="119" text-anchor="middle" class="sv-d">hard spatial boundary</text>
     <rect x="267" y="42" width="486" height="103" rx="8" class="sv-box sv-box-a"/>
     <text x="510" y="65" text-anchor="middle" class="sv-t">Orthographic capture × 4</text>
     <g transform="translate(292 77)">
-      <g><rect width="92" height="47" rx="5" fill="#fff" stroke="#c3d3e2"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">FRONT</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
-      <g transform="translate(115 0)"><rect width="92" height="47" rx="5" fill="#fff" stroke="#c3d3e2"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">BACK</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
-      <g transform="translate(230 0)"><rect width="92" height="47" rx="5" fill="#fff" stroke="#c3d3e2"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">LEFT</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
-      <g transform="translate(345 0)"><rect width="92" height="47" rx="5" fill="#fff" stroke="#c3d3e2"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">RIGHT</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
+      <g><rect width="92" height="47" rx="5" fill="#fff" stroke="#bfd0e5"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">FRONT</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
+      <g transform="translate(115 0)"><rect width="92" height="47" rx="5" fill="#fff" stroke="#bfd0e5"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">BACK</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
+      <g transform="translate(230 0)"><rect width="92" height="47" rx="5" fill="#fff" stroke="#bfd0e5"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">LEFT</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
+      <g transform="translate(345 0)"><rect width="92" height="47" rx="5" fill="#fff" stroke="#bfd0e5"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">RIGHT</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
     </g>
-    <text x="510" y="141" text-anchor="middle" class="sv-small">+ crop bounds + immutable capture-time camera matrices</text>
+    <text x="510" y="141" text-anchor="middle" class="sv-small">+ crop bounds + fixed capture matrices</text>
     <rect x="884" y="49" width="232" height="88" rx="8" class="sv-box sv-box-g"/>
-    <text x="1000" y="78" text-anchor="middle" class="sv-t">Replacement + colour views</text>
+    <text x="1000" y="78" text-anchor="middle" class="sv-t">Replacement mesh + colour views</text>
     <text x="1000" y="102" text-anchor="middle" class="sv-d">mesh returns with four</text>
     <text x="1000" y="120" text-anchor="middle" class="sv-d">refined images</text>
     <line x1="214" y1="93" x2="263" y2="93" class="sv-arr"/>
 
-    <rect x="0" y="202" width="1140" height="211" rx="10" fill="none" stroke="#e2e0da" stroke-dasharray="4 4"/>
-    <text x="16" y="226" class="sv-lane">ROUTER + ONE FOUR-BRANCH COMFYUI GRAPH</text>
+    <rect x="0" y="202" width="1140" height="211" rx="10" fill="none" stroke="#dfe5ec" stroke-dasharray="4 4"/>
+    <text x="16" y="226" class="sv-lane">ROUTER + ONE 4-BRANCH COMFYUI GRAPH</text>
     <rect x="24" y="246" width="205" height="132" rx="8" class="sv-box"/>
     <text x="127" y="273" text-anchor="middle" class="sv-t">Shared state</text>
     <text x="127" y="298" text-anchor="middle" class="sv-d">checkpoint · prompt</text>
@@ -412,15 +452,15 @@
     <text x="364" y="317" text-anchor="middle" class="sv-d">own visible surface</text>
     <text x="364" y="345" text-anchor="middle" class="sv-small">Front · Back · Left · Right</text>
     <rect x="499" y="246" width="185" height="132" rx="8" class="sv-box"/>
-    <text x="592" y="273" text-anchor="middle" class="sv-t">Prepare four inputs</text>
+    <text x="592" y="273" text-anchor="middle" class="sv-t">Prepare inputs</text>
     <text x="592" y="299" text-anchor="middle" class="sv-d">crop to projected OBB</text>
     <text x="592" y="317" text-anchor="middle" class="sv-d">centre + letterbox 512²</text>
     <rect x="724" y="238" width="205" height="148" rx="8" class="sv-box sv-box-g"/>
     <text x="827" y="266" text-anchor="middle" class="sv-t">Hunyuan3D-2mv Fast [13]</text>
-    <text x="827" y="289" text-anchor="middle" class="sv-d">remove BG · central component</text>
+    <text x="827" y="289" text-anchor="middle" class="sv-d">remove background · central component</text>
     <text x="827" y="307" text-anchor="middle" class="sv-d">tagged F / B / L / R</text>
     <text x="827" y="325" text-anchor="middle" class="sv-d">→ one replacement surface</text>
-    <rect x="752" y="339" width="150" height="34" rx="5" fill="#fff" stroke="#c5d8cb"/>
+    <rect x="752" y="339" width="150" height="34" rx="5" fill="#fff" stroke="#bfe6d8"/>
     <text x="827" y="361" text-anchor="middle" class="sv-small">DEFAULT · AUTO MODE</text>
     <rect x="969" y="246" width="147" height="132" rx="8" class="sv-box sv-box-r"/>
     <text x="1043" y="273" text-anchor="middle" class="sv-t">Fallback</text>
@@ -434,37 +474,36 @@
     <path d="M510 145 C510 184 127 188 127 242" class="sv-arr"/>
     <path d="M827 234 C827 190 1000 183 1000 141" class="sv-arr sv-arr-g"/>
   </svg>
-  <p class="note">This is region replacement, not masked latent editing of an existing 3D representation.</p>
 </section>
 
 <!-- 10 · Refinement locality and welding -->
-<section class="slide">
+<section class="slide refinement-locality-slide">
   <div class="eyebrow">Implementation · Refinement locality</div>
-  <h2>Unity makes the generated change spatially local</h2>
-  <div class="rule"></div>
+  <h2>Unity keeps each generated edit local</h2>
+
   <svg viewBox="0 0 1140 420" style="width:100%;flex:1" aria-label="Mesh clipping, zipper welding, colour projection and transactional validation">
     <g transform="translate(0 5)">
       <rect x="0" y="0" width="205" height="330" rx="10" class="sv-box sv-box-a"/>
       <text x="103" y="30" text-anchor="middle" class="sv-t">1 · Clip source</text>
-      <path d="M32 102 C60 45 147 55 177 104 L168 238 C120 272 68 261 37 225 Z" fill="#1f4e79" opacity=".25" stroke="#1f4e79" stroke-width="2"/>
-      <rect x="69" y="118" width="77" height="83" fill="#fff" stroke="#9c3a2e" stroke-width="2" stroke-dasharray="5 4"/>
+      <path d="M32 102 C60 45 147 55 177 104 L168 238 C120 272 68 261 37 225 Z" fill="#0a2540" opacity=".25" stroke="#0a2540" stroke-width="2"/>
+      <rect x="69" y="118" width="77" height="83" fill="#fff" stroke="#dc2626" stroke-width="2" stroke-dasharray="5 4"/>
       <text x="103" y="293" text-anchor="middle" class="sv-d">exact cut at OBB</text>
-      <text x="103" y="312" text-anchor="middle" class="sv-small">source geometry preserved outside</text>
+      <text x="103" y="312" text-anchor="middle" class="sv-small">preserve geometry outside the OBB</text>
 
       <rect x="233" y="0" width="205" height="330" rx="10" class="sv-box sv-box-w"/>
       <text x="336" y="30" text-anchor="middle" class="sv-t">2 · Fit replacement</text>
-      <rect x="269" y="82" width="133" height="156" rx="8" fill="#fff" stroke="#e4d2bd"/>
-      <path d="M282 220 L294 128 L334 91 L380 131 L390 220 Z" fill="#a8632a" opacity=".48"/>
-      <rect x="278" y="108" width="116" height="124" fill="none" stroke="#9c3a2e" stroke-dasharray="5 4"/>
+      <rect x="269" y="82" width="133" height="156" rx="8" fill="#fff" stroke="#f0d0a8"/>
+      <path d="M282 220 L294 128 L334 91 L380 131 L390 220 Z" fill="#d97706" opacity=".48"/>
+      <rect x="278" y="108" width="116" height="124" fill="none" stroke="#dc2626" stroke-dasharray="5 4"/>
       <text x="336" y="275" text-anchor="middle" class="sv-d" font-weight="600">104% of OBB</text>
       <text x="336" y="296" text-anchor="middle" class="sv-d">5% inset only on seam faces</text>
 
       <rect x="466" y="0" width="205" height="330" rx="10" class="sv-box"/>
       <text x="569" y="30" text-anchor="middle" class="sv-t">3 · Pair loops</text>
-      <ellipse cx="569" cy="136" rx="70" ry="46" fill="none" stroke="#1f4e79" stroke-width="3"/>
-      <ellipse cx="569" cy="145" rx="51" ry="32" fill="none" stroke="#a8632a" stroke-width="3"/>
-      <g fill="#1f4e79"><circle cx="499" cy="136" r="4"/><circle cx="527" cy="99" r="4"/><circle cx="589" cy="93" r="4"/><circle cx="635" cy="118" r="4"/><circle cx="628" cy="166" r="4"/><circle cx="553" cy="181" r="4"/></g>
-      <g fill="#a8632a"><circle cx="518" cy="145" r="4"/><circle cx="546" cy="117" r="4"/><circle cx="598" cy="120" r="4"/><circle cx="620" cy="151" r="4"/><circle cx="577" cy="177" r="4"/></g>
+      <ellipse cx="569" cy="136" rx="70" ry="46" fill="none" stroke="#0a2540" stroke-width="3"/>
+      <ellipse cx="569" cy="145" rx="51" ry="32" fill="none" stroke="#d97706" stroke-width="3"/>
+      <g fill="#0a2540"><circle cx="499" cy="136" r="4"/><circle cx="527" cy="99" r="4"/><circle cx="589" cy="93" r="4"/><circle cx="635" cy="118" r="4"/><circle cx="628" cy="166" r="4"/><circle cx="553" cy="181" r="4"/></g>
+      <g fill="#d97706"><circle cx="518" cy="145" r="4"/><circle cx="546" cy="117" r="4"/><circle cx="598" cy="120" r="4"/><circle cx="620" cy="151" r="4"/><circle cx="577" cy="177" r="4"/></g>
       <text x="569" y="246" text-anchor="middle" class="sv-d">OBB face + centroid</text>
       <text x="569" y="268" text-anchor="middle" class="sv-d" font-weight="600">arc-length zipper</text>
       <text x="569" y="290" text-anchor="middle" class="sv-small">unequal tessellation, no T-junctions</text>
@@ -472,23 +511,23 @@
       <rect x="699" y="0" width="205" height="330" rx="10" class="sv-box sv-box-g"/>
       <text x="802" y="30" text-anchor="middle" class="sv-t">4 · Reconstruct appearance</text>
       <g transform="translate(740 76)">
-        <path d="M0 142 L13 53 L63 8 L119 56 L128 142 Z" fill="#3d6b4a" opacity=".36" stroke="#3d6b4a" stroke-width="2"/>
-        <path d="M13 53 L63 8 L60 142 L0 142 Z" fill="#1f4e79" opacity=".25"/>
-        <path d="M63 8 L119 56 L128 142 L60 142 Z" fill="#a8632a" opacity=".28"/>
+        <path d="M0 142 L13 53 L63 8 L119 56 L128 142 Z" fill="#0e9f6e" opacity=".36" stroke="#0e9f6e" stroke-width="2"/>
+        <path d="M13 53 L63 8 L60 142 L0 142 Z" fill="#0a2540" opacity=".25"/>
+        <path d="M63 8 L119 56 L128 142 L60 142 Z" fill="#d97706" opacity=".28"/>
         <path d="M25 112 L42 95 L61 112" fill="none" stroke="#fff" stroke-width="4" opacity=".85"/>
       </g>
-      <text x="802" y="260" text-anchor="middle" class="sv-d">project vertex colours using</text>
+      <text x="802" y="260" text-anchor="middle" class="sv-d">project vertex colours with</text>
       <text x="802" y="279" text-anchor="middle" class="sv-d">stored camera matrices</text>
       <text x="802" y="301" text-anchor="middle" class="sv-small">normal⁴ weighting · blend top two</text>
 
-      <rect x="932" y="0" width="208" height="330" rx="10" fill="#3d6b4a"/>
+      <rect x="932" y="0" width="208" height="330" rx="10" fill="#0e9f6e"/>
       <text x="1036" y="30" text-anchor="middle" class="sv-t" fill="#fff">5 · Validate → commit</text>
       <circle cx="1036" cy="119" r="52" fill="none" stroke="#fff" stroke-width="5" opacity=".9"/>
       <path d="M1012 119 L1029 136 L1062 98" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-      <text x="1036" y="205" text-anchor="middle" font-size="13" fill="#e8f0ea">every new seam edge</text>
+      <text x="1036" y="205" text-anchor="middle" font-size="13" fill="#ecfdf5">every new seam edge</text>
       <text x="1036" y="225" text-anchor="middle" font-size="20" font-weight="600" fill="#fff">exactly 2 triangles</text>
-      <text x="1036" y="263" text-anchor="middle" font-size="13" fill="#e8f0ea">success: one Undo transaction</text>
-      <text x="1036" y="283" text-anchor="middle" font-size="13" fill="#e8f0ea">failure: destroy temp, keep source</text>
+      <text x="1036" y="263" text-anchor="middle" font-size="13" fill="#ecfdf5">success: one Undo transaction</text>
+      <text x="1036" y="283" text-anchor="middle" font-size="13" fill="#ecfdf5">failure: destroy temp, keep source</text>
       <line x1="205" y1="165" x2="229" y2="165" class="sv-arr"/>
       <line x1="438" y1="165" x2="462" y2="165" class="sv-arr"/>
       <line x1="671" y1="165" x2="695" y2="165" class="sv-arr"/>
@@ -497,213 +536,280 @@
   </svg>
   <div style="display:flex;gap:14px;align-items:center">
     <span class="tag g" style="margin:0">Guarantee</span>
-    <p class="note" style="font-size:15px"><strong>Hard geometric locality + welded transition.</strong> Remaining boundary: unchanged exterior samples do not condition the Hunyuan shape latent.</p>
+    <p class="note" style="font-size:15px"><strong>The edit is clipped to the OBB and welded at the boundary.</strong> Limitation: Hunyuan does not use the unchanged exterior when generating the new shape.</p>
   </div>
 </section>
 
 <!-- 11 · Two lifting models -->
-<section class="slide">
+<section class="slide model-choice-slide">
   <div class="eyebrow">Implementation · Model choice</div>
   <h2>Quality or iteration speed?</h2>
-  <div class="rule"></div>
-  <div style="display:flex;gap:24px;flex:none">
-    <div class="card" style="flex:1">
-      <span class="tag a">Creation option A</span>
+
+  <div class="model-comparison" data-motion-group="fade-up">
+    <article class="model-option tripo">
       <h3>TripoSR · single view <span class="cite">[12]</span></h3>
       <svg viewBox="0 0 300 60" style="width:100%;height:52px" aria-label="TripoSR relative speed and quality">
-        <text x="0" y="18" class="sv-small">SPEED</text><rect x="70" y="8" width="220" height="12" rx="6" fill="#e2e0da"/><rect data-gsap-bar x="70" y="8" width="200" height="12" rx="6" fill="#3d6b4a"/>
-        <text x="0" y="48" class="sv-small">QUALITY</text><rect x="70" y="38" width="220" height="12" rx="6" fill="#e2e0da"/><rect data-gsap-bar x="70" y="38" width="70" height="12" rx="6" fill="#9c3a2e"/>
+        <text x="0" y="18" class="sv-small">SPEED</text><rect x="70" y="8" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="8" width="200" height="12" rx="6" fill="#0e9f6e"/>
+        <text x="0" y="48" class="sv-small">QUALITY</text><rect x="70" y="38" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="38" width="70" height="12" rx="6" fill="#dc2626"/>
       </svg>
-      <p style="margin-top:8px;font-size:20px"><strong>Fast loop</strong><br>lower fidelity</p>
-    </div>
-    <div class="card" style="flex:1">
-      <span class="tag w">Creation option B</span>
+      <p class="model-summary"><strong>Fast feedback</strong><span>lower fidelity</span></p>
+    </article>
+    <div class="model-vs">VS.</div>
+    <article class="model-option hunyuan">
       <h3>Hunyuan3D 2.1 · single view <span class="cite">[13]</span></h3>
       <svg viewBox="0 0 300 60" style="width:100%;height:52px" aria-label="Hunyuan3D relative speed and quality">
-        <text x="0" y="18" class="sv-small">SPEED</text><rect x="70" y="8" width="220" height="12" rx="6" fill="#e2e0da"/><rect data-gsap-bar x="70" y="8" width="75" height="12" rx="6" fill="#9c3a2e"/>
-        <text x="0" y="48" class="sv-small">QUALITY</text><rect x="70" y="38" width="220" height="12" rx="6" fill="#e2e0da"/><rect data-gsap-bar x="70" y="38" width="200" height="12" rx="6" fill="#3d6b4a"/>
+        <text x="0" y="18" class="sv-small">SPEED</text><rect x="70" y="8" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="8" width="75" height="12" rx="6" fill="#dc2626"/>
+        <text x="0" y="48" class="sv-small">QUALITY</text><rect x="70" y="38" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="38" width="200" height="12" rx="6" fill="#0e9f6e"/>
       </svg>
-      <p style="margin-top:8px;font-size:20px"><strong>Higher fidelity</strong><br>slower · Linux</p>
-    </div>
+      <p class="model-summary"><strong>Higher fidelity</strong><span>slower · Linux</span></p>
+    </article>
   </div>
-  <div class="card accent" style="margin-top:20px;padding-top:17px;padding-bottom:17px">
-    <div style="display:flex;gap:22px;align-items:center">
-      <span class="tag a" style="margin:0;flex:none">Study variable</span>
+  <div class="model-decision-rail" data-motion-group="fade-up">
+    <div class="model-decision">
+      <span class="tag a">Study variable</span>
       <p style="font-size:19px"><strong>User preference:</strong> faster feedback or higher quality?</p>
-    </div>
-  </div>
-  <div class="card green" style="margin-top:14px;padding-top:14px;padding-bottom:14px">
-    <div style="display:flex;gap:20px;align-items:center">
-      <span class="tag g" style="margin:0;flex:none">Refinement role</span>
-      <p style="font-size:17px"><strong>Refinement:</strong> four-view Hunyuan by default; TripoSR fallback.</p>
     </div>
   </div>
 </section>
 
 <!-- 12 · Study design -->
-<section class="slide">
-  <div class="eyebrow">Study design</div>
-  <h2>Two conditions, two phases</h2>
-  <div class="rule"></div>
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
-    <span class="tag n" style="margin:0">Within-subjects · counterbalanced</span>
-    <p style="font-size:17px"><strong>Participants:</strong> 3D / game-design experience</p>
+<section class="slide study-design-slide">
+  <div class="eyebrow">Study design · Testing the RQs</div>
+  <h2>Each research question maps to one task phase</h2>
+
+  <div class="study-meta">
+    <span class="tag n">Within-subjects · counterbalanced</span>
+    <p><strong>Participants:</strong> experience in 3D or game design</p>
   </div>
-  <div data-motion-group="scale" style="display:grid;grid-template-columns:1fr 44px 1fr;gap:16px;align-items:stretch">
-    <div class="card" style="padding:14px 20px;display:flex;align-items:center;gap:22px">
-      <div style="font-size:42px;color:var(--ink-soft);line-height:1">Aa</div>
-      <div><span class="tag n" style="margin-bottom:5px">Condition A</span><h3 style="margin:0">Text only</h3></div>
+  <div class="condition-comparison" data-motion-group="scale">
+    <div class="study-condition text-only">
+      <div class="study-condition-icon">Aa</div>
+      <div><span class="tag n">Condition A</span><h3>Text only</h3></div>
     </div>
-    <div style="display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:var(--ink-faint)">VS.</div>
-    <div class="card accent" style="padding:14px 20px;display:flex;align-items:center;gap:22px">
-      <div style="font-size:45px;color:var(--accent);line-height:1">▦</div>
-      <div><span class="tag a" style="margin-bottom:5px">Condition B</span><h3 style="margin:0">Spatial controls</h3></div>
+    <div class="condition-vs">VS.</div>
+    <div class="study-condition spatial-controls">
+      <div class="study-condition-icon">▦</div>
+      <div><span class="tag a">Condition B</span><h3>Spatial controls</h3></div>
     </div>
   </div>
-  <div style="text-align:center;color:var(--ink-faint);font-size:13px;margin:12px 0 8px">same tasks · same Unity shell</div>
-  <div data-motion-group="scale" style="display:flex;gap:18px;flex:1;min-height:0">
-    <div class="card accent" style="flex:1;text-align:center;padding:16px">
+  <div class="same-shell">same tasks · same Unity shell</div>
+  <div class="study-phase-line" data-motion-group="scale">
+    <div class="study-phase creation">
       <span class="tag a">1 · Creation</span>
-      <div style="font-size:42px;color:var(--accent);margin:8px 0">▦ → ◈</div>
-      <h3 style="margin:0">Match layout</h3>
+      <div class="study-phase-icon">▦ → ◈</div>
+      <h3>Match layout</h3>
     </div>
-    <div style="font-size:30px;align-self:center;color:var(--accent)">→</div>
-    <div class="card warm" style="flex:1;text-align:center;padding:16px">
+    <div class="study-phase refinement">
       <span class="tag w">2 · Refinement</span>
-      <div style="font-size:42px;color:var(--warm);margin:8px 0">◩ → ✦</div>
-      <h3 style="margin:0">Edit one region</h3>
+      <div class="study-phase-icon">◩ → ✦</div>
+      <h3>Edit one region</h3>
     </div>
-    <div style="font-size:30px;align-self:center;color:var(--green)">→</div>
-    <div class="card green" style="flex:1;text-align:center;padding:16px">
+    <div class="study-phase condition-end">
       <span class="tag g">3 · Condition end</span>
-      <div style="font-size:42px;color:var(--green);margin:8px 0">◎</div>
-      <h3 style="margin:0">Overall measures</h3>
+      <div class="study-phase-icon">◎</div>
+      <h3>Overall measures</h3>
     </div>
   </div>
-  <div class="card" style="margin-top:16px;padding:14px 20px;display:flex;align-items:center;gap:20px">
-    <span class="tag n" style="margin:0">Secondary comparison</span>
-    <p style="font-size:17px"><strong>TripoSR ↔ Hunyuan3D 2.1:</strong> speed–quality preference under the same creation task.</p>
+  <div class="study-secondary">
+    <span class="tag n">Secondary comparison</span>
+    <p style="font-size:17px"><strong>TripoSR vs. Hunyuan3D 2.1:</strong> speed and quality preference on the same creation task.</p>
   </div>
 </section>
 
 <!-- 13 · Evaluation plan -->
-<section class="slide">
+<section class="slide measurement-slide">
   <div class="eyebrow">Study design · Measurement plan</div>
-  <h2>Measure each phase where it happens</h2>
-  <div class="rule"></div>
-  <div data-motion-group="fade-up" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;flex:1">
-    <div class="card accent">
+  <h2>Measure creation and refinement separately</h2>
+
+  <div class="measurement-columns" data-motion-group="fade-up">
+    <section class="measurement-column creation">
       <span class="tag a">After creation · 4 items</span>
-      <h3 style="font-size:24px;margin:8px 0 18px">Creation scorecard</h3>
+      <h3>Creation scorecard</h3>
       <p style="font-size:18px"><strong>SEQ</strong> · task ease <span class="cite">[19]</span></p>
       <p style="font-size:18px"><strong>Paas</strong> · mental effort <span class="cite">[20]</span></p>
-      <div style="height:1px;background:#cddbe8;margin:18px 0"></div>
-      <p style="font-size:16px"><strong>Targeted checks</strong><br>spatial intent match · perceived control</p>
+      <div class="measurement-rule"></div>
+      <p style="font-size:16px"><strong>Targeted checks</strong><br>spatial intent match · predictability</p>
       <p style="font-size:16px;margin-top:16px"><strong>Logs</strong><br>3D IoU / CD · time · attempts</p>
-    </div>
-    <div class="card warm">
+    </section>
+    <section class="measurement-column refinement">
       <span class="tag w">After refinement · 4 items</span>
-      <h3 style="font-size:24px;margin:8px 0 18px">Refinement scorecard</h3>
+      <h3>Refinement scorecard</h3>
       <p style="font-size:18px"><strong>SEQ</strong> · task ease <span class="cite">[19]</span></p>
       <p style="font-size:18px"><strong>Paas</strong> · mental effort <span class="cite">[20]</span></p>
-      <div style="height:1px;background:#e4d2bd;margin:18px 0"></div>
+      <div class="measurement-rule"></div>
       <p style="font-size:16px"><strong>Targeted checks</strong><br>edit locality · scene preservation</p>
       <p style="font-size:16px;margin-top:16px"><strong>Logs</strong><br>inside success · outside change · seam validity</p>
-    </div>
-    <div class="card green">
+    </section>
+    <section class="measurement-column workflow">
       <span class="tag g">After each condition</span>
-      <h3 style="font-size:24px;margin:8px 0 18px">Whole workflow</h3>
+      <h3>Whole workflow</h3>
       <p style="font-size:18px"><strong>NASA-TLX</strong> · six scales, once <span class="cite">[17,18]</span></p>
       <p style="font-size:18px"><strong>UMUX-LITE</strong> · two items <span class="cite">[21]</span></p>
-      <div style="height:1px;background:#cfe0d5;margin:18px 0"></div>
+      <div class="measurement-rule"></div>
       <p style="font-size:16px"><strong>Blind output rating</strong><br>spatial fit · visual quality · task fit</p>
-      <p style="font-size:16px;margin-top:16px"><strong>End of study</strong><br>forced preference + reason</p>
-    </div>
+      <p style="font-size:16px;margin-top:16px"><strong>End of study</strong><br>agency / ownership <span class="cite">[29]</span> · preference</p>
+    </section>
   </div>
-  <div class="card" style="margin-top:16px;padding:14px 20px;display:flex;align-items:center;gap:18px">
-    <span class="tag n" style="margin:0">Optional</span>
-    <p style="font-size:15.5px"><strong>Full Creativity Support Index once per condition</strong> if creative support remains a primary outcome <span class="cite">[22]</span>. Do not cherry-pick subscales.</p>
+  <div class="measurement-optional">
+    <span class="tag n">Optional</span>
+    <p style="font-size:15.5px">If creative support is a primary outcome, use the <strong>full Creativity Support Index once per condition</strong> <span class="cite">[22]</span>, not selected subscales.</p>
   </div>
 </section>
 
 <!-- 14 · Current stage -->
-<section class="slide">
-  <div class="eyebrow">Current working stage</div>
-  <h2>Where I am today</h2>
-  <div class="rule"></div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
-    <div class="card green" style="text-align:center"><div style="font-size:34px;color:var(--green)">✓</div><h3>Unity frontend</h3><p>proxy + capture</p></div>
-    <div class="card green" style="text-align:center"><div style="font-size:34px;color:var(--green)">✓</div><h3>Creation</h3><p>two lifters</p></div>
-    <div class="card green" style="text-align:center"><div style="font-size:34px;color:var(--green)">✓</div><h3>Refinement core</h3><p>clip + weld + validate</p></div>
-    <div class="card warm" style="text-align:center"><div style="font-size:34px;color:var(--warm)">●</div><h3>Study readiness</h3><p>in progress</p></div>
+<section class="slide current-stage-slide">
+  <div class="eyebrow">Current status</div>
+  <h2>Prototype status</h2>
+
+  <div class="stage-rail" data-motion-group="scale">
+    <div class="stage-milestone done"><span class="stage-status-mark">✓</span><h3>Unity frontend</h3><p>proxy + capture</p></div>
+    <div class="stage-milestone done"><span class="stage-status-mark">✓</span><h3>Creation</h3><p>two lifters</p></div>
+    <div class="stage-milestone done"><span class="stage-status-mark">✓</span><h3>Refinement core</h3><p>clip + weld + validate</p></div>
+    <div class="stage-milestone active"><span class="stage-status-mark">●</span><h3>Study readiness</h3><p>in progress</p></div>
   </div>
-  <div class="card red" style="flex:1">
+  <div class="bottleneck-section" data-motion="fade-up">
     <span class="tag r">Current bottleneck · refinement lifting</span>
-    <div style="display:flex;gap:28px;height:calc(100% - 32px);align-items:center">
-      <div style="flex:1;text-align:center;border-right:1px solid #e2c6bf;padding-right:26px">
-        <div style="font-size:48px;color:var(--red)">⚡</div><h3 style="font-size:25px">TripoSR</h3>
-        <p style="font-size:20px"><strong>Fast</strong><br>quality too poor</p>
-      </div>
-      <div style="font-size:32px;color:var(--red)">vs.</div>
-      <div style="flex:1;text-align:center;padding-left:4px">
-        <div style="font-size:48px;color:var(--red)">◈</div><h3 style="font-size:25px">Hunyuan3D 2.1 / 2mv</h3>
-        <p style="font-size:20px"><strong>Preferred quality</strong><br>Linux runtime required</p>
-      </div>
+    <div class="bottleneck-comparison">
+      <article>
+        <div class="bottleneck-icon">⚡</div><h3>TripoSR</h3>
+        <p style="font-size:20px"><strong>Fast</strong><br>quality too low for refinement</p>
+      </article>
+      <div class="bottleneck-vs">VS.</div>
+      <article>
+        <div class="bottleneck-icon">◈</div><h3>Hunyuan3D 2.1 / 2mv</h3>
+        <p style="font-size:20px"><strong>Better quality</strong><br>Linux runtime required</p>
+      </article>
     </div>
   </div>
 </section>
 
-<!-- 15 · Next steps -->
-<section class="slide">
+<!-- 15 · Possible Three.js refinement -->
+<section class="slide threejs-option-slide">
+  <div class="eyebrow">Implementation option</div>
+  <h2>Architectural refinement with Three.js</h2>
+
+  <p class="threejs-kicker">Procedural geometry for structured 3D assets.</p>
+
+  <div class="threejs-rationale">
+    <article class="threejs-panel benefit" data-motion-group="scale">
+      <header class="threejs-panel-heading">
+        <span class="tag g">Benefit</span>
+        <h3>Generate predictable geometry <span class="cite">[32]</span></h3>
+      </header>
+
+      <div class="threejs-benefit-grid">
+        <div class="threejs-benefit">
+          <span aria-hidden="true">↔</span>
+          <div><strong>Exact dimensions</strong><small>repeatable scale + fit</small></div>
+        </div>
+        <div class="threejs-benefit">
+          <span aria-hidden="true">⊥</span>
+          <div><strong>Predictable pose</strong><small>no perspective tilt</small></div>
+        </div>
+        <div class="threejs-benefit">
+          <span aria-hidden="true">△</span>
+          <div><strong>Clean topology</strong><small>stable clipping + welding</small></div>
+        </div>
+        <div class="threejs-benefit">
+          <span aria-hidden="true">▤</span>
+          <div><strong>Semantic parts</strong><small>edit components directly</small></div>
+        </div>
+      </div>
+
+      <div class="threejs-component-tree" aria-label="Semantic house components">
+        <span class="threejs-house-root">House</span>
+        <span class="threejs-tree-arrow" aria-hidden="true">→</span>
+        <div class="threejs-house-parts">
+          <span>Walls</span><span>Roof</span><span>Door</span><span>Windows</span>
+        </div>
+      </div>
+      <p class="threejs-panel-takeaway">A local edit updates parameters instead of reconstructing the asset.</p>
+    </article>
+
+    <article class="threejs-panel feasibility" data-motion-group="fade-up">
+      <header class="threejs-panel-heading">
+        <span class="tag a">Feasibility</span>
+        <h3>Fits the current pipeline</h3>
+      </header>
+
+      <div class="threejs-flow" aria-label="Three.js procedural asset generation and Unity integration">
+        <div class="threejs-flow-row">
+          <div class="threejs-flow-node">Prompt</div>
+          <span class="threejs-flow-arrow" aria-hidden="true">→</span>
+          <div class="threejs-flow-node accent">HouseSpec <small>validated JSON</small></div>
+          <span class="threejs-flow-arrow" aria-hidden="true">→</span>
+          <div class="threejs-flow-node warm">Three.js <small>parametric + rules</small></div>
+        </div>
+        <div class="threejs-quality-gate">
+          <span aria-hidden="true">✓</span>
+          <div><strong>Topology gate</strong><small>indexed · triangulated · watertight · Y-up · metres <span class="cite">[33]</span></small></div>
+        </div>
+        <div class="threejs-export-row">
+          <strong>GLTFExporter <span class="cite">[31]</span></strong><span aria-hidden="true">→</span><strong>GLB</strong><span aria-hidden="true">→</span><strong>Unity</strong>
+        </div>
+      </div>
+
+      <div class="threejs-feasibility-checks">
+        <span><b>✓</b> glTFast already imports GLB</span>
+        <span><b>✓</b> OBB clip · fit · weld · rollback remain reusable</span>
+        <span><b>+</b> needs a small provider + Y-up orientation hook</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- 16 · Next steps -->
+<section class="slide next-steps-slide">
   <div class="eyebrow">Next steps</div>
   <h2>From prototype to study</h2>
-  <div class="rule"></div>
-  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;flex:1;align-items:center">
-    <div class="card accent" style="text-align:center"><span class="tag a">01</span><div style="font-size:40px;color:var(--accent)">▣</div><h3>Linux backend</h3><p>/health preflight</p></div>
-    <div class="card" style="text-align:center"><span class="tag n">02</span><div style="font-size:40px;color:var(--ink-soft)">⇆</div><h3>Baselines</h3><p>text-only + lifter benchmark</p></div>
-    <div class="card" style="text-align:center"><span class="tag n">03</span><div style="font-size:40px;color:var(--ink-soft)">⌁</div><h3>Instrumentation</h3><p>logs + scorecards</p></div>
-    <div class="card warm" style="text-align:center"><span class="tag w">04</span><div style="font-size:40px;color:var(--warm)">◌</div><h3>Pilot</h3><p>3–4 participants</p></div>
-    <div class="card green" style="text-align:center"><span class="tag g">05</span><div style="font-size:40px;color:var(--green)">●</div><h3>Main study</h3><p>analyse + write</p></div>
+
+  <div class="next-step-grid" data-motion-group="scale">
+    <div class="next-step-card accent"><span class="tag a">01</span><div class="next-step-icon">▣</div><h3>Linux backend</h3><p>/health preflight</p></div>
+    <div class="next-step-card"><span class="tag n">02</span><div class="next-step-icon">⇆</div><h3>Baselines</h3><p>text-only + lifters</p></div>
+    <div class="next-step-card"><span class="tag n">03</span><div class="next-step-icon">⌁</div><h3>Instrumentation</h3><p>logs + scorecards</p></div>
+    <div class="next-step-card warm"><span class="tag w">04</span><div class="next-step-icon">◌</div><h3>Pilot</h3><p>3–4 participants</p></div>
+    <div class="next-step-card green"><span class="tag g">05</span><div class="next-step-icon">●</div><h3>Main study</h3><p>analyse + write</p></div>
   </div>
-  <div class="card warm" style="margin-top:18px;padding:16px 22px">
-    <span class="tag w">Open decisions</span>
-    <div style="display:flex;gap:32px">
-      <p style="flex:1;font-size:17px"><strong>Deployment:</strong> local Linux workstation or controlled remote backend?</p>
-      <p style="flex:1;font-size:17px"><strong>Targets:</strong> spatially demanding, but still natural for designers?</p>
+
+  <div class="next-step-decisions" data-motion-group="fade-up">
+    <span class="tag w">Before the pilot</span>
+    <div>
+      <p><strong>Deployment</strong><span>Linux workstation or controlled remote backend?</span></p>
+      <p><strong>Target scenes</strong><span>Require spatial reasoning and feel natural to designers.</span></p>
     </div>
   </div>
 </section>
 
-<!-- 16 · References I -->
-<section class="slide">
+<!-- 17 · References I -->
+<section class="slide references-slide">
   <div class="eyebrow">References · 1/2</div>
-  <h2>Foundations &amp; related systems</h2>
-  <div class="rule"></div>
-  <div class="refs">
+  <h2>Foundations, generation &amp; interaction</h2>
+
+  <div class="refs dense">
     <div class="ref"><b>[1]</b><span>Landau, B., &amp; Jackendoff, R. (1993). <em>“What” and “where” in spatial language and spatial cognition.</em> Behavioral and Brain Sciences, 16(2), 217–265. doi:10.1017/S0140525X00029733.</span></div>
     <div class="ref"><b>[2]</b><span>Egenhofer, M. J., &amp; Shariff, R. (1998). <em>Metric details for natural-language spatial relations.</em> ACM TOIS, 16(4), 295–321. doi:10.1145/291128.291129.</span></div>
     <div class="ref"><b>[3]</b><span>Totten, C. W. (2019). <em>An Architectural Approach to Level Design</em> (2nd ed.). CRC Press.</span></div>
-    <div class="ref"><b>[4]</b><span>Liapis, A., Yannakakis, G. N., Alexopoulos, C., &amp; Lopes, P. (2016). <em>Can computers foster human users’ creativity?</em> Digital Culture &amp; Education, 8(2), 136–153.</span></div>
+    <div class="ref"><b>[4]</b><span>Liapis, A., Smith, G., &amp; Shaker, N. (2016). <em>Mixed-initiative content creation.</em> In Procedural Content Generation in Games, 195–214. Springer.</span></div>
     <div class="ref"><b>[5]</b><span>Norman, D. A. (1986). <em>Cognitive engineering.</em> In User Centered System Design, 31–61. Lawrence Erlbaum.</span></div>
-    <div class="ref"><b>[6]</b><span>Poole, B., Jain, A., Barron, J. T., &amp; Mildenhall, B. (2022). <em>DreamFusion: Text-to-3D using 2D diffusion.</em> arXiv:2209.14988.</span></div>
+    <div class="ref"><b>[6]</b><span>Poole, B., Jain, A., Barron, J. T., &amp; Mildenhall, B. (2023). <em>DreamFusion: Text-to-3D using 2D diffusion.</em> ICLR.</span></div>
     <div class="ref"><b>[7]</b><span>Zhang, L., Rao, A., &amp; Agrawala, M. (2023). <em>Adding conditional control to text-to-image diffusion models.</em> ICCV, 3836–3847.</span></div>
     <div class="ref"><b>[8]</b><span>Schult, J., et al. (2024). <em>ControlRoom3D: Room generation using semantic proxy rooms.</em> CVPR 2024.</span></div>
-    <div class="ref"><b>[9]</b><span>Dong, W., et al. (2024). <em>Coin3D: Controllable and interactive 3D assets generation with proxy-guided conditioning.</em> doi:10.1145/3641519.3657425.</span></div>
+    <div class="ref"><b>[9]</b><span>Fedele, E., et al. (2025). <em>SpaceControl: Introducing test-time spatial control to 3D generative modeling.</em> arXiv preprint.</span></div>
     <div class="ref"><b>[10]</b><span>Chen, Y., et al. (2024). <em>GaussianEditor: Swift and controllable 3D editing with Gaussian splatting.</em> CVPR 2024.</span></div>
     <div class="ref"><b>[11]</b><span>Mikaeili, A., Perel, O., Safaee, M., Cohen-Or, D., &amp; Mahdavi-Amiri, A. (2023). <em>SKED: Sketch-guided text-based 3D editing.</em> ICCV 2023.</span></div>
-  </div>
-</section>
-
-<!-- 17 · References II -->
-<section class="slide">
-  <div class="eyebrow">References · 2/2</div>
-  <h2>Models, interaction &amp; measurement</h2>
-  <div class="rule"></div>
-  <div class="refs">
     <div class="ref"><b>[12]</b><span>Tochilkin, D., et al. (2024). <em>TripoSR: Fast 3D object reconstruction from a single image.</em> arXiv:2403.02151.</span></div>
     <div class="ref"><b>[13]</b><span>Team Hunyuan3D, et al. (2025). <em>Hunyuan3D 2.1: From images to high-fidelity 3D assets with production-ready PBR material.</em> arXiv:2506.15442.</span></div>
     <div class="ref"><b>[14]</b><span>Shneiderman, B. (1983). <em>Direct manipulation: A step beyond programming languages.</em> Computer, 16(8), 57–69. doi:10.1109/MC.1983.1654471.</span></div>
     <div class="ref"><b>[15]</b><span>Amershi, S., et al. (2019). <em>Guidelines for human-AI interaction.</em> CHI ’19, Paper 3. doi:10.1145/3290605.3300233.</span></div>
+  </div>
+</section>
+
+<!-- 18 · References II -->
+<section class="slide references-slide">
+  <div class="eyebrow">References · 2/2</div>
+  <h2>Automation, agency, measurement &amp; implementation</h2>
+
+  <div class="refs dense">
     <div class="ref"><b>[16]</b><span>Heer, J. (2019). <em>Agency plus automation: Designing artificial intelligence into interactive systems.</em> PNAS, 116(6), 1844–1850.</span></div>
     <div class="ref"><b>[17]</b><span>Hart, S. G., &amp; Staveland, L. E. (1988). <em>Development of NASA-TLX: Results of empirical and theoretical research.</em> In Human Mental Workload, 139–183.</span></div>
     <div class="ref"><b>[18]</b><span>Hart, S. G. (2006). <em>NASA-TLX: 20 years later.</em> Proceedings of the Human Factors and Ergonomics Society Annual Meeting, 50(9), 904–908.</span></div>
@@ -711,15 +817,26 @@
     <div class="ref"><b>[20]</b><span>Paas, F. (1992). <em>Training strategies for attaining transfer of problem-solving skill in statistics.</em> Journal of Educational Psychology, 84(4), 429–434.</span></div>
     <div class="ref"><b>[21]</b><span>Lewis, J. R., Utesch, B. S., &amp; Maher, D. E. (2013). <em>UMUX-LITE: When there’s no time for the SUS.</em> CHI ’13, 2099–2102. doi:10.1145/2470654.2481287.</span></div>
     <div class="ref"><b>[22]</b><span>Cherry, E., &amp; Latulipe, C. (2014). <em>Quantifying the creativity support of digital tools through the Creativity Support Index.</em> ACM TOCHI, 21(4), Article 21.</span></div>
+    <div class="ref"><b>[23]</b><span>Hutchins, E. L., Hollan, J. D., &amp; Norman, D. A. (1985). <em>Direct manipulation interfaces.</em> Human–Computer Interaction, 1(4), 311–338.</span></div>
+    <div class="ref"><b>[24]</b><span>LaViola, J. J., Kruijff, E., McMahan, R. P., Bowman, D. A., &amp; Poupyrev, I. (2017). <em>3D User Interfaces: Theory and Practice</em> (2nd ed.). Addison-Wesley.</span></div>
+    <div class="ref"><b>[25]</b><span>Xu, Y., et al. (2024). <em>Sketch2Scene: Automatic generation of interactive 3D game scenes from users’ casual sketches.</em> arXiv preprint.</span></div>
+    <div class="ref"><b>[26]</b><span>Lee, I., et al. (2026). <em>SimuScene: Simulation-ready compositional 3D scene reconstruction from a single image.</em> arXiv:2606.03994.</span></div>
+    <div class="ref"><b>[27]</b><span>Guo, C., Li, J., Li, Y., &amp; Huang, Z. (2026). <em>WorldClaw: Agentic 3D open-world generation at scale.</em> arXiv preprint.</span></div>
+    <div class="ref"><b>[28]</b><span>Pfaff, N., Cohn, T., Zakharov, S., Cory, R., &amp; Tedrake, R. (2026). <em>SceneSmith: Agentic generation of simulation-ready indoor scenes.</em> arXiv preprint.</span></div>
+    <div class="ref"><b>[29]</b><span>Cornelio, P., et al. (2022). <em>The sense of agency in emerging technologies for human–computer integration: A review.</em> Frontiers in Neuroscience, 16, 949138.</span></div>
+    <div class="ref"><b>[30]</b><span>Haque, A., Tancik, M., Efros, A. A., Holynski, A., &amp; Kanazawa, A. (2023). <em>Instruct-NeRF2NeRF: Editing 3D scenes with instructions.</em> ICCV, 19740–19750.</span></div>
+    <div class="ref"><b>[31]</b><span>Three.js. <em>GLTFExporter.</em> Documentation.</span></div>
+    <div class="ref"><b>[32]</b><span>Three.js. <em>BufferGeometry.</em> Documentation.</span></div>
+    <div class="ref"><b>[33]</b><span>Khronos Group. <em>glTF 2.0 Specification.</em></span></div>
   </div>
 </section>
 
-<!-- 18 · End -->
-<section class="slide title">
+<!-- 19 · End -->
+<section class="slide title closing-slide">
   <div class="title-wrap">
     <div class="eyebrow">Thank you</div>
     <h1>Questions &amp; discussion</h1>
-    <div class="rule"></div>
+
     <p class="sub" style="max-width:780px">Augmenting Text Prompts with Spatial Proxy Controls in
       AI-Assisted 3D Scene Generation within Unity</p>
     <div class="meta">
