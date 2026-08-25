@@ -345,237 +345,255 @@
 <!-- 8 · Generation engineering detail -->
 <section class="slide generation-detail-slide">
   <div class="eyebrow">Implementation · Single-view handoff</div>
-  <h2>Treat the source image as an asset specification</h2>
+  <h2>Internal textual prompt</h2>
 
-  <svg viewBox="0 0 1140 424" style="width:100%;flex:1" aria-label="Image-style failures and TripoSR orientation recovery">
-    <rect x="0" y="8" width="340" height="174" rx="10" class="sv-box-r"/>
-    <text x="22" y="35" class="sv-lane" fill="#dc2626">NAIVE · PHOTOGRAPH</text>
-    <rect x="24" y="51" width="118" height="88" rx="6" fill="#fff" stroke="#f2c5c5"/>
-    <path d="M35 130 L47 93 L66 78 L89 92 L103 130 Z" fill="#dc2626" opacity=".42"/>
-    <circle cx="45" cy="112" r="16" fill="#0e9f6e" opacity=".55"/>
-    <circle cx="116" cy="107" r="20" fill="#0e9f6e" opacity=".4"/>
-    <text x="162" y="72" class="sv-t">Scene cues enter the mesh</text>
-    <text x="162" y="96" class="sv-d">foreground plants + shadows</text>
-    <text x="162" y="114" class="sv-d">become reconstructed geometry</text>
-    <text x="162" y="146" class="sv-d" fill="#dc2626" font-weight="600">the mesh is not isolated</text>
+  <div class="source-image-comparison" data-motion-group="fade-up">
+    <article class="source-option photograph-source">
+      <img src="photograph.png" alt="Photograph of a house surrounded by lawn and vegetation" draggable="false">
+      <div class="source-option-copy">
+        <span class="source-option-kicker prompt-kicker">
+          <span>Before</span>
+          <code>“photorealistic house, right-front view, real-estate photo, natural daylight”</code>
+        </span>
+        <h3>Scene cues leak</h3>
+      </div>
+    </article>
 
-    <rect x="400" y="8" width="340" height="174" rx="10" class="sv-box-g"/>
-    <text x="422" y="35" class="sv-lane" fill="#0e9f6e">ADOPTED · LOW-POLY ASSET RENDER</text>
-    <rect x="424" y="51" width="118" height="88" rx="6" fill="#fff" stroke="#bfe6d8"/>
-    <path d="M441 130 L451 91 L478 72 L514 93 L526 130 Z" fill="#0a2540" opacity=".52"/>
-    <rect x="477" y="108" width="19" height="22" fill="#fff" opacity=".86"/>
-    <text x="562" y="72" class="sv-t">A simple convention helps</text>
-    <text x="562" y="96" class="sv-d">whole · centred · unoccluded</text>
-    <text x="562" y="114" class="sv-d">plain background · even light</text>
-    <text x="562" y="146" class="sv-d" fill="#0e9f6e" font-weight="600">clean source for lifting</text>
+    <div class="source-comparison-mid" aria-hidden="true">
+      <span>→</span>
+    </div>
 
-    <rect x="800" y="8" width="340" height="174" rx="10" class="sv-box-w"/>
-    <text x="822" y="35" class="sv-lane" fill="#d97706">KNOWN COST · 3/4 VIEW</text>
-    <line x1="867" y1="139" x2="867" y2="53" stroke="#8898aa" stroke-width="1.5" stroke-dasharray="4 3"/>
-    <g transform="rotate(6 890 98)">
-      <path d="M842 136 L851 93 L881 72 L918 95 L929 136 Z" fill="#d97706" opacity=".5"/>
-      <line x1="881" y1="72" x2="881" y2="136" stroke="#d97706" stroke-width="2"/>
-    </g>
-    <path d="M868 58 A40 40 0 0 1 891 62" fill="none" stroke="#dc2626" stroke-width="2"/>
-    <text x="899" y="64" class="sv-d" fill="#dc2626" font-weight="600">3–7° tilt</text>
-    <text x="952" y="96" class="sv-t">tilt is baked into the mesh</text>
-    <text x="952" y="120" class="sv-d">stricter prompts can trigger</text>
-    <text x="952" y="138" class="sv-d">the blueprint failure</text>
+    <article class="source-option lowpoly-source">
+      <img src="lowpoly.png" alt="Low-poly pink house on a plain background" draggable="false">
+      <div class="source-option-copy">
+        <span class="source-option-kicker prompt-kicker">
+          <span>Adopted</span>
+          <code>“low poly 3D model”</code>
+        </span>
+        <h3>Clean subject</h3>
+      </div>
+    </article>
 
-    <text x="0" y="222" class="sv-lane">GEOMETRIC RECOVERY · TRIPOSR PATH ONLY</text>
-    <rect x="0" y="242" width="205" height="116" rx="8" class="sv-box sv-box-a"/>
-    <text x="103" y="271" text-anchor="middle" class="sv-t">1 · Estimate up</text>
-    <text x="103" y="297" text-anchor="middle" class="sv-d">wall normals → smallest</text>
-    <text x="103" y="315" text-anchor="middle" class="sv-d">eigenvector of scatter matrix</text>
-    <text x="103" y="340" text-anchor="middle" class="sv-small">skip if underdetermined</text>
-    <rect x="235" y="242" width="180" height="116" rx="8" class="sv-box"/>
-    <text x="325" y="271" text-anchor="middle" class="sv-t">2 · Align yaw</text>
-    <text x="325" y="297" text-anchor="middle" class="sv-d">minimum-area footprint</text>
-    <text x="325" y="315" text-anchor="middle" class="sv-d" font-weight="600">search bounded to ±45°</text>
-    <rect x="445" y="242" width="225" height="116" rx="8" class="sv-box sv-box-w"/>
-    <text x="558" y="271" text-anchor="middle" class="sv-t">3 · Apply transforms in order</text>
-    <rect x="478" y="290" width="160" height="44" rx="5" fill="#fff" stroke="#f0d0a8"/>
-    <text x="558" y="307" text-anchor="middle" class="sv-d">rotate mesh children</text>
-    <text x="558" y="325" text-anchor="middle" class="sv-d">then scale the root</text>
-    <rect x="700" y="242" width="180" height="116" rx="8" class="sv-box sv-box-g"/>
-    <text x="790" y="271" text-anchor="middle" class="sv-t">4 · Fill proxy</text>
-    <text x="790" y="297" text-anchor="middle" class="sv-d">non-uniform scaling uses</text>
-    <text x="790" y="315" text-anchor="middle" class="sv-d">upright geometry</text>
-    <rect x="910" y="230" width="230" height="140" rx="10" fill="#0e9f6e"/>
-    <text x="1025" y="263" text-anchor="middle" font-size="12" letter-spacing=".12em" fill="#dfeae2">MEASURED ON REAL OUTPUTS</text>
-    <text x="1025" y="312" text-anchor="middle" font-size="34" font-weight="600" fill="#fff">3.26° → 0.24°</text>
-    <text x="1025" y="341" text-anchor="middle" font-size="14" fill="#ecfdf5">3.61° → 0.33°</text>
-    <line x1="205" y1="300" x2="231" y2="300" class="sv-arr"/>
-    <line x1="415" y1="300" x2="441" y2="300" class="sv-arr"/>
-    <line x1="670" y1="300" x2="696" y2="300" class="sv-arr"/>
-    <line x1="880" y1="300" x2="906" y2="300" class="sv-arr sv-arr-g"/>
-  </svg>
+    <div class="source-comparison-but" aria-hidden="true">
+      <span>But</span>
+    </div>
+
+    <figure class="source-option tilted-output">
+      <img src="tilted.png" alt="Tilted reconstructed mesh of a pink house" draggable="false">
+      <figcaption class="source-option-copy">
+        <h3>Tilt baked into the mesh</h3>
+      </figcaption>
+    </figure>
+  </div>
+
+  <section class="orientation-recovery" data-motion="fade-up" aria-label="TripoSR orientation recovery">
+    <header class="orientation-recovery-label">
+      <span>TripoSR · Orientation recovery</span>
+    </header>
+
+    <div class="recovery-flow" aria-label="Recovery steps">
+      <div class="recovery-step">
+        <strong>Estimate up</strong>
+        <p>Wall normals: smallest eigenvector of the scatter matrix</p>
+      </div>
+      <i aria-hidden="true"></i>
+      <div class="recovery-step">
+        <strong>Align yaw</strong>
+        <p>Find the minimum-area footprint</p>
+      </div>
+      <i aria-hidden="true"></i>
+      <div class="recovery-step">
+        <strong>Apply transforms in order</strong>
+        <p>Rotate mesh children, then scale the root</p>
+      </div>
+      <i aria-hidden="true"></i>
+      <div class="recovery-step">
+        <strong>Fill proxy</strong>
+        <p>Use non-uniform scaling</p>
+        <small>Fit with upright geometry</small>
+      </div>
+    </div>
+
+  </section>
+
+  <aside class="recovery-result" data-motion="scale" aria-label="Measured tilt after orientation recovery">
+    <div class="recovery-result-heading">
+      <span class="recovery-result-title">Measured tilt</span>
+      <small>from vertical · before → after correction</small>
+    </div>
+    <div class="recovery-result-values">
+      <p>
+        <span class="tag n">Mesh A</span>
+        <b>3.26°</b>
+        <i aria-hidden="true">→</i>
+        <strong>0.24°</strong>
+      </p>
+      <p>
+        <span class="tag n">Mesh B</span>
+        <b>3.61°</b>
+        <i aria-hidden="true">→</i>
+        <strong>0.33°</strong>
+      </p>
+    </div>
+  </aside>
 </section>
 
 <!-- 9 · Refinement inference architecture -->
 <section class="slide refinement-architecture-slide">
   <div class="eyebrow">Implementation · Refinement architecture</div>
-  <h2>Four views inform one local replacement</h2>
+  <h2>Multi-view guided local replacement</h2>
 
-  <svg viewBox="0 0 1140 430" style="width:100%;flex:1" aria-label="Multi-view local refinement inference pipeline">
-    <rect x="0" y="8" width="1140" height="156" rx="10" fill="none" stroke="#dfe5ec" stroke-dasharray="4 4"/>
-    <text x="16" y="32" class="sv-lane">UNITY · REGION CAPTURE</text>
-    <rect x="24" y="49" width="190" height="88" rx="8" class="sv-box sv-box-a"/>
-    <text x="119" y="78" text-anchor="middle" class="sv-t">Select refinement OBB</text>
-    <text x="119" y="101" text-anchor="middle" class="sv-d">select region + edit prompt</text>
-    <text x="119" y="119" text-anchor="middle" class="sv-d">hard spatial boundary</text>
-    <rect x="267" y="42" width="486" height="103" rx="8" class="sv-box sv-box-a"/>
-    <text x="510" y="65" text-anchor="middle" class="sv-t">Orthographic capture × 4</text>
-    <g transform="translate(292 77)">
-      <g><rect width="92" height="47" rx="5" fill="#fff" stroke="#bfd0e5"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">FRONT</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
-      <g transform="translate(115 0)"><rect width="92" height="47" rx="5" fill="#fff" stroke="#bfd0e5"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">BACK</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
-      <g transform="translate(230 0)"><rect width="92" height="47" rx="5" fill="#fff" stroke="#bfd0e5"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">LEFT</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
-      <g transform="translate(345 0)"><rect width="92" height="47" rx="5" fill="#fff" stroke="#bfd0e5"/><text x="46" y="19" text-anchor="middle" class="sv-d" font-weight="600">RIGHT</text><text x="46" y="36" text-anchor="middle" class="sv-small">RGB · D · E · M</text></g>
-    </g>
-    <text x="510" y="141" text-anchor="middle" class="sv-small">+ crop bounds + fixed capture matrices</text>
-    <rect x="884" y="49" width="232" height="88" rx="8" class="sv-box sv-box-g"/>
-    <text x="1000" y="78" text-anchor="middle" class="sv-t">Replacement mesh + colour views</text>
-    <text x="1000" y="102" text-anchor="middle" class="sv-d">mesh returns with four</text>
-    <text x="1000" y="120" text-anchor="middle" class="sv-d">refined images</text>
-    <line x1="214" y1="93" x2="263" y2="93" class="sv-arr"/>
+  <div class="generation-arch refinement-arch two-layer-arch" data-motion-group="fade-up"
+    aria-label="Two-layer local refinement architecture connecting Unity and ComfyUI">
+    <section class="generation-arch-tier unity-tier refinement-unity-tier">
+      <header class="generation-tier-name">
+        <span>Unity</span>
+      </header>
 
-    <rect x="0" y="202" width="1140" height="211" rx="10" fill="none" stroke="#dfe5ec" stroke-dasharray="4 4"/>
-    <text x="16" y="226" class="sv-lane">ROUTER + ONE 4-BRANCH COMFYUI GRAPH</text>
-    <rect x="24" y="246" width="205" height="132" rx="8" class="sv-box"/>
-    <text x="127" y="273" text-anchor="middle" class="sv-t">Shared state</text>
-    <text x="127" y="298" text-anchor="middle" class="sv-d">checkpoint · prompt</text>
-    <text x="127" y="316" text-anchor="middle" class="sv-d">ControlNet loaders · seed</text>
-    <text x="127" y="345" text-anchor="middle" class="sv-small">one request, consistent views</text>
-    <rect x="269" y="246" width="190" height="132" rx="8" class="sv-box sv-box-w"/>
-    <text x="364" y="273" text-anchor="middle" class="sv-t">Masked inpaint × 4</text>
-    <text x="364" y="299" text-anchor="middle" class="sv-d">each branch edits its</text>
-    <text x="364" y="317" text-anchor="middle" class="sv-d">own visible surface</text>
-    <text x="364" y="345" text-anchor="middle" class="sv-small">Front · Back · Left · Right</text>
-    <rect x="499" y="246" width="185" height="132" rx="8" class="sv-box"/>
-    <text x="592" y="273" text-anchor="middle" class="sv-t">Prepare inputs</text>
-    <text x="592" y="299" text-anchor="middle" class="sv-d">crop to projected OBB</text>
-    <text x="592" y="317" text-anchor="middle" class="sv-d">centre + letterbox 512²</text>
-    <rect x="724" y="238" width="205" height="148" rx="8" class="sv-box sv-box-g"/>
-    <text x="827" y="266" text-anchor="middle" class="sv-t">Hunyuan3D-2mv Fast [13]</text>
-    <text x="827" y="289" text-anchor="middle" class="sv-d">remove background · central component</text>
-    <text x="827" y="307" text-anchor="middle" class="sv-d">tagged F / B / L / R</text>
-    <text x="827" y="325" text-anchor="middle" class="sv-d">→ one replacement surface</text>
-    <rect x="752" y="339" width="150" height="34" rx="5" fill="#fff" stroke="#bfe6d8"/>
-    <text x="827" y="361" text-anchor="middle" class="sv-small">DEFAULT · AUTO MODE</text>
-    <rect x="969" y="246" width="147" height="132" rx="8" class="sv-box sv-box-r"/>
-    <text x="1043" y="273" text-anchor="middle" class="sv-t">Fallback</text>
-    <text x="1043" y="300" text-anchor="middle" class="sv-d">refined Front</text>
-    <text x="1043" y="318" text-anchor="middle" class="sv-d">→ TripoSR</text>
-    <text x="1043" y="345" text-anchor="middle" class="sv-small">warning recorded</text>
-    <line x1="229" y1="312" x2="265" y2="312" class="sv-arr"/>
-    <line x1="459" y1="312" x2="495" y2="312" class="sv-arr"/>
-    <line x1="684" y1="312" x2="720" y2="312" class="sv-arr"/>
-    <path d="M929 312 C947 312 947 312 965 312" class="sv-arr sv-arr-r"/>
-    <path d="M510 145 C510 184 127 188 127 242" class="sv-arr"/>
-    <path d="M827 234 C827 190 1000 183 1000 141" class="sv-arr sv-arr-g"/>
-  </svg>
+      <div class="generation-tier-cells refinement-unity-cells">
+        <article class="generation-arch-cell refinement-select-cell">
+          <figure class="refinement-evidence-image selected-evidence">
+            <img src="selected.png" alt="Roof region selected with an oriented bounding box in Unity" draggable="false">
+          </figure>
+          <div>
+            <h3>Select refinement OBB + textual prompt</h3>
+          </div>
+        </article>
+
+        <article class="generation-arch-cell refinement-capture-cell">
+          <div class="refinement-capture-heading">
+            <h3>Orthographic capture × 4</h3>
+          </div>
+          <div class="refinement-view-strip" aria-label="Front, left, back and right orthographic captures">
+            <figure>
+              <div class="refinement-view-crop"><img src="1c52c33fa3e04eb0a55e38cd89baed17_rgb_image.png" alt="Front orthographic house capture" draggable="false"></div>
+              <figcaption>Front</figcaption>
+            </figure>
+            <figure>
+              <div class="refinement-view-crop"><img src="2d80f0ba8ec747e094fc9217e9880d2c_rgb_image.png" alt="Left orthographic house capture" draggable="false"></div>
+              <figcaption>Left</figcaption>
+            </figure>
+            <figure>
+              <div class="refinement-view-crop"><img src="d15ac6498aa34aab8d3da205aaf91151_rgb_image.png" alt="Back orthographic house capture" draggable="false"></div>
+              <figcaption>Back</figcaption>
+            </figure>
+            <figure>
+              <div class="refinement-view-crop"><img src="e31ba8f39e464f38a2df09627aa59049_rgb_image.png" alt="Right orthographic house capture" draggable="false"></div>
+              <figcaption>Right</figcaption>
+            </figure>
+          </div>
+          <div class="refinement-capture-signals" aria-label="Captured signals">
+            <span>RGB</span><span>Depth</span><span>Edges</span><span>Mask</span>
+          </div>
+        </article>
+
+        <article class="generation-arch-cell refinement-result-cell">
+          <figure class="refinement-evidence-image result-evidence">
+            <img src="refined.png" alt="Refined roof mesh placed back into the house in Unity" draggable="false">
+          </figure>
+          <div class="refinement-result-copy">
+            <h3>Fit + place</h3>
+            <p>Fit to untouched geometry · hide the original inside the OBB · place the refined at the region</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="generation-layer-transfer refinement-layer-transfer" aria-hidden="true">
+      <div class="generation-layer-transfer-track refinement-layer-transfer-track">
+        <div class="generation-transfer-item down-flow refinement-capture-flow">
+          <span>4 views + masks</span><i></i>
+        </div>
+        <div class="generation-transfer-item up-flow refinement-replacement-flow">
+          <span>Refined mesh</span><i></i>
+        </div>
+      </div>
+    </div>
+
+    <section class="generation-arch-tier service-tier refinement-service-tier">
+      <header class="generation-tier-name">
+        <span>ComfyUI</span>
+      </header>
+
+      <div class="generation-tier-cells refinement-service-cells">
+        <article class="generation-arch-cell refinement-inpaint-cell">
+          <h3>Masked inpaint × 4</h3>
+          <p>Edit Front · Left · Back · Right</p>
+          <p>Shared prompt, checkpoint + seed</p>
+        </article>
+        <article class="generation-arch-cell refinement-prepare-cell">
+          <h3>Prepare four inputs</h3>
+          <p>Crop to projected OBB</p>
+          <p>Centre without distortion</p>
+        </article>
+        <article class="generation-arch-cell refinement-lift-cell">
+          <h3>Hunyuan3D-2mv Fast <span class="cite">[13]</span></h3>
+          <p>Tagged views</p>
+        </article>
+      </div>
+    </section>
+  </div>
 </section>
 
 <!-- 10 · Refinement locality and welding -->
 <section class="slide refinement-locality-slide">
-  <div class="eyebrow">Implementation · Refinement locality</div>
-  <h2>Unity keeps each generated edit local</h2>
+  <div class="eyebrow">Implementation · Fit and Place Refinement Mesh</div>
 
-  <svg viewBox="0 0 1140 420" style="width:100%;flex:1" aria-label="Mesh clipping, zipper welding, colour projection and transactional validation">
-    <g transform="translate(0 5)">
-      <rect x="0" y="0" width="205" height="330" rx="10" class="sv-box sv-box-a"/>
-      <text x="103" y="30" text-anchor="middle" class="sv-t">1 · Clip source</text>
-      <path d="M32 102 C60 45 147 55 177 104 L168 238 C120 272 68 261 37 225 Z" fill="#0a2540" opacity=".25" stroke="#0a2540" stroke-width="2"/>
-      <rect x="69" y="118" width="77" height="83" fill="#fff" stroke="#dc2626" stroke-width="2" stroke-dasharray="5 4"/>
-      <text x="103" y="293" text-anchor="middle" class="sv-d">exact cut at OBB</text>
-      <text x="103" y="312" text-anchor="middle" class="sv-small">preserve geometry outside the OBB</text>
+  <div class="local-surgery-layout" data-motion-group="fade-up">
+    <figure class="local-surgery-viewport" data-local-surgery-viewport>
+      <canvas data-local-surgery-scene aria-label="Interactive Three.js demonstration of local mesh surgery on a triangulated house. Drag to rotate; scroll to zoom; double-click to reset the view." title="Drag to rotate · Scroll to zoom · Double-click to reset"></canvas>
+      <div class="local-surgery-state" aria-live="polite">
+        <span data-local-surgery-state-index>01 / 06</span>
+        <strong data-local-surgery-state-title>Triangle mesh</strong>
+      </div>
+      <div class="local-surgery-status" data-local-surgery-status role="status">
+        <span data-local-surgery-status-text>Preparing 3D mesh…</span>
+      </div>
+    </figure>
 
-      <rect x="233" y="0" width="205" height="330" rx="10" class="sv-box sv-box-w"/>
-      <text x="336" y="30" text-anchor="middle" class="sv-t">2 · Fit replacement</text>
-      <rect x="269" y="82" width="133" height="156" rx="8" fill="#fff" stroke="#f0d0a8"/>
-      <path d="M282 220 L294 128 L334 91 L380 131 L390 220 Z" fill="#d97706" opacity=".48"/>
-      <rect x="278" y="108" width="116" height="124" fill="none" stroke="#dc2626" stroke-dasharray="5 4"/>
-      <text x="336" y="275" text-anchor="middle" class="sv-d" font-weight="600">104% of OBB</text>
-      <text x="336" y="296" text-anchor="middle" class="sv-d">5% inset only on seam faces</text>
+    <nav class="local-surgery-steps" aria-label="Local mesh surgery stages">
+      <button type="button" class="local-surgery-step is-active" data-local-surgery-step="0" aria-pressed="true">
+        <span>Triangle mesh</span>
+        <strong>Triangle mesh structure</strong>
+        <p>Connect triangular faces · Share internal edges</p>
+      </button>
 
-      <rect x="466" y="0" width="205" height="330" rx="10" class="sv-box"/>
-      <text x="569" y="30" text-anchor="middle" class="sv-t">3 · Pair loops</text>
-      <ellipse cx="569" cy="136" rx="70" ry="46" fill="none" stroke="#0a2540" stroke-width="3"/>
-      <ellipse cx="569" cy="145" rx="51" ry="32" fill="none" stroke="#d97706" stroke-width="3"/>
-      <g fill="#0a2540"><circle cx="499" cy="136" r="4"/><circle cx="527" cy="99" r="4"/><circle cx="589" cy="93" r="4"/><circle cx="635" cy="118" r="4"/><circle cx="628" cy="166" r="4"/><circle cx="553" cy="181" r="4"/></g>
-      <g fill="#d97706"><circle cx="518" cy="145" r="4"/><circle cx="546" cy="117" r="4"/><circle cx="598" cy="120" r="4"/><circle cx="620" cy="151" r="4"/><circle cx="577" cy="177" r="4"/></g>
-      <text x="569" y="246" text-anchor="middle" class="sv-d">OBB face + centroid</text>
-      <text x="569" y="268" text-anchor="middle" class="sv-d" font-weight="600">arc-length zipper</text>
-      <text x="569" y="290" text-anchor="middle" class="sv-small">unequal tessellation, no T-junctions</text>
+      <button type="button" class="local-surgery-step" data-local-surgery-step="1" aria-pressed="false">
+        <span>OBB cut</span>
+        <strong>Source boundary creation</strong>
+        <p>Split crossing triangles</p>
+      </button>
 
-      <rect x="699" y="0" width="205" height="330" rx="10" class="sv-box sv-box-g"/>
-      <text x="802" y="30" text-anchor="middle" class="sv-t">4 · Reconstruct appearance</text>
-      <g transform="translate(740 76)">
-        <path d="M0 142 L13 53 L63 8 L119 56 L128 142 Z" fill="#0e9f6e" opacity=".36" stroke="#0e9f6e" stroke-width="2"/>
-        <path d="M13 53 L63 8 L60 142 L0 142 Z" fill="#0a2540" opacity=".25"/>
-        <path d="M63 8 L119 56 L128 142 L60 142 Z" fill="#d97706" opacity=".28"/>
-        <path d="M25 112 L42 95 L61 112" fill="none" stroke="#fff" stroke-width="4" opacity=".85"/>
-      </g>
-      <text x="802" y="260" text-anchor="middle" class="sv-d">project vertex colours with</text>
-      <text x="802" y="279" text-anchor="middle" class="sv-d">stored camera matrices</text>
-      <text x="802" y="301" text-anchor="middle" class="sv-small">normal⁴ weighting · blend top two</text>
+      <button type="button" class="local-surgery-step" data-local-surgery-step="2" aria-pressed="false">
+        <span>Fit replacement</span>
+        <strong>Replacement boundary creation</strong>
+        <p>Fit replacement · Cut an inner seam</p>
+      </button>
 
-      <rect x="932" y="0" width="208" height="330" rx="10" fill="#0e9f6e"/>
-      <text x="1036" y="30" text-anchor="middle" class="sv-t" fill="#fff">5 · Validate → commit</text>
-      <circle cx="1036" cy="119" r="52" fill="none" stroke="#fff" stroke-width="5" opacity=".9"/>
-      <path d="M1012 119 L1029 136 L1062 98" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-      <text x="1036" y="205" text-anchor="middle" font-size="13" fill="#ecfdf5">every new seam edge</text>
-      <text x="1036" y="225" text-anchor="middle" font-size="20" font-weight="600" fill="#fff">exactly 2 triangles</text>
-      <text x="1036" y="263" text-anchor="middle" font-size="13" fill="#ecfdf5">success: one Undo transaction</text>
-      <text x="1036" y="283" text-anchor="middle" font-size="13" fill="#ecfdf5">failure: destroy temp, keep source</text>
-      <line x1="205" y1="165" x2="229" y2="165" class="sv-arr"/>
-      <line x1="438" y1="165" x2="462" y2="165" class="sv-arr"/>
-      <line x1="671" y1="165" x2="695" y2="165" class="sv-arr"/>
-      <line x1="904" y1="165" x2="928" y2="165" class="sv-arr sv-arr-g"/>
-    </g>
-  </svg>
-  <div style="display:flex;gap:14px;align-items:center">
-    <span class="tag g" style="margin:0">Guarantee</span>
-    <p class="note" style="font-size:15px"><strong>The edit is clipped to the OBB and welded at the boundary.</strong> Limitation: Hunyuan does not use the unchanged exterior when generating the new shape.</p>
+      <button type="button" class="local-surgery-step" data-local-surgery-step="3" aria-pressed="false">
+        <span>Zipper weld</span>
+        <strong>Transition strip construction</strong>
+        <p>Match normalized perimeters · Add one triangle per advance</p>
+      </button>
+
+      <button type="button" class="local-surgery-step" data-local-surgery-step="4" aria-pressed="false">
+        <span>Reconstruct appearance</span>
+        <strong>Multi-view colour reconstruction</strong>
+        <p>Project four views · Prefer facing cameras · Blend two best samples</p>
+      </button>
+
+      <button type="button" class="local-surgery-step" data-local-surgery-step="5" aria-pressed="false">
+        <span>Seam check</span>
+        <strong>Seam closure validation</strong>
+        <p>Check source seam · Check replacement seam · Reject open edges</p>
+      </button>
+    </nav>
   </div>
 </section>
 
-<!-- 11 · Two lifting models -->
-<section class="slide model-choice-slide">
-  <div class="eyebrow">Implementation · Model choice</div>
-  <h2>Quality or iteration speed?</h2>
-
-  <div class="model-comparison" data-motion-group="fade-up">
-    <article class="model-option tripo">
-      <h3>TripoSR · single view <span class="cite">[12]</span></h3>
-      <svg viewBox="0 0 300 60" style="width:100%;height:52px" aria-label="TripoSR relative speed and quality">
-        <text x="0" y="18" class="sv-small">SPEED</text><rect x="70" y="8" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="8" width="200" height="12" rx="6" fill="#0e9f6e"/>
-        <text x="0" y="48" class="sv-small">QUALITY</text><rect x="70" y="38" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="38" width="70" height="12" rx="6" fill="#dc2626"/>
-      </svg>
-      <p class="model-summary"><strong>Fast feedback</strong><span>lower fidelity</span></p>
-    </article>
-    <div class="model-vs">VS.</div>
-    <article class="model-option hunyuan">
-      <h3>Hunyuan3D 2.1 · single view <span class="cite">[13]</span></h3>
-      <svg viewBox="0 0 300 60" style="width:100%;height:52px" aria-label="Hunyuan3D relative speed and quality">
-        <text x="0" y="18" class="sv-small">SPEED</text><rect x="70" y="8" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="8" width="75" height="12" rx="6" fill="#dc2626"/>
-        <text x="0" y="48" class="sv-small">QUALITY</text><rect x="70" y="38" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="38" width="200" height="12" rx="6" fill="#0e9f6e"/>
-      </svg>
-      <p class="model-summary"><strong>Higher fidelity</strong><span>slower · Linux</span></p>
-    </article>
-  </div>
-  <div class="model-decision-rail" data-motion-group="fade-up">
-    <div class="model-decision">
-      <span class="tag a">Study variable</span>
-      <p style="font-size:19px"><strong>User preference:</strong> faster feedback or higher quality?</p>
-    </div>
-  </div>
-</section>
-
-<!-- 12 · Study design -->
+<!-- 11 · Study design -->
 <section class="slide study-design-slide">
-  <div class="eyebrow">Study design · Testing the RQs</div>
-  <h2>Each research question maps to one task phase</h2>
+  <div class="eyebrow">Study design</div>
 
   <div class="study-meta">
     <span class="tag n">Within-subjects · counterbalanced</span>
@@ -612,11 +630,34 @@
   </div>
   <div class="study-secondary">
     <span class="tag n">Secondary comparison</span>
-    <p style="font-size:17px"><strong>TripoSR vs. Hunyuan3D 2.1:</strong> speed and quality preference on the same creation task.</p>
+    <p><strong>Same creation task:</strong> preference between iteration speed and mesh fidelity.</p>
+  </div>
+  <div class="study-model-comparison" data-motion-group="fade-up" aria-label="TripoSR and Hunyuan3D speed and quality comparison">
+    <article class="study-model-option tripo">
+      <div class="study-model-copy">
+        <h3>TripoSR <span class="cite">[12]</span></h3>
+        <p><strong>Fast feedback</strong><span>Lower fidelity</span></p>
+      </div>
+      <svg viewBox="0 0 300 60" aria-label="TripoSR relative speed and quality">
+        <text x="0" y="18" class="sv-small">SPEED</text><rect x="70" y="8" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="8" width="200" height="12" rx="6" fill="#0e9f6e"/>
+        <text x="0" y="48" class="sv-small">QUALITY</text><rect x="70" y="38" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="38" width="70" height="12" rx="6" fill="#dc2626"/>
+      </svg>
+    </article>
+    <div class="study-model-vs" aria-hidden="true">VS.</div>
+    <article class="study-model-option hunyuan">
+      <div class="study-model-copy">
+        <h3>Hunyuan3D <span class="cite">[13]</span></h3>
+        <p><strong>Higher fidelity</strong><span>Slower · Linux</span></p>
+      </div>
+      <svg viewBox="0 0 300 60" aria-label="Hunyuan3D relative speed and quality">
+        <text x="0" y="18" class="sv-small">SPEED</text><rect x="70" y="8" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="8" width="75" height="12" rx="6" fill="#dc2626"/>
+        <text x="0" y="48" class="sv-small">QUALITY</text><rect x="70" y="38" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="38" width="200" height="12" rx="6" fill="#0e9f6e"/>
+      </svg>
+    </article>
   </div>
 </section>
 
-<!-- 13 · Evaluation plan -->
+<!-- 12 · Evaluation plan -->
 <section class="slide measurement-slide">
   <div class="eyebrow">Study design · Measurement plan</div>
   <h2>Measure creation and refinement separately</h2>
@@ -656,7 +697,7 @@
   </div>
 </section>
 
-<!-- 14 · Current stage -->
+<!-- 13 · Current stage -->
 <section class="slide current-stage-slide">
   <div class="eyebrow">Current status</div>
   <h2>Prototype status</h2>
@@ -683,7 +724,7 @@
   </div>
 </section>
 
-<!-- 15 · Possible Three.js refinement -->
+<!-- 14 · Possible Three.js refinement -->
 <section class="slide threejs-option-slide">
   <div class="eyebrow">Implementation option</div>
   <h2>Architectural refinement with Three.js</h2>
@@ -758,7 +799,7 @@
   </div>
 </section>
 
-<!-- 16 · Next steps -->
+<!-- 15 · Next steps -->
 <section class="slide next-steps-slide">
   <div class="eyebrow">Next steps</div>
   <h2>From prototype to study</h2>
@@ -780,7 +821,7 @@
   </div>
 </section>
 
-<!-- 17 · References I -->
+<!-- 16 · References I -->
 <section class="slide references-slide">
   <div class="eyebrow">References · 1/2</div>
   <h2>Foundations, generation &amp; interaction</h2>
@@ -804,7 +845,7 @@
   </div>
 </section>
 
-<!-- 18 · References II -->
+<!-- 17 · References II -->
 <section class="slide references-slide">
   <div class="eyebrow">References · 2/2</div>
   <h2>Automation, agency, measurement &amp; implementation</h2>
@@ -831,7 +872,7 @@
   </div>
 </section>
 
-<!-- 19 · End -->
+<!-- 18 · End -->
 <section class="slide title closing-slide">
   <div class="title-wrap">
     <div class="eyebrow">Thank you</div>

@@ -5,6 +5,7 @@ type MotionType = "fade-up" | "fade-left" | "fade-right" | "scale" | "draw" | "n
 interface SlideLifecycleDetail {
   index: number;
   slide: HTMLElement;
+  direction: -1 | 0 | 1;
 }
 
 interface MotionConditions {
@@ -17,6 +18,13 @@ interface MotionStartState {
   x?: number;
   y?: number;
   scale?: number;
+}
+
+interface PromptPolicyHandoffRect {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
 }
 
 /**
@@ -34,6 +42,8 @@ export class SlideMotionController {
   private activeProgressiveTween: gsap.core.Tween | null = null;
   private progressiveStep = 0;
   private progressiveStepCount = 0;
+  private progressiveStartsComplete = false;
+  private pendingPromptPolicyHandoff: PromptPolicyHandoffRect | null = null;
   private hoverCleanups: Array<() => void> = [];
   private inlineStyleCleanups: Array<() => void> = [];
   private allowMotion = true;
@@ -44,6 +54,7 @@ export class SlideMotionController {
     if (!detail?.slide) return;
 
     this.activeSlide = detail.slide;
+    this.progressiveStartsComplete = detail.direction === -1;
     this.play(detail.slide);
   };
 
@@ -53,6 +64,7 @@ export class SlideMotionController {
 
     this.teardownActiveMotion();
     this.activeSlide = null;
+    this.progressiveStartsComplete = false;
   };
 
   private constructor() {}
@@ -106,18 +118,52 @@ export class SlideMotionController {
       return true;
     }
 
+    const isSourceComparisonTransition =
+      this.activeSlide?.classList.contains("generation-detail-slide") && nextStep === 2;
+
     this.activeProgressiveTween = timeline.tweenTo(label, {
-      duration: 0.46,
-      ease: "power2.inOut",
+      duration: isSourceComparisonTransition ? 1.08 : 0.46,
+      ease: isSourceComparisonTransition ? "none" : "power2.inOut",
       onComplete: () => { this.activeProgressiveTween = null; }
     });
+    return true;
+  }
+
+  /**
+   * Arms the slide-7 → slide-8 shared-element handoff only after the full
+   * generation architecture has been revealed and the prompt-policy card was clicked.
+   */
+  preparePromptPolicyHandoff(target: Element | null): boolean {
+    if (
+      !this.activeSlide?.classList.contains("generation-architecture-slide") ||
+      this.progressiveStep < this.progressiveStepCount
+    ) return false;
+
+    const policy = target?.closest<HTMLElement>(".policy-cell");
+    if (!policy || !this.activeSlide.contains(policy)) return false;
+
+    const rect = policy.getBoundingClientRect();
+    this.pendingPromptPolicyHandoff = {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height
+    };
     return true;
   }
 
   private play(slide: HTMLElement): void {
     this.teardownActiveMotion();
     const isProgressiveArchitecture = slide.classList.contains("generation-architecture-slide");
-    if (!this.allowMotion && !isProgressiveArchitecture) return;
+    const isProgressiveGenerationDetail = slide.classList.contains("generation-detail-slide");
+    const isProgressiveRefinementArchitecture = slide.classList.contains(
+      "refinement-architecture-slide"
+    );
+    const isProgressiveSlide =
+      isProgressiveArchitecture ||
+      isProgressiveGenerationDetail ||
+      isProgressiveRefinementArchitecture;
+    if (!this.allowMotion && !isProgressiveSlide) return;
 
     this.activeContext = gsap.context(() => {
       if (this.allowMotion) {
@@ -130,6 +176,11 @@ export class SlideMotionController {
       }
 
       if (isProgressiveArchitecture) this.setupGenerationArchitectureSequence(slide);
+      if (isProgressiveGenerationDetail) this.setupGenerationDetailSequence(slide);
+      if (isProgressiveRefinementArchitecture) {
+        this.setupRefinementArchitectureSequence(slide);
+      }
+      if (isProgressiveArchitecture) this.bindPromptPolicyInteraction(slide);
       if (this.allowHover) this.bindCardHover(slide);
     }, slide);
   }
@@ -141,7 +192,11 @@ export class SlideMotionController {
       this.addTitleSequence(timeline, slide, handled);
     } else {
       this.addSlideChrome(timeline, slide, handled);
-      if (slide.classList.contains("generation-architecture-slide")) return;
+      if (
+        slide.classList.contains("generation-architecture-slide") ||
+        slide.classList.contains("generation-detail-slide") ||
+        slide.classList.contains("refinement-architecture-slide")
+      ) return;
 
       timeline.addLabel("content", 0.24);
 
@@ -392,14 +447,316 @@ export class SlideMotionController {
     progressive.to(result as HTMLElement, revealCard, "step-10");
     this.addTransferReveal(progressive, upFlow as HTMLElement, "step-10", "up");
     progressive.addLabel("step-11");
+    this.applyProgressiveEntryState(progressive);
+  }
+
+  /** Builds the six click stops requested for the refinement architecture. */
+  private setupRefinementArchitectureSequence(slide: HTMLElement): void {
+    const unityTier = slide.querySelector<HTMLElement>(".refinement-unity-tier");
+    const serviceTier = slide.querySelector<HTMLElement>(".refinement-service-tier");
+    const select = slide.querySelector<HTMLElement>(".refinement-select-cell");
+    const capture = slide.querySelector<HTMLElement>(".refinement-capture-cell");
+    const inpaint = slide.querySelector<HTMLElement>(".refinement-inpaint-cell");
+    const prepare = slide.querySelector<HTMLElement>(".refinement-prepare-cell");
+    const lift = slide.querySelector<HTMLElement>(".refinement-lift-cell");
+    const result = slide.querySelector<HTMLElement>(".refinement-result-cell");
+    const downFlow = slide.querySelector<HTMLElement>(".refinement-capture-flow");
+    const upFlow = slide.querySelector<HTMLElement>(".refinement-replacement-flow");
+
+    const required = [
+      unityTier,
+      serviceTier,
+      select,
+      capture,
+      inpaint,
+      prepare,
+      lift,
+      result,
+      downFlow,
+      upFlow
+    ];
+    if (required.some((element) => !element)) return;
+
+    const cards = [select, capture, inpaint, prepare, lift, result] as HTMLElement[];
+    const horizontalArrowSources = [select, inpaint, prepare] as HTMLElement[];
+    const transfers = [downFlow, upFlow] as HTMLElement[];
+
+    gsap.set([unityTier, serviceTier], {
+      autoAlpha: 0,
+      y: 8,
+      scale: 0.99,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(cards, {
+      autoAlpha: 0,
+      y: 8,
+      scale: 0.98,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(horizontalArrowSources, { "--flow-arrow-opacity": 0 } as gsap.TweenVars);
+    transfers.forEach((transfer) => this.prepareTransferReveal(transfer));
+
+    const progressive = gsap.timeline({
+      paused: true,
+      defaults: { duration: 0.42, ease: "power3.out" }
+    });
+    this.activeProgressiveTimeline = progressive;
+    this.progressiveStep = 0;
+    this.progressiveStepCount = 6;
+
+    const revealCard = { autoAlpha: 1, y: 0, scale: 1 };
+    const revealTier = { autoAlpha: 1, y: 0, scale: 1, duration: 0.48 };
+    const revealArrow = { "--flow-arrow-opacity": 1, duration: 0.24 } as gsap.TweenVars;
+
+    progressive.addLabel("step-0", 0);
+
+    progressive.to(unityTier as HTMLElement, revealTier, "step-0");
+    progressive.to(select as HTMLElement, revealCard, "step-0+=0.08");
+    progressive.addLabel("step-1");
+
+    progressive.to(capture as HTMLElement, revealCard, "step-1");
+    progressive.to(select as HTMLElement, revealArrow, "step-1+=0.12");
+    progressive.addLabel("step-2");
+
+    progressive.to(serviceTier as HTMLElement, revealTier, "step-2");
+    progressive.to(inpaint as HTMLElement, revealCard, "step-2+=0.08");
+    this.addTransferReveal(progressive, downFlow as HTMLElement, "step-2+=0.08", "down");
+    progressive.addLabel("step-3");
+
+    progressive.to(prepare as HTMLElement, revealCard, "step-3");
+    progressive.to(inpaint as HTMLElement, revealArrow, "step-3+=0.12");
+    progressive.addLabel("step-4");
+
+    progressive.to(lift as HTMLElement, revealCard, "step-4");
+    progressive.to(prepare as HTMLElement, revealArrow, "step-4+=0.12");
+    progressive.addLabel("step-5");
+
+    progressive.to(result as HTMLElement, revealCard, "step-5");
+    this.addTransferReveal(progressive, upFlow as HTMLElement, "step-5+=0.04", "up");
+    progressive.addLabel("step-6");
+    this.applyProgressiveEntryState(progressive);
+  }
+
+  /** Builds the nine click stops requested for the generation-detail comparison. */
+  private setupGenerationDetailSequence(slide: HTMLElement): void {
+    const photograph = slide.querySelector<HTMLElement>(".photograph-source");
+    const photographOutcome = photograph?.querySelector<HTMLElement>("h3");
+    const comparisonArrow = slide.querySelector<HTMLElement>(".source-comparison-mid");
+    const lowpoly = slide.querySelector<HTMLElement>(".lowpoly-source");
+    const comparisonBut = slide.querySelector<HTMLElement>(".source-comparison-but");
+    const tilted = slide.querySelector<HTMLElement>(".tilted-output");
+    const recovery = slide.querySelector<HTMLElement>(".orientation-recovery");
+    const recoverySteps = Array.from(slide.querySelectorAll<HTMLElement>(".recovery-step"));
+    const recoveryArrows = Array.from(slide.querySelectorAll<HTMLElement>(".recovery-flow > i"));
+    const recoveryResult = slide.querySelector<HTMLElement>(".recovery-result");
+
+    if (
+      !photograph ||
+      !photographOutcome ||
+      !comparisonArrow ||
+      !lowpoly ||
+      !comparisonBut ||
+      !tilted ||
+      !recovery ||
+      !recoveryResult ||
+      recoverySteps.length !== 4 ||
+      recoveryArrows.length !== 3
+    ) return;
+
+    const slideRect = slide.getBoundingClientRect();
+    const photographRect = photograph.getBoundingClientRect();
+    const scaleX = slide.offsetWidth > 0 ? slideRect.width / slide.offsetWidth : 1;
+    const scaleY = slide.offsetHeight > 0 ? slideRect.height / slide.offsetHeight : 1;
+    const initialX = (
+      slideRect.left + slideRect.width / 2 -
+      (photographRect.left + photographRect.width / 2)
+    ) / scaleX;
+    const initialY = (
+      slideRect.top + slideRect.height / 2 -
+      (photographRect.top + photographRect.height / 2)
+    ) / scaleY;
+    const promptPolicyHandoff = this.pendingPromptPolicyHandoff;
+    this.pendingPromptPolicyHandoff = null;
+
+    if (promptPolicyHandoff && this.allowMotion) {
+      const sourceScale = Math.max(
+        0.35,
+        Math.min(
+          promptPolicyHandoff.width / photographRect.width,
+          promptPolicyHandoff.height / photographRect.height
+        )
+      );
+      const sourceX = (
+        promptPolicyHandoff.left + promptPolicyHandoff.width / 2 -
+        (photographRect.left + photographRect.width / 2)
+      ) / scaleX;
+      const sourceY = (
+        promptPolicyHandoff.top + promptPolicyHandoff.height / 2 -
+        (photographRect.top + photographRect.height / 2)
+      ) / scaleY;
+
+      gsap.fromTo(
+        photograph,
+        {
+          autoAlpha: 0,
+          x: sourceX,
+          y: sourceY,
+          scale: sourceScale,
+          transformOrigin: "50% 50%"
+        },
+        {
+          autoAlpha: 1,
+          x: initialX,
+          y: initialY,
+          scale: 2,
+          duration: 0.86,
+          delay: 0.08,
+          ease: "back.out(1.32)",
+          overwrite: "auto"
+        }
+      );
+    } else {
+      gsap.set(photograph, {
+        autoAlpha: 1,
+        x: initialX,
+        y: initialY,
+        scale: 2,
+        transformOrigin: "50% 50%"
+      });
+    }
+    gsap.set(photographOutcome, { autoAlpha: 0, y: 8 });
+    gsap.set(comparisonArrow, { autoAlpha: 0, x: -20, scale: 0.82 });
+    gsap.set(lowpoly, {
+      autoAlpha: 0,
+      x: -32,
+      scaleX: 0.82,
+      transformOrigin: "left center"
+    });
+    gsap.set(comparisonBut, { autoAlpha: 0, x: -10 });
+    gsap.set(tilted, {
+      autoAlpha: 0,
+      x: -24,
+      scale: 0.97,
+      transformOrigin: "left center"
+    });
+    gsap.set(recovery, {
+      autoAlpha: 0,
+      y: 12,
+      scale: 0.99,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(recoverySteps, {
+      autoAlpha: 0,
+      y: 8,
+      scale: 0.98,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(recoveryArrows, {
+      autoAlpha: 0,
+      scaleX: 0,
+      transformOrigin: "left center"
+    });
+    gsap.set(recoveryResult, {
+      autoAlpha: 0,
+      y: 10,
+      scale: 0.98,
+      transformOrigin: "50% 50%"
+    });
+
+    const progressive = gsap.timeline({
+      paused: true,
+      defaults: { duration: 0.42, ease: "power3.out" }
+    });
+    this.activeProgressiveTimeline = progressive;
+    this.progressiveStep = 0;
+    this.progressiveStepCount = 9;
+
+    const revealStep = { autoAlpha: 1, y: 0, scale: 1, duration: 0.38 };
+    const revealArrow = { autoAlpha: 1, scaleX: 1, duration: 0.24 };
+
+    progressive.addLabel("step-0", 0);
+
+    progressive.to(photographOutcome as HTMLElement, { autoAlpha: 1, y: 0 }, "step-0");
+    progressive.addLabel("step-1");
+
+    progressive.to(
+      photograph as HTMLElement,
+      { x: 0, y: 0, scale: 1, duration: 1.08, ease: "power3.inOut" },
+      "step-1"
+    );
+    progressive.to(
+      comparisonArrow as HTMLElement,
+      { autoAlpha: 1, x: 0, scale: 1, duration: 0.34, ease: "back.out(1.45)" },
+      "step-1+=0.46"
+    );
+    progressive.to(
+      lowpoly as HTMLElement,
+      { autoAlpha: 1, x: 0, scaleX: 1, duration: 0.5, ease: "power3.out" },
+      "step-1+=0.56"
+    );
+    progressive.addLabel("step-2");
+
+    progressive.to(
+      comparisonBut as HTMLElement,
+      { autoAlpha: 1, x: 0, duration: 0.28 },
+      "step-2"
+    );
+    progressive.to(
+      tilted as HTMLElement,
+      { autoAlpha: 1, x: 0, scale: 1, duration: 0.5 },
+      "step-2+=0.08"
+    );
+    progressive.addLabel("step-3");
+
+    progressive.to(
+      recovery as HTMLElement,
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.5 },
+      "step-3"
+    );
+    progressive.addLabel("step-4");
+
+    progressive.to(recoverySteps[0], revealStep, "step-4");
+    progressive.addLabel("step-5");
+
+    progressive.to(recoveryArrows[0], revealArrow, "step-5");
+    progressive.to(recoverySteps[1], revealStep, "step-5+=0.08");
+    progressive.addLabel("step-6");
+
+    progressive.to(recoveryArrows[1], revealArrow, "step-6");
+    progressive.to(recoverySteps[2], revealStep, "step-6+=0.08");
+    progressive.addLabel("step-7");
+
+    progressive.to(recoveryArrows[2], revealArrow, "step-7");
+    progressive.to(recoverySteps[3], revealStep, "step-7+=0.08");
+    progressive.addLabel("step-8");
+
+    progressive.to(
+      recoveryResult as HTMLElement,
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.5 },
+      "step-8"
+    );
+    progressive.addLabel("step-9");
+    this.applyProgressiveEntryState(progressive);
+  }
+
+  private applyProgressiveEntryState(timeline: gsap.core.Timeline): void {
+    if (!this.progressiveStartsComplete) return;
+
+    timeline.seek(`step-${this.progressiveStepCount}`, false);
+    this.progressiveStep = this.progressiveStepCount;
   }
 
   private prepareTransferReveal(transfer: HTMLElement): void {
     const line = transfer.querySelector<HTMLElement>("i");
     const label = transfer.querySelector<HTMLElement>("span");
+    const preserveLabelTransform = transfer.closest(
+      ".generation-architecture-slide, .refinement-architecture-slide"
+    ) !== null;
     gsap.set(transfer, { autoAlpha: 0 });
     if (line) gsap.set(line, { scaleY: 0 });
-    if (label) gsap.set(label, { autoAlpha: 0, y: 3 });
+    if (label) {
+      gsap.set(label, preserveLabelTransform ? { autoAlpha: 0 } : { autoAlpha: 0, y: 3 });
+    }
   }
 
   private addTransferReveal(
@@ -410,6 +767,9 @@ export class SlideMotionController {
   ): void {
     const line = transfer.querySelector<HTMLElement>("i");
     const label = transfer.querySelector<HTMLElement>("span");
+    const preserveLabelTransform = transfer.closest(
+      ".generation-architecture-slide, .refinement-architecture-slide"
+    ) !== null;
 
     timeline.set(transfer, { autoAlpha: 1 }, position);
     if (line) {
@@ -425,7 +785,13 @@ export class SlideMotionController {
       );
     }
     if (label) {
-      timeline.to(label, { autoAlpha: 1, y: 0, duration: 0.26 }, `${position}+=0.08`);
+      timeline.to(
+        label,
+        preserveLabelTransform
+          ? { autoAlpha: 1, duration: 0.26 }
+          : { autoAlpha: 1, y: 0, duration: 0.26 },
+        `${position}+=0.08`
+      );
     }
   }
 
@@ -708,6 +1074,71 @@ export class SlideMotionController {
         gsap.killTweensOf(card);
         restoreTransform();
       });
+    });
+  }
+
+  private bindPromptPolicyInteraction(slide: HTMLElement): void {
+    const policy = slide.querySelector<HTMLElement>(".policy-cell");
+    if (!policy) return;
+
+    const originalTransform = policy.style.getPropertyValue("transform");
+    const originalTransformPriority = policy.style.getPropertyPriority("transform");
+    const restoreTransform = (): void => {
+      if (originalTransform) {
+        policy.style.setProperty("transform", originalTransform, originalTransformPriority);
+      } else {
+        policy.style.removeProperty("transform");
+      }
+    };
+    const animateRestingState = (hovered: boolean): void => {
+      if (!this.allowMotion) return;
+      gsap.to(policy, {
+        y: hovered ? -3 : 0,
+        scale: hovered ? 1.012 : 1,
+        duration: hovered ? 0.22 : 0.28,
+        ease: hovered ? "power2.out" : "power3.out",
+        overwrite: "auto",
+        onComplete: hovered ? undefined : restoreTransform
+      });
+    };
+    const enter = (): void => {
+      policy.classList.add("is-policy-hovered");
+      animateRestingState(true);
+    };
+    const leave = (): void => {
+      policy.classList.remove("is-policy-hovered", "is-policy-pressed");
+      animateRestingState(false);
+    };
+    const press = (): void => {
+      policy.classList.add("is-policy-pressed");
+      if (!this.allowMotion) return;
+      gsap.to(policy, {
+        y: 1,
+        scale: 0.975,
+        duration: 0.09,
+        ease: "power2.out",
+        overwrite: "auto"
+      });
+    };
+    const release = (): void => {
+      policy.classList.remove("is-policy-pressed");
+      animateRestingState(policy.matches(":hover"));
+    };
+
+    policy.addEventListener("pointerenter", enter);
+    policy.addEventListener("pointerleave", leave);
+    policy.addEventListener("pointerdown", press);
+    policy.addEventListener("pointerup", release);
+    policy.addEventListener("pointercancel", leave);
+    this.hoverCleanups.push(() => {
+      policy.removeEventListener("pointerenter", enter);
+      policy.removeEventListener("pointerleave", leave);
+      policy.removeEventListener("pointerdown", press);
+      policy.removeEventListener("pointerup", release);
+      policy.removeEventListener("pointercancel", leave);
+      policy.classList.remove("is-policy-hovered", "is-policy-pressed");
+      gsap.killTweensOf(policy);
+      restoreTransform();
     });
   }
 

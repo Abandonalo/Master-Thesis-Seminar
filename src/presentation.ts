@@ -1,4 +1,5 @@
 import { MarketSceneComparison } from "./market-scenes";
+import { LocalMeshSurgeryScene } from "./local-mesh-surgery-scene";
 import { SlideMotionController } from "./slide-motion";
 
 type MotionType = "fade-up" | "fade-left" | "fade-right" | "scale" | "draw" | "none";
@@ -10,6 +11,7 @@ interface ShowSlideOptions {
 interface SlideLifecycleDetail {
   index: number;
   slide: HTMLElement;
+  direction: -1 | 0 | 1;
 }
 
 interface DeckChangeDetail extends SlideLifecycleDetail {
@@ -47,7 +49,7 @@ class SlidePresentation {
     let numberedIndex = 0;
 
     this.slides.forEach((slide, slideIndex) => {
-      const heading = slide.querySelector<HTMLElement>("h1, h2");
+      const heading = slide.querySelector<HTMLElement>("h1, h2, .eyebrow");
       const label = heading?.textContent?.trim() || `Slide ${slideIndex + 1}`;
 
       slide.dataset.slideIndex = String(slideIndex);
@@ -124,6 +126,11 @@ class SlidePresentation {
   private showSlide(index: number, { updateHash = true }: ShowSlideOptions = {}): void {
     const nextIndex = this.clamp(index, 0, this.slides.length - 1);
     const previousIndex = this.currentIndex;
+    const direction = previousIndex < 0 || previousIndex === nextIndex
+      ? 0
+      : nextIndex > previousIndex
+        ? 1
+        : -1;
 
     this.slides.forEach((slide, slideIndex) => {
       const isCurrent = slideIndex === nextIndex;
@@ -133,7 +140,7 @@ class SlidePresentation {
     });
 
     if (previousIndex >= 0 && previousIndex !== nextIndex) {
-      this.emitSlideEvent(this.slides[previousIndex], "slide:leave", previousIndex);
+      this.emitSlideEvent(this.slides[previousIndex], "slide:leave", previousIndex, direction);
     }
 
     this.currentIndex = nextIndex;
@@ -143,18 +150,24 @@ class SlidePresentation {
       history.replaceState(null, "", `#${nextIndex + 1}`);
     }
 
-    this.emitSlideEvent(this.slides[nextIndex], "slide:enter", nextIndex);
+    this.emitSlideEvent(this.slides[nextIndex], "slide:enter", nextIndex, direction);
 
     const detail: DeckChangeDetail = {
       index: nextIndex,
       previousIndex,
+      direction,
       slide: this.slides[nextIndex]
     };
     document.dispatchEvent(new CustomEvent<DeckChangeDetail>("deck:change", { detail }));
   }
 
-  private emitSlideEvent(slide: HTMLElement, name: "slide:enter" | "slide:leave", index: number): void {
-    const detail: SlideLifecycleDetail = { index, slide };
+  private emitSlideEvent(
+    slide: HTMLElement,
+    name: "slide:enter" | "slide:leave",
+    index: number,
+    direction: -1 | 0 | 1
+  ): void {
+    const detail: SlideLifecycleDetail = { index, slide, direction };
     slide.dispatchEvent(new CustomEvent<SlideLifecycleDetail>(name, { bubbles: true, detail }));
   }
 
@@ -197,9 +210,21 @@ class SlidePresentation {
   private handleClick(event: MouseEvent): void {
     const target = event.target instanceof Element ? event.target : null;
     if (this.isInteractiveTarget(target)) return;
-    if (slideMotionController?.advanceActiveSequence()) return;
 
-    const direction = event.clientX < window.innerWidth * 0.25 ? -1 : 1;
+    const rawDirection = event.clientX < window.innerWidth * 0.25 ? -1 : 1;
+    const isPromptPolicyClick = Boolean(
+      target?.closest(".generation-architecture-slide .policy-cell")
+    );
+    if (
+      (rawDirection > 0 || isPromptPolicyClick) &&
+      slideMotionController?.advanceActiveSequence()
+    ) return;
+
+    const usesPromptPolicyHandoff =
+      slideMotionController?.preparePromptPolicyHandoff(target) ?? false;
+    const direction = usesPromptPolicyHandoff
+      ? 1
+      : rawDirection;
     this.showSlide(this.currentIndex + direction);
   }
 
@@ -263,7 +288,7 @@ class SlidePresentation {
 
   private isInteractiveTarget(target: Element | null): boolean {
     return Boolean(target?.closest(
-      "a, button, input, textarea, select, [contenteditable='true'], [data-market-scene-viewport]"
+      "a, button, input, textarea, select, [contenteditable='true'], [data-market-scene-viewport], [data-local-surgery-viewport]"
     ));
   }
 
@@ -285,4 +310,7 @@ slideMotionController?.initialize();
 
 const marketSceneComparison = MarketSceneComparison.mount();
 marketSceneComparison?.initialize();
+
+const localMeshSurgeryScene = LocalMeshSurgeryScene.mount();
+localMeshSurgeryScene?.initialize();
 new SlidePresentation();
