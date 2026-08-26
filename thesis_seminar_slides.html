@@ -595,106 +595,121 @@
 <section class="slide study-design-slide">
   <div class="eyebrow">Study design</div>
 
-  <div class="study-meta">
-    <span class="tag n">Within-subjects · counterbalanced</span>
-    <p><strong>Participants:</strong> experience in 3D or game design</p>
-  </div>
-  <div class="condition-comparison" data-motion-group="scale">
-    <div class="study-condition text-only">
-      <div class="study-condition-icon">Aa</div>
-      <div><span class="tag n">Condition A</span><h3>Text only</h3></div>
-    </div>
-    <div class="condition-vs">VS.</div>
-    <div class="study-condition spatial-controls">
-      <div class="study-condition-icon">▦</div>
-      <div><span class="tag a">Condition B</span><h3>Spatial controls</h3></div>
-    </div>
-  </div>
-  <div class="same-shell">same tasks · same Unity shell</div>
-  <div class="study-phase-line" data-motion-group="scale">
-    <div class="study-phase creation">
-      <span class="tag a">1 · Creation</span>
-      <div class="study-phase-icon">▦ → ◈</div>
-      <h3>Match layout</h3>
-    </div>
-    <div class="study-phase refinement">
-      <span class="tag w">2 · Refinement</span>
-      <div class="study-phase-icon">◩ → ✦</div>
-      <h3>Edit one region</h3>
-    </div>
-    <div class="study-phase condition-end">
-      <span class="tag g">3 · Condition end</span>
-      <div class="study-phase-icon">◎</div>
-      <h3>Overall measures</h3>
-    </div>
-  </div>
-  <div class="study-secondary">
-    <span class="tag n">Secondary comparison</span>
-    <p><strong>Same creation task:</strong> preference between iteration speed and mesh fidelity.</p>
-  </div>
-  <div class="study-model-comparison" data-motion-group="fade-up" aria-label="TripoSR and Hunyuan3D speed and quality comparison">
-    <article class="study-model-option tripo">
-      <div class="study-model-copy">
-        <h3>TripoSR <span class="cite">[12]</span></h3>
-        <p><strong>Fast feedback</strong><span>Lower fidelity</span></p>
+  <section class="study-primary" aria-label="Main study">
+    <header class="study-primary-header">
+      <div>
+        <span class="study-section-label">Main study</span>
       </div>
-      <svg viewBox="0 0 300 60" aria-label="TripoSR relative speed and quality">
-        <text x="0" y="18" class="sv-small">SPEED</text><rect x="70" y="8" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="8" width="200" height="12" rx="6" fill="#0e9f6e"/>
-        <text x="0" y="48" class="sv-small">QUALITY</text><rect x="70" y="38" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="38" width="70" height="12" rx="6" fill="#dc2626"/>
-      </svg>
-    </article>
-    <div class="study-model-vs" aria-hidden="true">VS.</div>
-    <article class="study-model-option hunyuan">
-      <div class="study-model-copy">
-        <h3>Hunyuan3D <span class="cite">[13]</span></h3>
-        <p><strong>Higher fidelity</strong><span>Slower · Linux</span></p>
+      <div class="study-meta" aria-label="Main study setup">
+        <span>Within-subjects · counterbalanced</span>
       </div>
-      <svg viewBox="0 0 300 60" aria-label="Hunyuan3D relative speed and quality">
-        <text x="0" y="18" class="sv-small">SPEED</text><rect x="70" y="8" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="8" width="75" height="12" rx="6" fill="#dc2626"/>
-        <text x="0" y="48" class="sv-small">QUALITY</text><rect x="70" y="38" width="220" height="12" rx="6" fill="#dfe5ec"/><rect data-gsap-bar x="70" y="38" width="200" height="12" rx="6" fill="#0e9f6e"/>
-      </svg>
-    </article>
-  </div>
+    </header>
+
+    <div class="condition-comparison" data-motion-group="scale">
+      <div class="study-condition text-only">
+        <div><h3>Text only</h3></div>
+      </div>
+      <div class="condition-vs">VS.</div>
+      <div class="study-condition spatial-controls">
+        <div><h3>Spatial controls</h3></div>
+      </div>
+    </div>
+
+    <div class="same-shell">Same tasks · same Unity shell</div>
+
+    <div class="study-phase-line" data-motion-group="scale" aria-label="Main study timeline">
+      <div class="study-phase creation">
+        <span class="tag a">Generation</span>
+        <div class="study-phase-node" aria-hidden="true">1</div>
+        <h3>Match layout</h3>
+      </div>
+      <div class="study-phase refinement">
+        <span class="tag w">Refinement</span>
+        <div class="study-phase-node" aria-hidden="true">2</div>
+        <h3>Edit one region</h3>
+      </div>
+      <div class="study-phase condition-end">
+        <span class="tag g">Condition end</span>
+        <div class="study-phase-node" aria-hidden="true">3</div>
+        <h3>Overall measures</h3>
+      </div>
+    </div>
+  </section>
+
+  <section class="study-secondary-block" aria-label="Secondary comparison">
+    <header class="study-secondary">
+      <div>
+        <span class="study-section-label">Secondary comparison</span>
+      </div>
+    </header>
+
+    <div class="study-model-comparison" data-motion-group="fade-up" aria-label="Speed and quality model comparison">
+      <article class="study-model-option tripo">
+        <h3 class="study-model-dimension">Speed</h3>
+        <p>TripoSR <span class="cite">[12]</span>: Fast feedback · lower fidelity</p>
+      </article>
+      <div class="study-model-vs" aria-hidden="true">VS.</div>
+      <article class="study-model-option hunyuan">
+        <h3 class="study-model-dimension">Quality</h3>
+        <p>Hunyuan3D <span class="cite">[13]</span>: <span>Higher fidelity · slower · Linux</span></p>
+      </article>
+    </div>
+  </section>
 </section>
 
 <!-- 12 · Evaluation plan -->
 <section class="slide measurement-slide">
-  <div class="eyebrow">Study design · Measurement plan</div>
-  <h2>Measure creation and refinement separately</h2>
+  <div class="eyebrow">Study design · Evaluation plan</div>
 
-  <div class="measurement-columns" data-motion-group="fade-up">
-    <section class="measurement-column creation">
-      <span class="tag a">After creation · 4 items</span>
-      <h3>Creation scorecard</h3>
-      <p style="font-size:18px"><strong>SEQ</strong> · task ease <span class="cite">[19]</span></p>
-      <p style="font-size:18px"><strong>Paas</strong> · mental effort <span class="cite">[20]</span></p>
-      <div class="measurement-rule"></div>
-      <p style="font-size:16px"><strong>Targeted checks</strong><br>spatial intent match · predictability</p>
-      <p style="font-size:16px;margin-top:16px"><strong>Logs</strong><br>3D IoU / CD · time · attempts</p>
-    </section>
-    <section class="measurement-column refinement">
-      <span class="tag w">After refinement · 4 items</span>
-      <h3>Refinement scorecard</h3>
-      <p style="font-size:18px"><strong>SEQ</strong> · task ease <span class="cite">[19]</span></p>
-      <p style="font-size:18px"><strong>Paas</strong> · mental effort <span class="cite">[20]</span></p>
-      <div class="measurement-rule"></div>
-      <p style="font-size:16px"><strong>Targeted checks</strong><br>edit locality · scene preservation</p>
-      <p style="font-size:16px;margin-top:16px"><strong>Logs</strong><br>inside success · outside change · seam validity</p>
-    </section>
-    <section class="measurement-column workflow">
-      <span class="tag g">After each condition</span>
-      <h3>Whole workflow</h3>
-      <p style="font-size:18px"><strong>NASA-TLX</strong> · six scales, once <span class="cite">[17,18]</span></p>
-      <p style="font-size:18px"><strong>UMUX-LITE</strong> · two items <span class="cite">[21]</span></p>
-      <div class="measurement-rule"></div>
-      <p style="font-size:16px"><strong>Blind output rating</strong><br>spatial fit · visual quality · task fit</p>
-      <p style="font-size:16px;margin-top:16px"><strong>End of study</strong><br>agency / ownership <span class="cite">[29]</span> · preference</p>
-    </section>
-  </div>
-  <div class="measurement-optional">
-    <span class="tag n">Optional</span>
-    <p style="font-size:15.5px">If creative support is a primary outcome, use the <strong>full Creativity Support Index once per condition</strong> <span class="cite">[22]</span>, not selected subscales.</p>
-  </div>
+  <section class="measurement-phase-block" aria-label="Phase-specific scorecards">
+    <header class="measurement-block-header">
+      <span class="study-section-label">Phase scorecards</span>
+      <span class="measurement-timing">After each phase</span>
+    </header>
+
+    <div class="measurement-shared" data-motion="scale" aria-label="Measures repeated after generation and refinement">
+      <div class="measurement-shared-copy">
+        <strong>Common phase measures</strong>
+      </div>
+      <div class="measurement-instruments">
+        <p><strong>SEQ <span class="cite">[19]</span></strong><span>Task ease</span></p>
+        <p><strong>Paas <span class="cite">[20]</span></strong><span>Mental effort</span></p>
+        <p><strong>CSI <span class="cite">[22]</span></strong><span>Creative support</span></p>
+      </div>
+    </div>
+
+    <div class="measurement-columns" data-motion-group="fade-up">
+      <article class="measurement-column creation">
+        <h3>Generation</h3>
+        <div class="measurement-evidence">
+          <p><span>Targeted checks</span><strong>Spatial intent match<br>Predictability</strong></p>
+          <p><span>Logs</span><strong>3D IoU / CD<br>Time<br>Attempts</strong></p>
+        </div>
+      </article>
+
+      <article class="measurement-column refinement">
+        <h3>Refinement</h3>
+        <div class="measurement-evidence">
+          <p><span>Targeted checks</span><strong>Edit locality<br>Scene preservation</strong></p>
+          <p><span>Logs</span><strong>Edit achieved inside OBB<br>Unintended change outside OBB<br>Seam validity</strong></p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="measurement-workflow-block" aria-label="Whole-workflow measures">
+    <header class="measurement-block-header">
+      <span class="study-section-label">Whole workflow</span>
+      <span class="measurement-timing">After each condition · final preference at study end</span>
+    </header>
+
+    <div class="measurement-workflow-grid" data-motion-group="fade-up">
+      <article><h3>NASA-TLX <span class="cite">[17,18]</span></h3><p>Workload · six scales, once</p></article>
+      <article><h3>UMUX-LITE <span class="cite">[21]</span></h3><p>Perceived usability · two items</p></article>
+      <article><h3>Blind output rating</h3><p>Spatial fit · visual quality · task fit</p></article>
+      <article><h3>Agency + preference <span class="cite">[29]</span></h3><p>Ownership · preferred workflow</p></article>
+    </div>
+  </section>
 </section>
 
 <!-- 13 · Current stage -->
@@ -707,20 +722,6 @@
     <div class="stage-milestone done"><span class="stage-status-mark">✓</span><h3>Creation</h3><p>two lifters</p></div>
     <div class="stage-milestone done"><span class="stage-status-mark">✓</span><h3>Refinement core</h3><p>clip + weld + validate</p></div>
     <div class="stage-milestone active"><span class="stage-status-mark">●</span><h3>Study readiness</h3><p>in progress</p></div>
-  </div>
-  <div class="bottleneck-section" data-motion="fade-up">
-    <span class="tag r">Current bottleneck · refinement lifting</span>
-    <div class="bottleneck-comparison">
-      <article>
-        <div class="bottleneck-icon">⚡</div><h3>TripoSR</h3>
-        <p style="font-size:20px"><strong>Fast</strong><br>quality too low for refinement</p>
-      </article>
-      <div class="bottleneck-vs">VS.</div>
-      <article>
-        <div class="bottleneck-icon">◈</div><h3>Hunyuan3D 2.1 / 2mv</h3>
-        <p style="font-size:20px"><strong>Better quality</strong><br>Linux runtime required</p>
-      </article>
-    </div>
   </div>
 </section>
 
