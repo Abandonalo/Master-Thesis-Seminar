@@ -130,7 +130,7 @@ export class SlideMotionController {
   }
 
   /**
-   * Arms the slide-7 → slide-8 shared-element handoff only after the full
+   * Arms the slide-6 → slide-7 shared-element handoff only after the full
    * generation architecture has been revealed and the prompt-policy card was clicked.
    */
   preparePromptPolicyHandoff(target: Element | null): boolean {
@@ -154,15 +154,25 @@ export class SlideMotionController {
 
   private play(slide: HTMLElement): void {
     this.teardownActiveMotion();
+    const isProgressiveProblemStory = slide.classList.contains("problem-story-slide");
+    const isProgressiveHumanFoundations = slide.classList.contains(
+      "human-foundations-slide"
+    );
+    const isProgressiveAiLandscape = slide.classList.contains("ai-landscape-slide");
     const isProgressiveArchitecture = slide.classList.contains("generation-architecture-slide");
     const isProgressiveGenerationDetail = slide.classList.contains("generation-detail-slide");
     const isProgressiveRefinementArchitecture = slide.classList.contains(
       "refinement-architecture-slide"
     );
+    const isProgressiveResearchQuestion = slide.classList.contains("research-opportunity-slide");
     const isProgressiveSlide =
+      isProgressiveProblemStory ||
+      isProgressiveHumanFoundations ||
+      isProgressiveAiLandscape ||
       isProgressiveArchitecture ||
       isProgressiveGenerationDetail ||
-      isProgressiveRefinementArchitecture;
+      isProgressiveRefinementArchitecture ||
+      isProgressiveResearchQuestion;
     if (!this.allowMotion && !isProgressiveSlide) return;
 
     this.activeContext = gsap.context(() => {
@@ -175,11 +185,15 @@ export class SlideMotionController {
         this.buildEntranceTimeline(timeline, slide);
       }
 
+      if (isProgressiveProblemStory) this.setupProblemStorySequence(slide);
+      if (isProgressiveHumanFoundations) this.setupHumanFoundationsSequence(slide);
+      if (isProgressiveAiLandscape) this.setupAiLandscapeSequence(slide);
       if (isProgressiveArchitecture) this.setupGenerationArchitectureSequence(slide);
       if (isProgressiveGenerationDetail) this.setupGenerationDetailSequence(slide);
       if (isProgressiveRefinementArchitecture) {
         this.setupRefinementArchitectureSequence(slide);
       }
+      if (isProgressiveResearchQuestion) this.setupResearchQuestionSequence(slide);
       if (isProgressiveArchitecture) this.bindPromptPolicyInteraction(slide);
       if (this.allowHover) this.bindCardHover(slide);
     }, slide);
@@ -191,11 +205,16 @@ export class SlideMotionController {
     if (slide.classList.contains("title")) {
       this.addTitleSequence(timeline, slide, handled);
     } else {
-      this.addSlideChrome(timeline, slide, handled);
+      const isHumanFoundations = slide.classList.contains("human-foundations-slide");
+      this.addSlideChrome(timeline, slide, handled, !isHumanFoundations);
       if (
+        slide.classList.contains("problem-story-slide") ||
+        isHumanFoundations ||
+        slide.classList.contains("ai-landscape-slide") ||
         slide.classList.contains("generation-architecture-slide") ||
         slide.classList.contains("generation-detail-slide") ||
-        slide.classList.contains("refinement-architecture-slide")
+        slide.classList.contains("refinement-architecture-slide") ||
+        slide.classList.contains("research-opportunity-slide")
       ) return;
 
       timeline.addLabel("content", 0.24);
@@ -277,7 +296,8 @@ export class SlideMotionController {
   private addSlideChrome(
     timeline: gsap.core.Timeline,
     slide: HTMLElement,
-    handled: Set<Element>
+    handled: Set<Element>,
+    includeHeading = true
   ): void {
     const eyebrow = this.directChild(slide, ".eyebrow");
     const heading = this.directChild(slide, "h1, h2");
@@ -293,7 +313,7 @@ export class SlideMotionController {
       );
     }
 
-    if (heading) {
+    if (heading && includeHeading) {
       handled.add(heading);
       timeline.fromTo(
         heading,
@@ -320,6 +340,412 @@ export class SlideMotionController {
       );
     }
   }
+
+  /**
+   * Builds slide 2 as a four-click narrative: intended arrangement, the text
+   * description, the inference arrow, and finally the model's spatial guess.
+   */
+  private setupProblemStorySequence(slide: HTMLElement): void {
+    const intended = slide.querySelector<HTMLElement>(".scene-plan.intended");
+    const promptTag = slide.querySelector<HTMLElement>(".prompt-bottleneck > .tag");
+    const quote = slide.querySelector<HTMLElement>(".prompt-bottleneck > blockquote");
+    const arrow = slide.querySelector<HTMLElement>(".prompt-bottleneck > .guess-arrow");
+    const guessed = slide.querySelector<HTMLElement>(".scene-plan.guessed");
+
+    if (!intended || !promptTag || !quote || !arrow || !guessed) return;
+
+    gsap.set(intended, {
+      autoAlpha: 0,
+      x: -34,
+      scale: 0.975,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(promptTag, {
+      autoAlpha: 0,
+      y: 8,
+      scale: 0.9,
+      transformOrigin: "left center"
+    });
+    gsap.set(quote, { autoAlpha: 0, y: 16 });
+    gsap.set(arrow, {
+      autoAlpha: 0,
+      x: -12,
+      scale: 0.86,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(guessed, {
+      autoAlpha: 0,
+      x: 34,
+      scale: 0.975,
+      transformOrigin: "50% 50%"
+    });
+
+    const progressive = gsap.timeline({
+      paused: true,
+      defaults: { duration: 0.48, ease: "power3.out" }
+    });
+    this.activeProgressiveTimeline = progressive;
+    this.progressiveStep = 0;
+    this.progressiveStepCount = 4;
+
+    progressive.addLabel("step-0", 0);
+
+    progressive.to(
+      intended,
+      { autoAlpha: 1, x: 0, scale: 1, duration: 0.62 },
+      "step-0"
+    );
+    progressive.addLabel("step-1");
+
+    progressive.to(
+      promptTag,
+      { autoAlpha: 1, y: 0, scale: 1, ease: "back.out(1.55)", duration: 0.34 },
+      "step-1"
+    );
+    progressive.to(
+      quote,
+      { autoAlpha: 1, y: 0, duration: 0.5 },
+      "step-1+=0.08"
+    );
+    progressive.addLabel("step-2");
+
+    progressive.to(
+      arrow,
+      { autoAlpha: 1, x: 0, scale: 1, ease: "back.out(1.8)", duration: 0.4 },
+      "step-2"
+    );
+    progressive.addLabel("step-3");
+
+    progressive.to(
+      guessed,
+      { autoAlpha: 1, x: 0, scale: 1, duration: 0.62 },
+      "step-3"
+    );
+    progressive.addLabel("step-4");
+    this.applyProgressiveEntryState(progressive);
+  }
+
+  /**
+   * Builds slide 3 as a four-click argument: language exposes ambiguity,
+   * blockout externalizes constraints, direct manipulation restores agency,
+   * and the final requirement states the resulting design implication.
+   */
+  private setupHumanFoundationsSequence(slide: HTMLElement): void {
+    const heading = this.directChild(slide, "h2");
+    const language = slide.querySelector<HTMLElement>(".human-foundation.language");
+    const blockout = slide.querySelector<HTMLElement>(".human-foundation.blockout");
+    const manipulation = slide.querySelector<HTMLElement>(".human-foundation.manipulation");
+    const requirement = slide.querySelector<HTMLElement>(".human-foundation-requirement");
+
+    if (!heading || !language || !blockout || !manipulation || !requirement) return;
+
+    gsap.set(heading, {
+      autoAlpha: 0,
+      y: 20,
+      rotationX: -4,
+      transformOrigin: "0% 50%"
+    });
+    gsap.set(language, {
+      autoAlpha: 0,
+      x: -30,
+      scale: 0.975,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(blockout, {
+      autoAlpha: 0,
+      y: 18,
+      scale: 0.975,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(manipulation, {
+      autoAlpha: 0,
+      x: 30,
+      scale: 0.975,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(requirement, {
+      autoAlpha: 0,
+      y: 14,
+      scale: 0.99,
+      transformOrigin: "50% 50%"
+    });
+
+    const progressive = gsap.timeline({
+      paused: true,
+      defaults: { duration: 0.48, ease: "power3.out" }
+    });
+    this.activeProgressiveTimeline = progressive;
+    this.progressiveStep = 0;
+    this.progressiveStepCount = 4;
+
+    progressive.addLabel("step-0", 0);
+
+    progressive.to(
+      heading,
+      { autoAlpha: 1, y: 0, rotationX: 0, duration: 0.58 },
+      "step-0"
+    );
+    progressive.to(
+      language,
+      { autoAlpha: 1, x: 0, scale: 1, duration: 0.58 },
+      "step-0+=0.08"
+    );
+    progressive.addLabel("step-1");
+
+    progressive.to(
+      blockout,
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.58 },
+      "step-1"
+    );
+    progressive.addLabel("step-2");
+
+    progressive.to(
+      manipulation,
+      { autoAlpha: 1, x: 0, scale: 1, duration: 0.58 },
+      "step-2"
+    );
+    progressive.addLabel("step-3");
+
+    progressive.to(
+      requirement,
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.5 },
+      "step-3"
+    );
+    progressive.addLabel("step-4");
+    this.applyProgressiveEntryState(progressive);
+  }
+
+  /** Builds slide 4 as an eight-click comparison, ending with the open gap. */
+  private setupAiLandscapeSequence(slide: HTMLElement): void {
+    const capabilities = slide.querySelector<HTMLElement>(".ai-capability-stack");
+    const systemsLabel = slide.querySelector<HTMLElement>(
+      ".ai-system-routes > .ai-landscape-label"
+    );
+    const layoutRoute = slide.querySelector<HTMLElement>(".ai-system-route.layout-route");
+    const agentRoute = slide.querySelector<HTMLElement>(".ai-system-route.agent-route");
+    const layoutHeader = layoutRoute?.querySelector<HTMLElement>("header");
+    const layoutPoints = Array.from(
+      layoutRoute?.querySelectorAll<HTMLElement>(".ai-route-points > span") ?? []
+    );
+    const agentHeader = agentRoute?.querySelector<HTMLElement>("header");
+    const agentDescription = agentRoute?.querySelector<HTMLElement>("p");
+    const agentOutput = agentRoute?.querySelector<HTMLElement>(".ai-route-output");
+    const gap = slide.querySelector<HTMLElement>(".ai-landscape-gap");
+
+    const required = [
+      capabilities,
+      systemsLabel,
+      layoutHeader,
+      ...layoutPoints,
+      agentHeader,
+      agentDescription,
+      agentOutput,
+      gap
+    ];
+    if (layoutPoints.length !== 1 || required.some((element) => !element)) return;
+
+    gsap.set(capabilities, {
+      autoAlpha: 0,
+      x: -30,
+      scale: 0.985,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(systemsLabel, { autoAlpha: 0, y: 8 });
+    gsap.set(
+      [
+        layoutHeader,
+        ...layoutPoints,
+        agentHeader,
+        agentDescription
+      ],
+      {
+        autoAlpha: 0,
+        x: 24,
+        y: 4
+      }
+    );
+    gsap.set(agentOutput as HTMLElement, {
+      autoAlpha: 0,
+      x: 14,
+      scale: 0.94,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(gap, {
+      autoAlpha: 0,
+      y: 14,
+      scale: 0.99,
+      transformOrigin: "50% 50%"
+    });
+
+    const progressive = gsap.timeline({
+      paused: true,
+      defaults: { duration: 0.5, ease: "power3.out" }
+    });
+    this.activeProgressiveTimeline = progressive;
+    this.progressiveStep = 0;
+    this.progressiveStepCount = 8;
+
+    progressive.addLabel("step-0", 0);
+
+    progressive.to(
+      capabilities,
+      { autoAlpha: 1, x: 0, scale: 1, duration: 0.62 },
+      "step-0"
+    );
+    progressive.addLabel("step-1");
+
+    progressive.to(systemsLabel, { autoAlpha: 1, y: 0, duration: 0.34 }, "step-1");
+    progressive.addLabel("step-2");
+
+    progressive.to(
+      layoutHeader as HTMLElement,
+      { autoAlpha: 1, x: 0, y: 0, duration: 0.46 },
+      "step-2"
+    );
+    progressive.addLabel("step-3");
+
+    progressive.to(
+      layoutPoints[0],
+      { autoAlpha: 1, x: 0, y: 0, duration: 0.46 },
+      "step-3"
+    );
+    progressive.addLabel("step-4");
+
+    progressive.to(
+      agentHeader as HTMLElement,
+      { autoAlpha: 1, x: 0, y: 0, duration: 0.46 },
+      "step-4"
+    );
+    progressive.addLabel("step-5");
+
+    progressive.to(
+      agentDescription as HTMLElement,
+      { autoAlpha: 1, x: 0, y: 0, duration: 0.46 },
+      "step-5"
+    );
+    progressive.addLabel("step-6");
+
+    progressive.to(
+      agentOutput as HTMLElement,
+      { autoAlpha: 1, x: 0, scale: 1, duration: 0.46 },
+      "step-6"
+    );
+    progressive.addLabel("step-7");
+
+    progressive.to(
+      gap,
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.52 },
+      "step-7"
+    );
+    progressive.addLabel("step-8");
+    this.applyProgressiveEntryState(progressive);
+  }
+
+  private setupResearchQuestionSequence(slide: HTMLElement): void {
+    const convergence = slide.querySelector<HTMLElement>(".research-convergence");
+    const sources = Array.from(
+      slide.querySelectorAll<HTMLElement>(".convergence-source")
+    );
+    const thesis = slide.querySelector<HTMLElement>(".thesis-control-layer");
+    const arrows = Array.from(
+      slide.querySelectorAll<HTMLElement>(".convergence-arrow")
+    );
+    const questionBlock = slide.querySelector<HTMLElement>(".research-question-block");
+    const rq = slide.querySelector<HTMLElement>(".research-question-header h3");
+    const rq1 = slide.querySelector<HTMLElement>(".generationstage");
+    const rq2 = slide.querySelector<HTMLElement>(".refinementstage");
+
+    if (
+      !convergence ||
+      sources.length !== 2 ||
+      !thesis ||
+      arrows.length !== 2 ||
+      !questionBlock ||
+      !rq ||
+      !rq1 ||
+      !rq2
+    ) return;
+
+    const [humanSource, modelSource] = sources as [HTMLElement, HTMLElement];
+
+    gsap.set(convergence, {
+      autoAlpha: 0,
+      y: 14,
+      scale: 0.99,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(humanSource, { autoAlpha: 0, x: -24 });
+    gsap.set(modelSource, { autoAlpha: 0, x: 24 });
+    gsap.set(arrows, {
+      autoAlpha: 0,
+      scale: 0.82,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(thesis, { autoAlpha: 0, y: 12, scale: 0.985 });
+    gsap.set(questionBlock, {
+      autoAlpha: 0,
+      y: 14,
+      scale: 0.99,
+      transformOrigin: "50% 50%"
+    });
+    gsap.set(rq, { autoAlpha: 0, y: 10 });
+    gsap.set(rq1, { autoAlpha: 0, x: -20 });
+    gsap.set(rq2, { autoAlpha: 0, x: 20 });
+
+    const progressive = gsap.timeline({
+      paused: true,
+      defaults: { duration: 0.5, ease: "power3.out" }
+    });
+    this.activeProgressiveTimeline = progressive;
+    this.progressiveStep = 0;
+    this.progressiveStepCount = 5;
+
+    progressive.addLabel("step-0", 0);
+
+    progressive.to(
+      convergence,
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.5 },
+      "step-0"
+    );
+    progressive.to(
+      [humanSource, modelSource],
+      { autoAlpha: 1, x: 0, duration: 0.58 },
+      "step-0+=0.08"
+    );
+    progressive.addLabel("step-1");
+
+    progressive.to(
+      [arrows, thesis],
+      { autoAlpha: 1, scale: 1, duration: 0.34 },
+      "step-1"
+    );
+    progressive.addLabel("step-2");
+
+    progressive.to(
+      questionBlock,
+      { autoAlpha: 1, y: 0, scale: 1, duration: 0.46 },
+      "step-2"
+    );
+    progressive.to(rq, { autoAlpha: 1, y: 0, duration: 0.4 }, "step-3+=0.08");
+    progressive.addLabel("step-3");
+
+    progressive.to(
+      rq1,
+      { autoAlpha: 1, x: 0, duration: 0.46 },
+      "step-3"
+    );
+    progressive.addLabel("step-4");
+
+    progressive.to(
+      rq2,
+      { autoAlpha: 1, x: 0, duration: 0.46 },
+      "step-4"
+    );
+    progressive.addLabel("step-5");
+    this.applyProgressiveEntryState(progressive);
+  }
+
+
 
   /** Builds the eleven click stops requested for the generation architecture. */
   private setupGenerationArchitectureSequence(slide: HTMLElement): void {

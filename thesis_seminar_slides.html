@@ -20,11 +20,11 @@
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-      <path d="M0,0 L8,4.5 L0,9 z" fill="#0a2540"/></marker>
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#12283c"/></marker>
     <marker id="ahg" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-      <path d="M0,0 L8,4.5 L0,9 z" fill="#0e9f6e"/></marker>
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#317765"/></marker>
     <marker id="ahr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-      <path d="M0,0 L8,4.5 L0,9 z" fill="#dc2626"/></marker>
+      <path d="M0,0 L8,4.5 L0,9 z" fill="#b34c4c"/></marker>
   </defs>
 </svg>
 
@@ -43,7 +43,7 @@
 </section>
 
 <!-- 2 · Problem: story -->
-<section class="slide">
+<section class="slide problem-story-slide">
   <div class="eyebrow">Problem statement · game scene setup</div>
   <h2>A story every studio knows by now</h2>
 
@@ -62,14 +62,7 @@
     </figure>
 
     <div class="prompt-bottleneck">
-      <span class="tag n">Text prompt</span>
-      <blockquote>&quot;Two market stalls around a well. Crates beside the left stall. Keep a clear route to the gate.&quot;</blockquote>
-      <div class="prompt-loss">
-        <span>distance <b>?</b></span>
-        <span>rotation <b>?</b></span>
-        <span>scale <b>?</b></span>
-        <span>clearance <b>?</b></span>
-      </div>
+      <blockquote class="tag n">&quot;Two market stalls around a well. Crates beside the left stall. Keep a clear route to the gate.&quot;</blockquote>
       <div class="guess-arrow" aria-hidden="true">→</div>
     </div>
 
@@ -91,7 +84,7 @@
 <!-- 3 · Related work: human foundations -->
 <section class="slide human-foundations-slide">
   <div class="eyebrow">Related work · Human foundations</div>
-  <h2>Designers need visible, metric control</h2>
+  <h2>Text alone cannot specify a 3D layout</h2>
 
   <div class="human-foundations-flow" data-motion-group="fade-up">
     <article class="human-foundation language">
@@ -128,7 +121,7 @@
 
   <div class="human-foundation-requirement" data-motion="scale">
     <span>Human-side requirement</span>
-    <strong>Spatial intent must be explicit, visible and editable.</strong>
+    <strong>Let designers encode missing metric decisions directly in the scene.</strong>
   </div>
 </section>
 
@@ -139,16 +132,16 @@
 
   <div class="ai-landscape-layout">
     <section class="ai-capability-stack" data-motion-group="fade-left" aria-label="Model capabilities">
-      <div class="ai-landscape-label">What models can do</div>
+      <div class="ai-landscape-label">Model capabilities</div>
       <article class="ai-capability-row">
         <span class="ai-capability-icon" aria-hidden="true">◈</span>
         <div><h3>Reconstruct 3D</h3><p>Fast assets from text or images</p></div>
-        <span class="cite">[6,12,13]</span>
+        <span class="cite">[6,12,13,34]</span>
       </article>
       <article class="ai-capability-row">
         <span class="ai-capability-icon" aria-hidden="true">▦</span>
         <div><h3>Follow geometry</h3><p>Explicit structure can condition generation</p></div>
-        <span class="cite">[7–9]</span>
+        <span class="cite">[7–9,35,36]</span>
       </article>
       <article class="ai-capability-row">
         <span class="ai-capability-icon" aria-hidden="true">◩</span>
@@ -158,42 +151,35 @@
     </section>
 
     <section class="ai-system-routes" data-motion-group="fade-right" aria-label="Current system strategies">
-      <div class="ai-landscape-label">How current systems use it</div>
+      <div class="ai-landscape-label">Existing systems</div>
       <article class="ai-system-route layout-route">
-        <header><span class="tag a">2D layout input</span><strong><span class="cite">[25]</span></strong></header>
-        <div class="ai-route-diagram">
-          <span class="ai-route-input sketch-input" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span class="ai-route-arrow" aria-hidden="true">→</span>
-          <span class="ai-route-output">3D volume<br><b>inferred</b></span>
-        </div>
-        <p>The layout is visible;<br>depth and volume are still chosen by the system.</p>
+        <header><span class="tag a">Layout-guided generation</span><strong><span class="cite">[25,35]</span></strong></header>
+        <p class="ai-route-points">
+          <span>2D layouts leave metric 3D placement to the system</span>
+        </p>
       </article>
       <article class="ai-system-route agent-route">
-        <header><span class="tag w">Autonomous generation + repair</span><strong><span class="cite">[26–28]</span></strong></header>
-        <div class="ai-route-diagram">
-          <span class="ai-route-input agent-input" aria-hidden="true">AI</span>
-          <span class="ai-route-arrow" aria-hidden="true">→</span>
-          <span class="ai-route-output">Designer intent<br><b>inferred</b></span>
-        </div>
-        <p>The system can repair invalid output without exposing the intended geometry.</p>
+        <header><span class="tag w">System-directed generation and repair</span><strong><span class="cite">[26–28,34,38]</span></strong></header>
+        <p><span>AI determines scene structure and corrects errors</span></p>
+        <span class="ai-route-output"><small>Authoring limit</small><b>No user control</b></span>
       </article>
     </section>
   </div>
 
   <div class="ai-landscape-gap" data-motion="scale">
-    <span>Open gap</span>
-    <strong>Usage of AI lacks editable, designer-authored metric constraints.</strong>
+    <span>Underexplored</span>
+    <strong>Spatial user-facing controls for AI-assisted 3D generation and refinement inside an established editor</strong>
   </div>
 </section>
 
-<!-- 5 · Research opportunity: convergence -->
-<section class="slide research-opportunity-slide">
-  <div class="eyebrow">Research opportunity · Convergence</div>
+<!-- 5 · Research opportunity and questions -->
+<section class="slide research-opportunity-slide research-program-slide">
+  <div class="eyebrow">Research Questions</div>
   <h2>Connect designer control with model capability</h2>
 
   <div class="research-convergence" data-motion-group="scale">
     <section class="convergence-source human-source">
-      <span class="tag w">Human requirement</span>
+      <span class="convergence-label human-label">Human requirement</span>
       <h3>Keep intent editable</h3>
       <div class="convergence-source-items">
         <span>Semantic prompt</span>
@@ -206,26 +192,16 @@
 
     <section class="thesis-control-layer">
       <header>
-        <span class="tag g">This thesis</span>
-        <h3>Editable Unity control layer</h3>
+        <span class="convergence-label thesis-label">This thesis</span>
+        <h3>Editable spatial proxy control layer in Unity</h3>
       </header>
-      <div class="thesis-control-phases">
-        <article class="thesis-phase creation-phase">
-          <span class="thesis-phase-index">RQ1</span>
-          <div><strong>Creation</strong><p>Proxy → generate → fit</p></div>
-        </article>
-        <article class="thesis-phase refinement-phase">
-          <span class="thesis-phase-index">RQ2</span>
-          <div><strong>Refinement</strong><p>Region → regenerate → preserve</p></div>
-        </article>
-      </div>
     </section>
 
     <div class="convergence-arrow model-arrow" aria-hidden="true">←</div>
 
     <section class="convergence-source model-source">
-      <span class="tag a">Model capability</span>
-      <h3>Generate and update detail</h3>
+      <span class="convergence-label model-label">Model capability</span>
+      <h3>Generate and update mesh</h3>
       <div class="convergence-source-items">
         <span>3D reconstruction</span>
         <span>Spatial conditioning</span>
@@ -234,32 +210,26 @@
     </section>
   </div>
 
-  <div class="research-opportunity-principle" data-motion="fade-up">
-    <span>Control principle</span>
-    <strong>The designer defines the geometry. AI supplies and updates the detail.</strong>
-  </div>
-</section>
-
-<!-- 6 · Research questions -->
-<section class="slide research-questions-slide">
-  <div class="eyebrow">Research questions · What to test</div>
-  <h2>Do spatial proxies improve control over AI-assisted 3D scene generation in Unity?</h2>
-
-  <div class="rq-split" data-motion-group="fade-up">
-      <div>
-        <span class="tag a">Generation stage</span>
-        <h3>Primitive proxies vs. Textual prompts</h3>
+  <section class="research-question-block" data-motion-group="fade-up" aria-label="Research questions">
+    <header class="research-question-header">
+      <h3>Do spatial proxies improve control over AI-assisted 3D scene generation in Unity?</h3>
+    </header>
+    <div class="rq-split">
+      <div class="generationstage">
+        <span class="research-stage-label generation-label">Generation</span>
+        <h3>Primitive proxies vs. textual prompts</h3>
         <p>Do proxies improve <strong>spatial fit</strong> and reduce <strong>translation effort</strong>?</p>
       </div>
-      <div>
-        <span class="tag w">Refinement stage</span>
-        <h3>Spatial mask vs. Global regeneration</h3>
-        <p>Does the mask make local edits more <strong>predictable</strong> and preserve the rest of the scene?</p>
+      <div class="refinementstage">
+        <span class="research-stage-label refinement-label">Refinement</span>
+        <h3>Spatial mask vs. global regeneration</h3>
+        <p>Do masks make local edits more <strong>predictable</strong> and preserve the rest of the scene?</p>
       </div>
-  </div>
+    </div>
+  </section>
 </section>
 
-<!-- 7 · Architecture: generation -->
+<!-- 6 · Architecture: generation -->
 <section class="slide generation-architecture-slide">
   <div class="eyebrow">Implementation · Generation architecture</div>
   <h2>From spatial proxy to a fitted mesh</h2>
@@ -342,7 +312,7 @@
   </div>
 </section>
 
-<!-- 8 · Generation engineering detail -->
+<!-- 7 · Generation engineering detail -->
 <section class="slide generation-detail-slide">
   <div class="eyebrow">Implementation · Single-view handoff</div>
   <h2>Internal textual prompt</h2>
@@ -438,7 +408,7 @@
   </aside>
 </section>
 
-<!-- 9 · Refinement inference architecture -->
+<!-- 8 · Refinement inference architecture -->
 <section class="slide refinement-architecture-slide">
   <div class="eyebrow">Implementation · Refinement architecture</div>
   <h2>Multi-view guided local replacement</h2>
@@ -535,7 +505,7 @@
   </div>
 </section>
 
-<!-- 10 · Refinement locality and welding -->
+<!-- 9 · Refinement locality and welding -->
 <section class="slide refinement-locality-slide">
   <div class="eyebrow">Implementation · Fit and Place Refinement Mesh</div>
 
@@ -591,7 +561,7 @@
   </div>
 </section>
 
-<!-- 11 · Study design -->
+<!-- 10 · Study design -->
 <section class="slide study-design-slide">
   <div class="eyebrow">Study design</div>
 
@@ -620,17 +590,14 @@
     <div class="study-phase-line" data-motion-group="scale" aria-label="Main study timeline">
       <div class="study-phase creation">
         <span class="tag a">Generation</span>
-        <div class="study-phase-node" aria-hidden="true">1</div>
         <h3>Match layout</h3>
       </div>
       <div class="study-phase refinement">
         <span class="tag w">Refinement</span>
-        <div class="study-phase-node" aria-hidden="true">2</div>
         <h3>Edit one region</h3>
       </div>
       <div class="study-phase condition-end">
         <span class="tag g">Condition end</span>
-        <div class="study-phase-node" aria-hidden="true">3</div>
         <h3>Overall measures</h3>
       </div>
     </div>
@@ -657,7 +624,7 @@
   </section>
 </section>
 
-<!-- 12 · Evaluation plan -->
+<!-- 11 · Evaluation plan -->
 <section class="slide measurement-slide">
   <div class="eyebrow">Study design · Evaluation plan</div>
 
@@ -704,28 +671,77 @@
     </header>
 
     <div class="measurement-workflow-grid" data-motion-group="fade-up">
-      <article><h3>NASA-TLX <span class="cite">[17,18]</span></h3><p>Workload · six scales, once</p></article>
-      <article><h3>UMUX-LITE <span class="cite">[21]</span></h3><p>Perceived usability · two items</p></article>
-      <article><h3>Blind output rating</h3><p>Spatial fit · visual quality · task fit</p></article>
+      <article><h3>NASA-TLX <span class="cite">[17,18]</span></h3><p>Workload</p></article>
+      <article><h3>UMUX-LITE <span class="cite">[21]</span></h3><p>Perceived usability</p></article>
+      <article><h3>Blind output rating</h3><p>Spatial fit · visual quality</p></article>
       <article><h3>Agency + preference <span class="cite">[29]</span></h3><p>Ownership · preferred workflow</p></article>
     </div>
   </section>
 </section>
 
-<!-- 13 · Current stage -->
-<section class="slide current-stage-slide">
-  <div class="eyebrow">Current status</div>
-  <h2>Prototype status</h2>
+<!-- 12 · Study plan and current status -->
+<section class="slide study-roadmap-slide">
+  <div class="eyebrow">Study plan · Current status</div>
+  <h2>From working prototype to main study</h2>
 
-  <div class="stage-rail" data-motion-group="scale">
-    <div class="stage-milestone done"><span class="stage-status-mark">✓</span><h3>Unity frontend</h3><p>proxy + capture</p></div>
-    <div class="stage-milestone done"><span class="stage-status-mark">✓</span><h3>Creation</h3><p>two lifters</p></div>
-    <div class="stage-milestone done"><span class="stage-status-mark">✓</span><h3>Refinement core</h3><p>clip + weld + validate</p></div>
-    <div class="stage-milestone active"><span class="stage-status-mark">●</span><h3>Study readiness</h3><p>in progress</p></div>
+  <div class="study-roadmap" data-motion="fade-up" aria-label="Study roadmap showing completed, current and upcoming work">
+    <div class="roadmap-phase-labels">
+      <span class="complete">Implementation · Complete</span>
+      <span class="current">Current</span>
+      <span class="upcoming">Evaluation · Next</span>
+    </div>
+
+    <div class="roadmap-rail" data-motion-group="scale">
+      <article class="roadmap-milestone done">
+        <span class="roadmap-status-mark" aria-hidden="true">✓</span>
+        <h3>Unity frontend</h3>
+        <p>Proxy + capture</p>
+      </article>
+      <article class="roadmap-milestone done">
+        <span class="roadmap-status-mark" aria-hidden="true">✓</span>
+        <h3>Generation</h3>
+        <p>Two lifters</p>
+      </article>
+      <article class="roadmap-milestone done">
+        <span class="roadmap-status-mark" aria-hidden="true">✓</span>
+        <h3>Refinement</h3>
+        <p>Clip + weld + validate</p>
+      </article>
+      <article class="roadmap-milestone done">
+        <span class="roadmap-status-mark" aria-hidden="true">✓</span>
+        <h3>Linux backend</h3>
+        <p>Colab validated</p>
+      </article>
+      <article class="roadmap-milestone done">
+        <span class="roadmap-status-mark" aria-hidden="true">✓</span>
+        <h3>Study logging</h3>
+        <p>Implemented</p>
+      </article>
+      <article class="roadmap-milestone active">
+        <span class="roadmap-status-mark" aria-hidden="true">●</span>
+        <h3>Target scenes</h3>
+        <p>Set up test scenarios</p>
+      </article>
+      <article class="roadmap-milestone upcoming">
+        <span class="roadmap-status-mark" aria-hidden="true"></span>
+        <h3>Pilot</h3>
+        <p>3–4 participants</p>
+      </article>
+      <article class="roadmap-milestone upcoming">
+        <span class="roadmap-status-mark" aria-hidden="true"></span>
+        <h3>Main study</h3>
+        <p>Analyse + write</p>
+      </article>
+    </div>
+  </div>
+
+  <div class="roadmap-focus" data-motion="fade-up">
+    <span>Current bottleneck</span>
+    <p><strong>Backend cost</strong><small>Colab works, but sustained use is expensive.</small></p>
   </div>
 </section>
 
-<!-- 14 · Possible Three.js refinement -->
+<!-- 13 · Possible Three.js refinement -->
 <section class="slide threejs-option-slide">
   <div class="eyebrow">Implementation option</div>
   <h2>Architectural refinement with Three.js</h2>
@@ -800,31 +816,9 @@
   </div>
 </section>
 
-<!-- 15 · Next steps -->
-<section class="slide next-steps-slide">
-  <div class="eyebrow">Next steps</div>
-  <h2>From prototype to study</h2>
-
-  <div class="next-step-grid" data-motion-group="scale">
-    <div class="next-step-card accent"><span class="tag a">01</span><div class="next-step-icon">▣</div><h3>Linux backend</h3><p>/health preflight</p></div>
-    <div class="next-step-card"><span class="tag n">02</span><div class="next-step-icon">⇆</div><h3>Baselines</h3><p>text-only + lifters</p></div>
-    <div class="next-step-card"><span class="tag n">03</span><div class="next-step-icon">⌁</div><h3>Instrumentation</h3><p>logs + scorecards</p></div>
-    <div class="next-step-card warm"><span class="tag w">04</span><div class="next-step-icon">◌</div><h3>Pilot</h3><p>3–4 participants</p></div>
-    <div class="next-step-card green"><span class="tag g">05</span><div class="next-step-icon">●</div><h3>Main study</h3><p>analyse + write</p></div>
-  </div>
-
-  <div class="next-step-decisions" data-motion-group="fade-up">
-    <span class="tag w">Before the pilot</span>
-    <div>
-      <p><strong>Deployment</strong><span>Linux workstation or controlled remote backend?</span></p>
-      <p><strong>Target scenes</strong><span>Require spatial reasoning and feel natural to designers.</span></p>
-    </div>
-  </div>
-</section>
-
-<!-- 16 · References I -->
+<!-- 14 · References I -->
 <section class="slide references-slide">
-  <div class="eyebrow">References · 1/2</div>
+  <div class="eyebrow">References · 1/3</div>
   <h2>Foundations, generation &amp; interaction</h2>
 
   <div class="refs dense">
@@ -846,9 +840,9 @@
   </div>
 </section>
 
-<!-- 17 · References II -->
+<!-- 15 · References II -->
 <section class="slide references-slide">
-  <div class="eyebrow">References · 2/2</div>
+  <div class="eyebrow">References · 2/3</div>
   <h2>Automation, agency, measurement &amp; implementation</h2>
 
   <div class="refs dense">
@@ -867,13 +861,28 @@
     <div class="ref"><b>[28]</b><span>Pfaff, N., Cohn, T., Zakharov, S., Cory, R., &amp; Tedrake, R. (2026). <em>SceneSmith: Agentic generation of simulation-ready indoor scenes.</em> arXiv preprint.</span></div>
     <div class="ref"><b>[29]</b><span>Cornelio, P., et al. (2022). <em>The sense of agency in emerging technologies for human–computer integration: A review.</em> Frontiers in Neuroscience, 16, 949138.</span></div>
     <div class="ref"><b>[30]</b><span>Haque, A., Tancik, M., Efros, A. A., Holynski, A., &amp; Kanazawa, A. (2023). <em>Instruct-NeRF2NeRF: Editing 3D scenes with instructions.</em> ICCV, 19740–19750.</span></div>
-    <div class="ref"><b>[31]</b><span>Three.js. <em>GLTFExporter.</em> Documentation.</span></div>
-    <div class="ref"><b>[32]</b><span>Three.js. <em>BufferGeometry.</em> Documentation.</span></div>
-    <div class="ref"><b>[33]</b><span>Khronos Group. <em>glTF 2.0 Specification.</em></span></div>
   </div>
 </section>
 
-<!-- 18 · End -->
+<!-- 16 · References III -->
+<section class="slide references-slide">
+  <div class="eyebrow">References · 3/3</div>
+  <h2>Scene systems &amp; implementation</h2>
+
+  <div class="refs dense">
+    <div class="ref"><b>[31]</b><span>Three.js. <em>GLTFExporter.</em> Documentation.</span></div>
+    <div class="ref"><b>[32]</b><span>Three.js. <em>BufferGeometry.</em> Documentation.</span></div>
+    <div class="ref"><b>[33]</b><span>Khronos Group. <em>glTF 2.0 Specification.</em></span></div>
+    <div class="ref"><b>[34]</b><span>Höllein, L., Cao, A., Owens, A., Johnson, J., &amp; Nießner, M. (2023). <em>Text2Room: Extracting textured 3D meshes from 2D text-to-image models.</em> ICCV, 7909–7920.</span></div>
+    <div class="ref"><b>[35]</b><span>Zhai, G., et al. (2023). <em>CommonScenes: Generating commonsense 3D indoor scenes with scene graph diffusion.</em> NeurIPS 2023.</span></div>
+    <div class="ref"><b>[36]</b><span>Chen, M., et al. (2025). <em>Layout2Scene: 3D semantic layout guided scene generation via geometry and appearance diffusion priors.</em> arXiv preprint.</span></div>
+    <div class="ref"><b>[37]</b><span>Sun, C., et al. (2023). <em>3D-GPT: Procedural 3D modeling with large language models.</em> arXiv preprint.</span></div>
+    <div class="ref"><b>[38]</b><span>Wang, D., et al. (2026). <em>WorldGen: From text to traversable and interactive 3D worlds.</em> CVPR 2026, 27124–27135.</span></div>
+    <div class="ref"><b>[39]</b><span>Wang, P., et al. (2026). <em>SceneCode: Executable world programs for editable indoor scenes with articulated objects.</em> arXiv preprint.</span></div>
+  </div>
+</section>
+
+<!-- 17 · End -->
 <section class="slide title closing-slide">
   <div class="title-wrap">
     <div class="eyebrow">Thank you</div>
