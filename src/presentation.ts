@@ -1,17 +1,10 @@
 import { MarketSceneComparison } from "./market-scenes";
 import { LocalMeshSurgeryScene } from "./local-mesh-surgery-scene";
 import { SlideMotionController } from "./slide-motion";
-
-type MotionType = "fade-up" | "fade-left" | "fade-right" | "scale" | "draw" | "none";
+import type { MotionType, SlideLifecycleDetail } from "./presentation-types";
 
 interface ShowSlideOptions {
   updateHash?: boolean;
-}
-
-interface SlideLifecycleDetail {
-  index: number;
-  slide: HTMLElement;
-  direction: -1 | 0 | 1;
 }
 
 interface DeckChangeDetail extends SlideLifecycleDetail {
@@ -44,7 +37,9 @@ class SlidePresentation {
 
   /** Add numbering, accessibility labels, and default motion metadata. */
   private prepareSlides(): void {
-    const numberedSlides = this.slides.filter((slide) => !slide.classList.contains("hero"));
+    const numberedSlides = this.slides.filter(
+      (slide) => !slide.classList.contains("hero"),
+    );
     const total = String(numberedSlides.length).padStart(2, "0");
     let numberedIndex = 0;
 
@@ -61,7 +56,10 @@ class SlidePresentation {
       }
       slide.setAttribute("role", "group");
       slide.setAttribute("aria-roledescription", "slide");
-      slide.setAttribute("aria-label", `${slideIndex + 1} of ${this.slides.length}: ${label}`);
+      slide.setAttribute(
+        "aria-label",
+        `${slideIndex + 1} of ${this.slides.length}: ${label}`,
+      );
 
       this.prepareDefaultMotion(slide);
     });
@@ -85,9 +83,11 @@ class SlidePresentation {
       this.setMotionOrder(element, order);
     });
 
-    slide.querySelectorAll<HTMLElement>("[data-motion-group]").forEach((group) => {
-      this.prepareMotionGroup(group);
-    });
+    slide
+      .querySelectorAll<HTMLElement>("[data-motion-group]")
+      .forEach((group) => {
+        this.prepareMotionGroup(group);
+      });
   }
 
   private prepareMotionGroup(group: HTMLElement): void {
@@ -118,19 +118,33 @@ class SlidePresentation {
 
     document.addEventListener("keydown", (event) => this.handleKeydown(event));
     document.addEventListener("click", (event) => this.handleClick(event));
-    document.addEventListener("wheel", (event) => this.handleWheel(event), { passive: true });
-    document.addEventListener("touchstart", (event) => this.handleTouchStart(event), { passive: true });
-    document.addEventListener("touchend", (event) => this.handleTouchEnd(event), { passive: true });
+    document.addEventListener("wheel", (event) => this.handleWheel(event), {
+      passive: true,
+    });
+    document.addEventListener(
+      "touchstart",
+      (event) => this.handleTouchStart(event),
+      { passive: true },
+    );
+    document.addEventListener(
+      "touchend",
+      (event) => this.handleTouchEnd(event),
+      { passive: true },
+    );
   }
 
-  private showSlide(index: number, { updateHash = true }: ShowSlideOptions = {}): void {
+  private showSlide(
+    index: number,
+    { updateHash = true }: ShowSlideOptions = {},
+  ): void {
     const nextIndex = this.clamp(index, 0, this.slides.length - 1);
     const previousIndex = this.currentIndex;
-    const direction = previousIndex < 0 || previousIndex === nextIndex
-      ? 0
-      : nextIndex > previousIndex
-        ? 1
-        : -1;
+    const direction =
+      previousIndex < 0 || previousIndex === nextIndex
+        ? 0
+        : nextIndex > previousIndex
+          ? 1
+          : -1;
 
     this.slides.forEach((slide, slideIndex) => {
       const isCurrent = slideIndex === nextIndex;
@@ -140,7 +154,12 @@ class SlidePresentation {
     });
 
     if (previousIndex >= 0 && previousIndex !== nextIndex) {
-      this.emitSlideEvent(this.slides[previousIndex], "slide:leave", previousIndex, direction);
+      this.emitSlideEvent(
+        this.slides[previousIndex],
+        "slide:leave",
+        previousIndex,
+        direction,
+      );
     }
 
     this.currentIndex = nextIndex;
@@ -150,25 +169,34 @@ class SlidePresentation {
       history.replaceState(null, "", `#${nextIndex + 1}`);
     }
 
-    this.emitSlideEvent(this.slides[nextIndex], "slide:enter", nextIndex, direction);
+    this.emitSlideEvent(
+      this.slides[nextIndex],
+      "slide:enter",
+      nextIndex,
+      direction,
+    );
 
     const detail: DeckChangeDetail = {
       index: nextIndex,
       previousIndex,
       direction,
-      slide: this.slides[nextIndex]
+      slide: this.slides[nextIndex],
     };
-    document.dispatchEvent(new CustomEvent<DeckChangeDetail>("deck:change", { detail }));
+    document.dispatchEvent(
+      new CustomEvent<DeckChangeDetail>("deck:change", { detail }),
+    );
   }
 
   private emitSlideEvent(
     slide: HTMLElement,
     name: "slide:enter" | "slide:leave",
     index: number,
-    direction: -1 | 0 | 1
+    direction: -1 | 0 | 1,
   ): void {
     const detail: SlideLifecycleDetail = { index, slide, direction };
-    slide.dispatchEvent(new CustomEvent<SlideLifecycleDetail>(name, { bubbles: true, detail }));
+    slide.dispatchEvent(
+      new CustomEvent<SlideLifecycleDetail>(name, { bubbles: true, detail }),
+    );
   }
 
   private updateProgress(): void {
@@ -213,18 +241,17 @@ class SlidePresentation {
 
     const rawDirection = event.clientX < window.innerWidth * 0.25 ? -1 : 1;
     const isPromptPolicyClick = Boolean(
-      target?.closest(".generation-architecture-slide .policy-cell")
+      target?.closest(".generation-architecture-slide .policy-cell"),
     );
     if (
       (rawDirection > 0 || isPromptPolicyClick) &&
       slideMotionController?.advanceActiveSequence()
-    ) return;
+    )
+      return;
 
     const usesPromptPolicyHandoff =
       slideMotionController?.preparePromptPolicyHandoff(target) ?? false;
-    const direction = usesPromptPolicyHandoff
-      ? 1
-      : rawDirection;
+    const direction = usesPromptPolicyHandoff ? 1 : rawDirection;
     this.showSlide(this.currentIndex + direction);
   }
 
@@ -232,11 +259,14 @@ class SlidePresentation {
     const target = event.target instanceof Element ? event.target : null;
     if (this.isInteractiveTarget(target)) return;
     if (this.wheelLocked || Math.abs(event.deltaY) < 18) return;
-    if (event.deltaY > 0 && slideMotionController?.advanceActiveSequence()) return;
+    if (event.deltaY > 0 && slideMotionController?.advanceActiveSequence())
+      return;
 
     this.wheelLocked = true;
     this.showSlide(this.currentIndex + (event.deltaY > 0 ? 1 : -1));
-    window.setTimeout(() => { this.wheelLocked = false; }, 420);
+    window.setTimeout(() => {
+      this.wheelLocked = false;
+    }, 420);
   }
 
   private handleTouchStart(event: TouchEvent): void {
@@ -282,14 +312,16 @@ class SlidePresentation {
 
   private elementChildren(element: HTMLElement): HTMLElement[] {
     return Array.from(element.children).filter(
-      (child): child is HTMLElement => child instanceof HTMLElement
+      (child): child is HTMLElement => child instanceof HTMLElement,
     );
   }
 
   private isInteractiveTarget(target: Element | null): boolean {
-    return Boolean(target?.closest(
-      "a, button, input, textarea, select, [contenteditable='true'], [data-market-scene-viewport], [data-local-surgery-viewport]"
-    ));
+    return Boolean(
+      target?.closest(
+        "a, button, input, textarea, select, [contenteditable='true'], [data-market-scene-viewport], [data-local-surgery-viewport]",
+      ),
+    );
   }
 
   private requireElement<T extends HTMLElement>(id: string): T {
