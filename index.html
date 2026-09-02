@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="assets/animations/animations.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -22,7 +23,8 @@
 
       <!-- 1 · Title -->
       <section class="slide title hero">
-        <img class="hero-background-logo" src="uds_owl.png" alt="" aria-hidden="true" data-motion="none">
+        <div class="canvas-fx-layer hero-fx" data-fx="constellation" aria-hidden="true"></div>
+        <img class="hero-background-logo" src="uds_owl.png" alt="" aria-hidden="true" data-anim="none">
         <div class="title-wrap">
           <div class="eyebrow">Master's Thesis Seminar &middot; Saarland University</div>
           <h1>Augmenting Text Prompts with<br>Spatial Proxy Controls in<br>AI-Assisted 3D Scene Generation within Unity
@@ -40,7 +42,7 @@
         <div class="eyebrow">Problem statement · game scene setup</div>
         <h2>A story every studio knows by now</h2>
 
-        <div class="spatial-story" data-motion-group="scale">
+        <div class="spatial-story" data-anim-group="zoom-pop">
           <figure class="scene-plan intended">
             <span class="tag a">What the designer means</span>
             <div class="market-scene-viewport" data-market-scene-viewport="intended" data-state="loading">
@@ -75,14 +77,20 @@
             </div>
           </figure>
         </div>
+
+        <div class="production-evidence" data-production-evidence>
+          <span>16-practitioner study</span>
+          <strong>Early-stage use · existing-tool integration · editable standard formats <span
+              class="cite">[4]</span></strong>
+        </div>
       </section>
 
       <!-- 3 · Related work: human foundations -->
       <section class="slide human-foundations-slide">
         <div class="eyebrow">Related work · Human foundations</div>
-        <h2>Text alone cannot specify a 3D layout</h2>
+        <h2>Hmmm...How to describe it?</h2>
 
-        <div class="human-foundations-flow" data-motion-group="fade-up">
+        <div class="human-foundations-flow" data-anim-group="fade-up">
           <article class="human-foundation language">
             <span class="tag w">Spatial language</span>
             <div class="human-foundation-visual language-visual" aria-hidden="true">
@@ -90,20 +98,20 @@
               <i></i>
               <b>?</b>
             </div>
-            <h3>Meaning, not space</h3>
+            <h3>Qualitative, not complete</h3>
             <p>A relation is named, but distance, orientation and clearance remain unspecified. <span
                 class="cite">[1,2]</span></p>
           </article>
 
           <article class="human-foundation blockout">
-            <span class="tag a">Blockout</span>
+            <span class="tag a">External spatial representation</span>
             <div class="human-foundation-visual blockout-visual" aria-hidden="true">
               <span class="blockout-object one"></span>
               <span class="blockout-object two"></span>
               <span class="blockout-path"></span>
             </div>
-            <h3>Visible spatial constraints</h3>
-            <p>Primitives externalize scale, flow and composition before detail. <span class="cite">[3,4]</span></p>
+            <h3>Common scene-design practice</h3>
+            <p>Greyboxes test scale, flow and composition before final assets. <span class="cite">[3,5]</span></p>
           </article>
 
           <article class="human-foundation manipulation">
@@ -111,138 +119,160 @@
             <div class="human-foundation-visual manipulation-visual" aria-hidden="true">
               <span class="manipulation-object"></span>
             </div>
-            <h3>Under designer control</h3>
-            <p>Visible actions preserve agency and support iteration. <span class="cite">[5–10]</span></p>
+            <h3>Visible and reversible</h3>
+            <p>Direct actions reduce the gap between intention and operation. <span class="cite">[6–11]</span></p>
           </article>
         </div>
 
-        <div class="human-foundation-requirement" data-motion="scale">
-          <span>Human-side requirement</span>
-          <strong>Let designers encode missing metric decisions directly in the scene.</strong>
+        <div class="human-foundation-requirement" data-anim="zoom-pop">
+          <span>Generation inspiration</span>
+          <strong>Reuse the designer’s greybox as an explicit, editable spatial condition for AI generation.</strong>
         </div>
       </section>
 
-      <!-- 4 · Related work: AI system landscape -->
-      <section class="slide ai-landscape-slide">
-        <div class="eyebrow">Related work · AI system landscape</div>
-        <h2>How can AI help?</h2>
+      <!-- 4 · Related work: generative capabilities -->
+      <section class="slide related-capabilities-slide">
+        <div class="eyebrow">Related work · Model capabilities</div>
+        <h2>What can models do?</h2>
 
-        <div class="ai-landscape-layout">
-          <section class="ai-capability-stack" data-motion-group="fade-left" aria-label="Model capabilities">
-            <div class="ai-landscape-label">Model capabilities</div>
-            <article class="ai-capability-row">
-              <span class="ai-capability-icon" aria-hidden="true">◈</span>
-              <div>
-                <h3>Reconstruct 3D</h3>
-                <p>Fast assets from text or images</p>
-              </div>
-              <span class="cite">[12,23,27,28]</span>
-            </article>
-            <article class="ai-capability-row">
-              <span class="ai-capability-icon" aria-hidden="true">▦</span>
-              <div>
-                <h3>Follow geometry</h3>
-                <p>Explicit structure can condition generation</p>
-              </div>
-              <span class="cite">[13–15,24,25]</span>
-            </article>
-            <article class="ai-capability-row">
-              <span class="ai-capability-icon" aria-hidden="true">◩</span>
-              <div>
-                <h3>Refine locally</h3>
-                <p>One region can change while the rest remains</p>
-              </div>
-              <span class="cite">[16,17,22]</span>
-            </article>
-          </section>
-
-          <section class="ai-system-routes" data-motion-group="fade-right" aria-label="Current system strategies">
-            <div class="ai-landscape-label">Existing systems</div>
-            <article class="ai-system-route layout-route">
-              <header><span class="tag a">Layout-guided generation</span><strong><span
-                    class="cite">[18,24]</span></strong></header>
-              <p><span>2D layouts leave metric 3D placement to the system</span></p>
-              <span class="ai-route-output layout-output"><small>3D placement</small><b>System-defined</b></span>
-            </article>
-            <article class="ai-system-route agent-route">
-              <header><span class="tag w">System-directed generation and repair</span><strong><span
-                    class="cite">[19–21,23,26]</span></strong></header>
-              <p><span>AI determines scene structure and corrects errors</span></p>
-              <span class="ai-route-output"><small>Authoring limit</small><b>No user control</b></span>
-            </article>
-          </section>
-        </div>
-
-        <div class="ai-landscape-gap" data-motion="scale">
-          <span>Underexplored</span>
-          <strong>Spatial user-facing controls for AI-assisted 3D generation and refinement inside an established
-            editor</strong>
-        </div>
-      </section>
-
-      <!-- 5 · Research opportunity and questions -->
-      <section class="slide research-opportunity-slide research-program-slide">
-        <div class="eyebrow">Research Questions</div>
-        <h2>Connect designer control with model capability</h2>
-
-        <div class="research-convergence" data-motion-group="scale">
-          <section class="convergence-source human-source">
-            <span class="convergence-label human-label">Human requirement</span>
-            <h3>Keep intent editable</h3>
-            <div class="convergence-source-items">
-              <span>Semantic prompt</span>
-              <span>Metric 3D proxy</span>
-              <span>Direct manipulation</span>
-            </div>
-          </section>
-
-          <div class="convergence-arrow human-arrow" aria-hidden="true">→</div>
-
-          <section class="thesis-control-layer">
+        <div class="research-direction-list" aria-label="Three directions in generative 3D research">
+          <article class="research-direction generation-direction">
             <header>
-              <span class="convergence-label thesis-label">This thesis</span>
-              <h3>Editable spatial proxy control layer in Unity</h3>
+              <span class="research-direction-index">01</span>
+              <div><span>Sketch2Scene</span><h3>Author through a viewpoint-dependent 2D sketch</h3></div>
+              <span class="cite">[21]</span>
             </header>
-          </section>
-
-          <div class="convergence-arrow model-arrow" aria-hidden="true">←</div>
-
-          <section class="convergence-source model-source">
-            <span class="convergence-label model-label">Model capability</span>
-            <h3>Generate and update mesh</h3>
-            <div class="convergence-source-items">
-              <span>3D reconstruction</span>
-              <span>Spatial conditioning</span>
-              <span>Local refinement</span>
+            <div class="research-direction-body">
+              <p><strong>Contribution</strong><span>Visual composition is more direct than a long scene description</span></p>
+              <p><strong>Authoring limit</strong><span>The sketch specifies one view rather than editable 3D spatial relationships</span></p>
             </div>
-          </section>
+          </article>
+
+          <article class="research-direction conditioning-direction">
+            <header>
+              <span class="research-direction-index">02</span>
+              <div><span>ControlRoom3D · SpaceControl</span><h3>Condition generation with explicit geometry</h3></div>
+              <span class="cite">[19,20,22,23]</span>
+            </header>
+            <div class="research-direction-body">
+              <p><strong>Contribution</strong><span>Room proxies and spatial controls can guide the generated result</span></p>
+              <p><strong>Authoring limit</strong><span>The focus is model control, not an end-to-end designer authoring workflow</span></p>
+            </div>
+          </article>
+
+          <article class="research-direction validation-direction">
+            <header>
+              <span class="research-direction-index">03</span>
+              <div><span>SimuScene · WorldGen · SceneSmith</span><h3>Inspect or repair generated 3D scenes</h3></div>
+              <span class="cite">[24,25,27]</span>
+            </header>
+            <div class="research-direction-body">
+              <p><strong>Contribution</strong><span>Simulation and agentic repair reveal errors hidden by plausible views</span></p>
+              <p><strong>Authoring limit</strong><span>Placement and correction remain largely system-directed</span></p>
+            </div>
+          </article>
         </div>
 
-        <section class="research-question-block" data-motion-group="fade-up" aria-label="Research questions">
-          <header class="research-question-header">
-            <h3>Do spatial proxies improve control over AI-assisted 3D scene generation in Unity?</h3>
-          </header>
-          <div class="rq-split">
-            <div class="generationstage">
-              <span class="research-stage-label generation-label">Generation</span>
-              <h3>Primitive proxies vs. textual prompts</h3>
-              <p>Do proxies improve <strong>spatial fit</strong> and reduce <strong>translation effort</strong>?</p>
-            </div>
-            <div class="refinementstage">
-              <span class="research-stage-label refinement-label">Refinement</span>
-              <h3>Spatial mask vs. global regeneration</h3>
-              <p>Do masks make local edits more <strong>predictable</strong> and preserve the rest of the scene?</p>
-            </div>
-          </div>
-        </section>
+        <div class="research-synthesis" data-research-synthesis>
+          <span>Cross-paper synthesis</span>
+          <strong>Asset generation is established <span class="cite">[13–17,38,39]</span>; designer-facing spatial control remains underexplored.</strong>
+        </div>
       </section>
 
-      <!-- 6 · Architecture: generation -->
+      <!-- 5 · Related work: refinement and positioning -->
+      <section class="slide related-positioning-slide">
+        <div class="eyebrow">Related work · Refinement and initiative</div>
+        <h2>Who controls the change?</h2>
+
+        <div class="research-direction-list refinement-landscape" aria-label="Refinement and authoring approaches">
+          <article class="research-direction refinement-direction local-editing">
+            <header>
+              <span class="research-direction-index">01</span>
+              <div><span>Instruct-NeRF2NeRF · SKED · GaussianEditor · NeRFiller</span><h3>Instruction, sketch and inpainting edits</h3></div>
+              <span class="cite">[30–33]</span>
+            </header>
+            <div class="research-direction-body">
+              <p><strong>Contribution</strong><span>Local changes through instructions, sketches or inpainting</span></p>
+              <p><strong>Authoring limit</strong><span>Controls remain tied to NeRF or Gaussian representations</span></p>
+            </div>
+          </article>
+          <article class="research-direction refinement-direction continuity-editing">
+            <header>
+              <span class="research-direction-index">02</span>
+              <div><span>BlockFusion · WorldGrow</span><h3>Condition on neighbouring structure</h3></div>
+              <span class="cite">[34,35]</span>
+            </header>
+            <div class="research-direction-body">
+              <p><strong>Contribution</strong><span>Neighbouring 3D structure helps preserve context</span></p>
+              <p><strong>Authoring limit</strong><span>No interactive object-level selection is exposed</span></p>
+            </div>
+          </article>
+          <article class="research-direction refinement-direction initiative-editing">
+            <header>
+              <span class="research-direction-index">03</span>
+              <div><span>3D-GPT · SceneCode · WorldClaw · SceneSmith</span><h3>Programs preserve structure; agents repair automatically</h3></div>
+              <span class="cite">[26,27,36,37]</span>
+            </header>
+            <div class="research-direction-body">
+              <p><strong>Contribution</strong><span>Programs retain structure; agents inspect and repair scenes</span></p>
+              <p><strong>Authoring limit</strong><span>Designer-authored spatial decisions remain limited</span></p>
+            </div>
+          </article>
+        </div>
+
+        <div class="positioning-gap" data-positioning-gap>
+          <span>Research gap</span>
+          <strong>How should user-authored spatial constraints be integrated and evaluated inside an established 3D editor?</strong>
+        </div>
+
+      </section>
+
+      <!-- 6 · Related work: practical precedent -->
+      <section class="slide practical-precedent-slide">
+        <div class="eyebrow">Related work · Practical precedent</div>
+        <h2>Practical inspiration</h2>
+        <div class="precedent-comparison" aria-label="Hyper3D and thesis positioning">
+          <article class="precedent hyper3d-precedent">
+            <h3>Hyper3D Rodin <span class="cite">[28,29]</span></h3>
+            <p class="precedent-interaction">
+              <span>Local modification</span>
+              <strong>Draw a 3D box → describe the change</strong>
+            </p>
+            <div class="precedent-research-context">
+              <article>
+                <span>CLAY</span>
+                <p>Spatial conditioning via bounding boxes · voxels · point clouds</p>
+              </article>
+              <article>
+                <span>BANG</span>
+                <p>Part-level decomposition via bounding boxes · surface regions</p>
+              </article>
+            </div>
+            <small>Commercial service · credit-based</small>
+            <div class="hyper3d-local-edit-visual" aria-label="Hyper3D local modification interface">
+              <div class="hyper3d-shot-main">
+                <img src="hyper3d_local_modify.png"
+                  alt="Hyper3D interface with a box drawn around a 3D dog's head for local modification"
+                  draggable="false">
+              </div>
+            </div>
+          </article>
+          <div class="precedent-vs" aria-hidden="true">→</div>
+          <article class="precedent thesis-precedent">
+            <h3>This thesis</h3>
+            <p>Unity-integrated spatial interaction</p>
+            <p>Editable authoring workflow</p>
+            <small>Free · Configurable</small>
+          </article>
+        </div>
+      </section>
+
+      <!-- 7 · Architecture: generation -->
       <section class="slide generation-architecture-slide">
         <div class="eyebrow">Implementation · Generation architecture</div>
         <h2>From spatial proxy to a fitted mesh</h2>
 
-        <div class="generation-arch two-layer-arch" data-motion-group="fade-up"
+        <div class="generation-arch two-layer-arch" data-anim-group="fade-up"
           aria-label="Two-layer generation architecture connecting Unity and the FastAPI plus ComfyUI service">
           <section class="generation-arch-tier unity-tier">
             <header class="generation-tier-name">
@@ -299,7 +329,7 @@
                 <p><strong>Negative</strong> · scene · occlusion · wrong view</p>
               </article>
               <article class="generation-arch-cell image-generation-cell">
-                <h3>2D image generation</h3>
+                <h3>2D image generation <span class="cite">[18]</span></h3>
                 <p>Depth + edge controlled</p>
               </article>
               <article class="generation-arch-cell extraction-cell">
@@ -320,12 +350,67 @@
         </div>
       </section>
 
-      <!-- 7 · Generation engineering detail -->
-      <section class="slide generation-detail-slide">
-        <div class="eyebrow">Implementation · Single-view handoff</div>
+      <!-- 8 · Research questions -->
+      <section class="slide research-questions-slide">
+        <div class="eyebrow">Research questions · What to test</div>
+
+        <div class="central-rq" data-central-rq>
+          <div class="central-rq-fx" data-fx="orbit-ring" aria-hidden="true"></div>
+          <span>Central research question</span>
+          <p>How do editable spatial proxies affect <strong>control</strong>, <strong>workload</strong> and
+            <strong>output quality</strong> in 3D scene generation and refinement?</p>
+        </div>
+
+        <div class="rq-phase-grid" aria-label="Generation and refinement research questions">
+          <article class="rq-phase generation-rq">
+            <span>Generation</span>
+            <h3>Proxy-guided generation <span class="rq-vs">vs.</span> text-only prompting</h3>
+            <p>How does proxy guidance affect <strong>spatial fit</strong>, <strong>effort</strong> and
+              <strong>predictability</strong>?</p>
+          </article>
+          <article class="rq-phase refinement-rq">
+            <span>Refinement</span>
+            <h3>3D region selection <span class="rq-vs">vs.</span> global regeneration</h3>
+            <p>How does region selection affect <strong>edit locality</strong>, <strong>preservation</strong> and
+              <strong>predictability</strong>?</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- 9 · Hypotheses -->
+      <section class="slide hypotheses-slide">
+        <div class="eyebrow">Hypotheses · Expected effects</div>
+
+        <div class="hypothesis-map" aria-label="Three study hypotheses">
+          <article class="hypothesis-row h1">
+            <span class="hypothesis-index">H1</span>
+            <div class="hypothesis-phase"><span>Generation</span><strong>Spatial fit</strong></div>
+            <p>Proxy-guided generation produces objects that fit the intended layout more closely than text-only prompting.</p>
+          </article>
+          <article class="hypothesis-row h2">
+            <span class="hypothesis-index">H2</span>
+            <div class="hypothesis-phase"><span>Interaction</span><strong>Control</strong></div>
+            <p>Spatial controls increase predictability and agency and reduce mental demand or frustration.</p>
+          </article>
+          <article class="hypothesis-row h3">
+            <span class="hypothesis-index">H3</span>
+            <div class="hypothesis-phase"><span>Refinement</span><strong>Locality</strong></div>
+            <p>Region-based refinement changes more inside the selection, preserves more outside it and is preferred over global regeneration.</p>
+          </article>
+        </div>
+
+        <div class="hypothesis-caveat">
+          <span>Trade-off to test</span>
+          <strong>More direct manipulation may be worthwhile if it reduces translation effort and uncertainty.</strong>
+        </div>
+      </section>
+
+      <!-- Appendix A1 · Generation engineering detail -->
+      <section class="slide generation-detail-slide appendix-slide" data-appendix="A1">
+        <div class="eyebrow">Appendix A1 · Generation engineering</div>
         <h2>Internal textual prompt</h2>
 
-        <div class="source-image-comparison" data-motion-group="fade-up">
+        <div class="source-image-comparison" data-anim-group="fade-up">
           <article class="source-option photograph-source">
             <img src="photograph.png" alt="Photograph of a house surrounded by lawn and vegetation" draggable="false">
             <div class="source-option-copy">
@@ -364,7 +449,7 @@
           </figure>
         </div>
 
-        <section class="orientation-recovery" data-motion="fade-up" aria-label="TripoSR orientation recovery">
+        <section class="orientation-recovery" data-anim="fade-up" aria-label="TripoSR orientation recovery">
           <header class="orientation-recovery-label">
             <span>TripoSR · Orientation recovery</span>
           </header>
@@ -394,7 +479,7 @@
 
         </section>
 
-        <aside class="recovery-result" data-motion="scale" aria-label="Measured tilt after orientation recovery">
+        <aside class="recovery-result" data-anim="zoom-pop" aria-label="Measured tilt after orientation recovery">
           <div class="recovery-result-heading">
             <span class="recovery-result-title">Measured tilt</span>
             <small>from vertical · before → after correction</small>
@@ -416,12 +501,12 @@
         </aside>
       </section>
 
-      <!-- 8 · Refinement inference architecture -->
-      <section class="slide refinement-architecture-slide">
-        <div class="eyebrow">Implementation · Refinement architecture</div>
+      <!-- Appendix A2 · Refinement inference architecture -->
+      <section class="slide refinement-architecture-slide appendix-slide" data-appendix="A2">
+        <div class="eyebrow">Appendix A2 · Refinement architecture</div>
         <h2>Multi-view guided local replacement</h2>
 
-        <div class="generation-arch refinement-arch two-layer-arch" data-motion-group="fade-up"
+        <div class="generation-arch refinement-arch two-layer-arch" data-anim-group="fade-up"
           aria-label="Two-layer local refinement architecture connecting Unity and ComfyUI">
           <section class="generation-arch-tier unity-tier refinement-unity-tier">
             <header class="generation-tier-name">
@@ -510,7 +595,7 @@
                 <p>Centre without distortion</p>
               </article>
               <article class="generation-arch-cell refinement-lift-cell">
-                <h3>Hunyuan3D-2mv Fast <span class="cite">[28]</span></h3>
+                <h3>Hunyuan3D-2mv Fast <span class="cite">[39]</span></h3>
                 <p>Tagged views</p>
               </article>
             </div>
@@ -518,11 +603,11 @@
         </div>
       </section>
 
-      <!-- 9 · Refinement locality and welding -->
-      <section class="slide refinement-locality-slide">
-        <div class="eyebrow">Implementation · Fit and Place Refinement Mesh</div>
+      <!-- Appendix A3 · Refinement locality and welding -->
+      <section class="slide refinement-locality-slide appendix-slide" data-appendix="A3">
+        <div class="eyebrow">Appendix A3 · Fit and place refinement mesh</div>
 
-        <div class="local-surgery-layout" data-motion-group="fade-up">
+        <div class="local-surgery-layout" data-anim-group="fade-up">
           <figure class="local-surgery-viewport" data-local-surgery-viewport>
             <canvas data-local-surgery-scene
               aria-label="Interactive Three.js demonstration of local mesh surgery on a triangulated house. Drag to rotate; scroll to zoom; double-click to reset the view."
@@ -590,7 +675,7 @@
             </div>
           </header>
 
-          <div class="condition-comparison" data-motion-group="scale">
+          <div class="condition-comparison" data-anim-group="zoom-pop">
             <div class="study-condition text-only">
               <div>
                 <h3>Text only</h3>
@@ -604,9 +689,9 @@
             </div>
           </div>
 
-          <div class="same-shell">Same tasks · same Unity shell</div>
+          <div class="same-shell">Equivalent goals · same Unity shell</div>
 
-          <div class="study-phase-line" data-motion-group="scale" aria-label="Main study timeline">
+          <div class="study-phase-line" data-anim-group="zoom-pop" aria-label="Main study timeline">
             <div class="study-phase creation">
               <span class="tag a">Generation</span>
               <h3>Match layout</h3>
@@ -621,104 +706,98 @@
             </div>
           </div>
         </section>
-
-        <section class="study-secondary-block" aria-label="Secondary comparison">
-          <header class="study-secondary">
-            <div>
-              <span class="study-section-label">Secondary comparison</span>
-            </div>
-          </header>
-
-          <div class="study-model-comparison" data-motion-group="fade-up"
-            aria-label="Speed and quality model comparison">
-            <article class="study-model-option tripo">
-              <h3 class="study-model-dimension">Speed</h3>
-              <p>TripoSR <span class="cite">[27]</span>: Fast feedback · lower fidelity</p>
-            </article>
-            <div class="study-model-vs" aria-hidden="true">VS.</div>
-            <article class="study-model-option hunyuan">
-              <h3 class="study-model-dimension">Quality</h3>
-              <p>Hunyuan3D <span class="cite">[28]</span>: <span>Higher fidelity · slower · Linux</span></p>
-            </article>
-          </div>
-        </section>
       </section>
 
       <!-- 11 · Evaluation plan -->
       <section class="slide measurement-slide">
-        <div class="eyebrow">Study design · Evaluation plan</div>
+        <div class="eyebrow">Study design · Measures</div>
 
-        <section class="measurement-phase-block" aria-label="Phase-specific scorecards">
+        <section class="hypothesis-scorecard" aria-label="Measures mapped to hypotheses">
           <header class="measurement-block-header">
-            <span class="study-section-label">Phase scorecards</span>
-            <span class="measurement-timing">After each phase</span>
+            <span class="study-section-label">Phase evidence</span>
+            <span class="measurement-timing">Collected after generation and refinement</span>
           </header>
 
-          <div class="measurement-shared" data-motion="scale"
-            aria-label="Measures repeated after generation and refinement">
-            <div class="measurement-shared-copy">
-              <strong>Common phase measures</strong>
-            </div>
+          <div class="measurement-shared" data-anim="zoom-pop">
+            <div class="measurement-shared-copy"><strong>Common phase measures</strong></div>
             <div class="measurement-instruments">
-              <p><strong>SEQ <span class="cite">[31]</span></strong><span>Task ease</span></p>
-              <p><strong>Paas <span class="cite">[32]</span></strong><span>Mental effort</span></p>
-              <p><strong>CSI <span class="cite">[34]</span></strong><span>Creative support</span></p>
+              <p><strong>SEQ <span class="cite">[42]</span></strong><span>Task ease</span></p>
+              <p><strong>Paas <span class="cite">[43]</span></strong><span>Mental effort</span></p>
+              <p><strong>CSI <span class="cite">[45]</span></strong><span>Creative support</span></p>
             </div>
           </div>
 
-          <div class="measurement-columns" data-motion-group="fade-up">
-            <article class="measurement-column creation">
-              <h3>Generation</h3>
-              <div class="measurement-evidence">
-                <p><span>Targeted checks</span><strong>Spatial intent match<br>Predictability</strong></p>
-                <p><span>Logs</span><strong>3D IoU / CD<br>Time<br>Attempts</strong></p>
-              </div>
+          <div class="hypothesis-evidence-grid">
+            <article class="hypothesis-evidence h1-evidence">
+              <header><span>H1</span><h3>Spatial fit</h3></header>
+              <p><strong>Generation</strong><span>3D IoU · Chamfer distance · blind fit rating · time · attempts</span></p>
             </article>
-
-            <article class="measurement-column refinement">
-              <h3>Refinement</h3>
-              <div class="measurement-evidence">
-                <p><span>Targeted checks</span><strong>Edit locality<br>Scene preservation</strong></p>
-                <p><span>Logs</span><strong>Edit achieved inside OBB<br>Unintended change outside OBB<br>Seam
-                    validity</strong></p>
-              </div>
+            <article class="hypothesis-evidence h2-evidence">
+              <header><span>H2</span><h3>Control experience</h3></header>
+              <p><strong>Both phases</strong><span>Predictability · agency · phase measures · interaction logs</span></p>
+            </article>
+            <article class="hypothesis-evidence h3-evidence">
+              <header><span>H3</span><h3>Edit locality</h3></header>
+              <p><strong>Refinement</strong><span>Change inside OBB · change outside OBB · seam validity · preference</span></p>
             </article>
           </div>
         </section>
 
-        <section class="measurement-workflow-block" aria-label="Whole-workflow measures">
+        <section class="condition-measures" aria-label="Whole-workflow condition measures">
           <header class="measurement-block-header">
             <span class="study-section-label">Whole workflow</span>
             <span class="measurement-timing">After each condition · final preference at study end</span>
           </header>
-
-          <div class="measurement-workflow-grid" data-motion-group="fade-up">
-            <article>
-              <h3>NASA-TLX <span class="cite">[29,30]</span></h3>
-              <p>Workload</p>
-            </article>
-            <article>
-              <h3>UMUX-LITE <span class="cite">[33]</span></h3>
-              <p>Perceived usability</p>
-            </article>
-            <article>
-              <h3>Blind output rating</h3>
-              <p>Spatial fit · visual quality</p>
-            </article>
-            <article>
-              <h3>Agency + preference <span class="cite">[11]</span></h3>
-              <p>Ownership · preferred workflow</p>
-            </article>
+          <div class="condition-measure-grid">
+            <p><span>H2</span><strong>NASA-TLX <span class="cite">[40,41]</span></strong><small>Workload</small></p>
+            <p><span>H2</span><strong>UMUX-LITE <span class="cite">[44]</span></strong><small>Usability</small></p>
+            <p><span>H1</span><strong>Blind output rating</strong><small>Fit · visual quality</small></p>
+            <p><span>H2/H3</span><strong>Agency + preference <span class="cite">[12]</span></strong><small>Ownership · choice</small></p>
           </div>
         </section>
       </section>
 
-      <!-- 12 · Study plan and current status -->
+      <!-- 12 · Procedure and analysis -->
+      <section class="slide study-procedure-slide">
+        <div class="eyebrow">Study design · Procedure and analysis</div>
+        <h2>Two phases support one paired comparison</h2>
+
+        <div class="procedure-phase-track" aria-label="Generation and refinement study phases">
+          <article class="procedure-phase generation-phase">
+            <span>Generation phase</span>
+            <h3>Set up a multi-object scene</h3>
+            <p>Equivalent goal and authoring environment in both conditions</p>
+          </article>
+          <div class="procedure-arrow" aria-hidden="true">→</div>
+          <article class="procedure-phase refinement-phase">
+            <span>Refinement phase</span>
+            <h3>Modify one bounded region</h3>
+            <p>Preserve the surrounding geometry</p>
+          </article>
+        </div>
+
+        <div class="procedure-analysis-grid" aria-label="Pilot, main study and analysis plan">
+          <article class="procedure-analysis pilot-plan">
+            <span>First</span><h3>Pilot · 1–2 participants</h3>
+            <p>Check instructions · logging · obvious difficulty problems</p>
+          </article>
+          <article class="procedure-analysis main-plan">
+            <span>Then</span><h3>Main study</h3>
+            <p>Both conditions · counterbalanced order · final sample after pilot</p>
+          </article>
+          <article class="procedure-analysis analysis-plan">
+            <span>Analyse</span><h3>Paired comparisons</h3>
+            <p>Order effects · spatial logs · questionnaires · qualitative comments</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- 13 · Study plan and current status -->
       <section class="slide study-roadmap-slide">
         <div class="eyebrow">Study plan · Current status</div>
         <h2>From working prototype to main study</h2>
 
-        <div class="study-roadmap" data-motion="fade-up"
+        <div class="study-roadmap" data-anim="fade-up"
           aria-label="Study roadmap showing completed, current and upcoming work">
           <div class="roadmap-phase-labels">
             <span class="complete">Implementation · Complete</span>
@@ -726,7 +805,7 @@
             <span class="upcoming">Evaluation · Next</span>
           </div>
 
-          <div class="roadmap-rail" data-motion-group="scale">
+          <div class="roadmap-rail" data-anim-group="zoom-pop">
             <article class="roadmap-milestone done">
               <span class="roadmap-status-mark" aria-hidden="true">✓</span>
               <h3>Unity frontend</h3>
@@ -765,7 +844,7 @@
             <article class="roadmap-milestone upcoming">
               <span class="roadmap-status-mark" aria-hidden="true"></span>
               <h3>Pilot</h3>
-              <p>3–4 participants</p>
+              <p>1–2 participants</p>
             </article>
             <article class="roadmap-milestone upcoming">
               <span class="roadmap-status-mark" aria-hidden="true"></span>
@@ -775,21 +854,182 @@
           </div>
         </div>
 
-        <div class="roadmap-focus" data-motion="fade-up">
-          <span>Current bottleneck</span>
-          <p><strong>Backend cost</strong><small>Colab works, but sustained use is expensive.</small></p>
+        <div class="roadmap-focus" data-anim="fade-up">
+          <span>Current constraints</span>
+          <p><strong>Image lifting</strong><small>Background, perspective and irregular topology can enter the mesh.</small></p>
+          <p><strong>Backend cost</strong><small>Colab works, but sustained high-quality generation is expensive.</small></p>
         </div>
       </section>
 
-      <!-- 13 · Possible Three.js refinement -->
-      <section class="slide threejs-option-slide">
-        <div class="eyebrow">Implementation option</div>
-        <h2>Architectural refinement with Three.js</h2>
+      <!-- 14 · Three.js considered alternative -->
+      <section class="slide threejs-consideration-slide">
+        <div class="eyebrow">Implementation option · Under consideration</div>
+        <h2>A procedural path for geometry that needs predictable structure</h2>
+
+        <div class="threejs-consideration-layout">
+          <section class="threejs-problem" data-threejs-problem>
+            <span>Current difficulty</span>
+            <h3>Image-to-3D output can be difficult to refine reliably</h3>
+            <p>Perspective · background geometry · irregular topology · unstable dimensions</p>
+          </section>
+
+          <div class="threejs-candidate-flow" aria-label="Considered Three.js procedural workflow">
+            <article><span>Prompt</span><strong>“two-storey gabled house”</strong></article>
+            <i aria-hidden="true">→</i>
+            <article class="spec-node"><span>Validated specification</span><strong>Parts + dimensions</strong></article>
+            <i aria-hidden="true">→</i>
+            <article class="three-node"><span>Three.js</span><strong>Procedural geometry</strong></article>
+            <i aria-hidden="true">→</i>
+            <article><span>GLB</span><strong>Editable in Unity</strong></article>
+          </div>
+
+          <div class="threejs-benefit-line" data-threejs-benefits>
+            <span>Potential benefit</span>
+            <p><strong>Cleaner topology</strong><small>More reliable refinement</small></p>
+            <p><strong>Repeatable dimensions</strong><small>Predictable fit</small></p>
+            <p><strong>Semantic components</strong><small>Roof · door · windows</small></p>
+          </div>
+
+          <div class="hybrid-direction" data-hybrid-direction>
+            <span>Considered hybrid</span>
+            <p><strong>Procedural generation</strong> where structure can be specified</p>
+            <i aria-hidden="true">+</i>
+            <p><strong>Hunyuan3D</strong> for open-ended forms</p>
+            <span class="cite">[39,46–48]</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 15 · References I -->
+      <section class="slide references-slide">
+        <div class="eyebrow">References · 1/3</div>
+        <h2>Foundations · Production and interaction</h2>
+
+        <div class="refs dense">
+          <div class="ref"><b>[1]</b><span>Landau &amp; Jackendoff (1993). <em>“What” and “where” in spatial language and cognition.</em> BBS 16(2).</span></div>
+          <div class="ref"><b>[2]</b><span>Egenhofer &amp; Shariff (1998). <em>Metric details for natural-language spatial relations.</em> ACM TOIS 16(4).</span></div>
+          <div class="ref"><b>[3]</b><span>Totten (2019). <em>An Architectural Approach to Level Design</em> (2nd ed.). CRC Press.</span></div>
+          <div class="ref"><b>[4]</b><span>Fukaya, Daylamani-Zad &amp; Agius (2025). <em>Heuristics for AI-driven graphical asset generation tools in game pipelines.</em> arXiv:2503.02703.</span></div>
+          <div class="ref"><b>[5]</b><span>Liapis, Smith &amp; Shaker (2016). <em>Mixed-initiative content creation.</em> In Procedural Content Generation in Games.</span></div>
+          <div class="ref"><b>[6]</b><span>Norman (1986). <em>Cognitive engineering.</em> In User Centered System Design.</span></div>
+          <div class="ref"><b>[7]</b><span>Shneiderman (1983). <em>Direct manipulation: A step beyond programming languages.</em> Computer 16(8).</span></div>
+          <div class="ref"><b>[8]</b><span>Amershi et al. (2019). <em>Guidelines for human–AI interaction.</em> CHI ’19.</span></div>
+          <div class="ref"><b>[9]</b><span>Heer (2019). <em>Agency plus automation.</em> PNAS 116(6).</span></div>
+          <div class="ref"><b>[10]</b><span>Hutchins, Hollan &amp; Norman (1985). <em>Direct manipulation interfaces.</em> HCI 1(4).</span></div>
+          <div class="ref"><b>[11]</b><span>LaViola et al. (2017). <em>3D User Interfaces: Theory and Practice</em> (2nd ed.).</span></div>
+          <div class="ref"><b>[12]</b><span>Cornelio et al. (2022). <em>The sense of agency in emerging technologies.</em> Frontiers in Neuroscience 16.</span></div>
+        </div>
+      </section>
+
+      <!-- 16 · References II -->
+      <section class="slide references-slide">
+        <div class="eyebrow">References · 2/3</div>
+        <h2>Related work · Generative and controllable 3D</h2>
+
+        <div class="refs dense">
+          <div class="ref"><b>[13]</b><span>Poole et al. (2023). <em>DreamFusion: Text-to-3D using 2D diffusion.</em> ICLR.</span></div>
+          <div class="ref"><b>[14]</b><span>Lin et al. (2023). <em>Magic3D: High-resolution text-to-3D content creation.</em> CVPR.</span></div>
+          <div class="ref"><b>[15]</b><span>Shi et al. (2024). <em>MVDream: Multi-view diffusion for 3D generation.</em> ICLR.</span></div>
+          <div class="ref"><b>[16]</b><span>Li et al. (2024). <em>Instant3D: Fast text-to-3D with sparse-view generation.</em> ICLR.</span></div>
+          <div class="ref"><b>[17]</b><span>Tang et al. (2024). <em>LGM: Large multi-view Gaussian model.</em> ECCV.</span></div>
+          <div class="ref"><b>[18]</b><span>Zhang, Rao &amp; Agrawala (2023). <em>Adding conditional control to text-to-image diffusion models.</em> ICCV.</span></div>
+          <div class="ref"><b>[19]</b><span>Schult et al. (2024). <em>ControlRoom3D: Room generation using semantic proxy rooms.</em> CVPR.</span></div>
+          <div class="ref"><b>[20]</b><span>Fedele et al. (2025). <em>SpaceControl: Test-time spatial control for 3D generation.</em> arXiv.</span></div>
+          <div class="ref"><b>[21]</b><span>Xu et al. (2024). <em>Sketch2Scene: Interactive game scenes from casual sketches.</em> arXiv.</span></div>
+          <div class="ref"><b>[22]</b><span>Zhai et al. (2023). <em>CommonScenes: Commonsense 3D indoor scenes.</em> NeurIPS.</span></div>
+          <div class="ref"><b>[23]</b><span>Chen et al. (2025). <em>Layout2Scene: 3D semantic-layout-guided scene generation.</em> arXiv.</span></div>
+          <div class="ref"><b>[24]</b><span>Lee et al. (2026). <em>SimuScene: Simulation-ready compositional 3D reconstruction.</em> arXiv:2606.03994.</span></div>
+          <div class="ref"><b>[25]</b><span>Wang et al. (2026). <em>WorldGen: Text to traversable and interactive 3D worlds.</em> CVPR.</span></div>
+          <div class="ref"><b>[26]</b><span>Guo et al. (2026). <em>WorldClaw: Agentic 3D open-world generation.</em> arXiv.</span></div>
+          <div class="ref"><b>[27]</b><span>Pfaff et al. (2026). <em>SceneSmith: Agentic generation of simulation-ready indoor scenes.</em> arXiv.</span></div>
+          <div class="ref"><b>[28]</b><span>Zhang et al. (2024). <em>CLAY: A controllable large-scale generative model for 3D assets.</em> ACM TOG.</span></div>
+          <div class="ref"><b>[29]</b><span>Zhang et al. (2025). <em>BANG: Dividing 3D assets via generative exploded dynamics.</em> ACM TOG 44(4).</span></div>
+        </div>
+      </section>
+
+      <!-- 17 · References III -->
+      <section class="slide references-slide">
+        <div class="eyebrow">References · 3/3</div>
+        <h2>Editing, models and evaluation methods</h2>
+
+        <div class="refs dense">
+          <div class="ref"><b>[30]</b><span>Haque et al. (2023). <em>Instruct-NeRF2NeRF: Editing 3D scenes with instructions.</em> ICCV.</span></div>
+          <div class="ref"><b>[31]</b><span>Mikaeili et al. (2023). <em>SKED: Sketch-guided text-based 3D editing.</em> ICCV.</span></div>
+          <div class="ref"><b>[32]</b><span>Chen et al. (2024). <em>GaussianEditor: Swift and controllable 3D editing.</em> CVPR.</span></div>
+          <div class="ref"><b>[33]</b><span>Weber et al. (2024). <em>NeRFiller: Completing scenes via generative 3D inpainting.</em> CVPR.</span></div>
+          <div class="ref"><b>[34]</b><span>Wu et al. (2024). <em>BlockFusion: Expandable 3D scene generation.</em> ACM TOG 43(4).</span></div>
+          <div class="ref"><b>[35]</b><span>Li et al. (2026). <em>WorldGrow: Generating infinite 3D world.</em> AAAI.</span></div>
+          <div class="ref"><b>[36]</b><span>Sun et al. (2023). <em>3D-GPT: Procedural 3D modeling with large language models.</em> arXiv.</span></div>
+          <div class="ref"><b>[37]</b><span>Wang et al. (2026). <em>SceneCode: Executable world programs for editable scenes.</em> arXiv.</span></div>
+          <div class="ref"><b>[38]</b><span>Tochilkin et al. (2024). <em>TripoSR: Fast 3D object reconstruction from one image.</em> arXiv:2403.02151.</span></div>
+          <div class="ref"><b>[39]</b><span>Team Hunyuan3D et al. (2025). <em>Hunyuan3D 2.1.</em> arXiv:2506.15442.</span></div>
+          <div class="ref"><b>[40]</b><span>Hart &amp; Staveland (1988). <em>Development of NASA-TLX.</em> Human Mental Workload.</span></div>
+          <div class="ref"><b>[41]</b><span>Hart (2006). <em>NASA-TLX: 20 years later.</em> HFES.</span></div>
+          <div class="ref"><b>[42]</b><span>Sauro &amp; Dumas (2009). <em>Comparison of one-question post-task questionnaires.</em> CHI.</span></div>
+          <div class="ref"><b>[43]</b><span>Paas (1992). <em>Training strategies and mental-effort measurement.</em> JEP 84(4).</span></div>
+          <div class="ref"><b>[44]</b><span>Lewis, Utesch &amp; Maher (2013). <em>UMUX-LITE.</em> CHI.</span></div>
+          <div class="ref"><b>[45]</b><span>Cherry &amp; Latulipe (2014). <em>Creativity Support Index.</em> ACM TOCHI 21(4).</span></div>
+          <div class="ref"><b>[46]</b><span>Three.js. <em>GLTFExporter.</em> Documentation.</span></div>
+          <div class="ref"><b>[47]</b><span>Three.js. <em>BufferGeometry.</em> Documentation.</span></div>
+          <div class="ref"><b>[48]</b><span>Khronos Group. <em>glTF 2.0 Specification.</em></span></div>
+        </div>
+      </section>
+
+      <!-- 18 · End -->
+      <section class="slide title closing-slide hero">
+        <div class="canvas-fx-layer hero-fx closing-fx" data-fx="constellation" aria-hidden="true"></div>
+        <div class="title-wrap">
+          <div class="eyebrow">Thank you</div>
+          <h1>Questions &amp; discussion</h1>
+
+          <p class="sub" style="max-width:780px">Augmenting Text Prompts with Spatial Proxy Controls in
+            AI-Assisted 3D Scene Generation within Unity</p>
+          <div class="meta">
+            <b>Luojinxuan Wang</b><br>Advisor: Dr. Michael Schmitz<br>
+            Saarland University &middot; Experimental Media Lab, HBKsaar
+          </div>
+          <p class="closing-appendix-hint">Press <kbd>A</kbd> for the implementation appendix</p>
+        </div>
+      </section>
+
+      <!-- Appendix A4 · Model choice -->
+      <section class="slide model-choice-slide appendix-slide" data-appendix="A4">
+        <div class="eyebrow">Appendix A4 · Model choice</div>
+        <h2>Quality or iteration speed?</h2>
+
+        <div class="appendix-model-comparison" aria-label="TripoSR and Hunyuan3D implementation trade-off">
+          <article class="appendix-model-option tripo-model">
+            <span>Speed</span>
+            <h3>TripoSR <span class="cite">[38]</span></h3>
+            <p>Fast feedback</p>
+            <small>Lower fidelity · unreliable for refinement</small>
+          </article>
+          <div class="appendix-model-vs" aria-hidden="true">VS.</div>
+          <article class="appendix-model-option hunyuan-model">
+            <span>Quality</span>
+            <h3>Hunyuan3D 2.1 <span class="cite">[39]</span></h3>
+            <p>Higher fidelity</p>
+            <small>Slower · Linux · higher compute cost</small>
+          </article>
+        </div>
+
+        <div class="appendix-model-question">
+          <span>Secondary implementation question</span>
+          <strong>Do users prefer rapid iteration or the higher-quality result?</strong>
+        </div>
+      </section>
+
+      <!-- Appendix A5 · Detailed Three.js feasibility -->
+      <section class="slide threejs-option-slide appendix-slide" data-appendix="A5">
+        <div class="eyebrow">Appendix A5 · Three.js feasibility</div>
+        <h2>Architectural refinement with procedural geometry</h2>
+        <p class="threejs-kicker">A detailed implementation path for the hybrid option.</p>
+
         <div class="threejs-rationale">
-          <article class="threejs-panel benefit" data-motion-group="scale">
+          <article class="threejs-panel benefit" data-anim-group="zoom-pop">
             <header class="threejs-panel-heading">
               <span class="tag g">Benefit</span>
-              <h3>Generate predictable geometry <span class="cite">[36]</span></h3>
+              <h3>Generate predictable geometry <span class="cite">[47]</span></h3>
             </header>
 
             <div class="threejs-benefit-grid">
@@ -821,7 +1061,7 @@
             <p class="threejs-panel-takeaway">A local edit updates parameters instead of reconstructing the asset.</p>
           </article>
 
-          <article class="threejs-panel feasibility" data-motion-group="fade-up">
+          <article class="threejs-panel feasibility" data-anim-group="fade-up">
             <header class="threejs-panel-heading">
               <span class="tag a">Feasibility</span>
               <h3>Fits the current pipeline</h3>
@@ -837,12 +1077,10 @@
               </div>
               <div class="threejs-quality-gate">
                 <span aria-hidden="true">✓</span>
-                <div><strong>Mesh validity gate</strong><small>indexed · triangulated · watertight · consistent
-                    orientation and scale <span class="cite">[37]</span></small></div>
+                <div><strong>Mesh validity gate</strong><small>indexed · triangulated · watertight · consistent orientation and scale <span class="cite">[48]</span></small></div>
               </div>
               <div class="threejs-export-row">
-                <strong>GLTFExporter <span class="cite">[35]</span></strong><span
-                  aria-hidden="true">→</span><strong>GLB</strong><span aria-hidden="true">→</span><strong>Unity</strong>
+                <strong>GLTFExporter <span class="cite">[46]</span></strong><span aria-hidden="true">→</span><strong>GLB</strong><span aria-hidden="true">→</span><strong>Unity</strong>
               </div>
             </div>
 
@@ -855,129 +1093,11 @@
         </div>
       </section>
 
-      <!-- 14 · References I -->
-      <section class="slide references-slide">
-        <div class="eyebrow">References · 1/3</div>
-        <h2>Related work · Foundations &amp; interaction</h2>
-
-        <div class="refs dense">
-          <div class="ref"><b>[1]</b><span>Landau, B., &amp; Jackendoff, R. (1993). <em>“What” and “where” in spatial
-                language and spatial cognition.</em> Behavioral and Brain Sciences, 16(2), 217–265.
-              doi:10.1017/S0140525X00029733.</span></div>
-          <div class="ref"><b>[2]</b><span>Egenhofer, M. J., &amp; Shariff, R. (1998). <em>Metric details for
-                natural-language spatial relations.</em> ACM TOIS, 16(4), 295–321. doi:10.1145/291128.291129.</span>
-          </div>
-          <div class="ref"><b>[3]</b><span>Totten, C. W. (2019). <em>An Architectural Approach to Level Design</em> (2nd
-              ed.). CRC Press.</span></div>
-          <div class="ref"><b>[4]</b><span>Liapis, A., Smith, G., &amp; Shaker, N. (2016). <em>Mixed-initiative content
-                creation.</em> In Procedural Content Generation in Games, 195–214. Springer.</span></div>
-          <div class="ref"><b>[5]</b><span>Norman, D. A. (1986). <em>Cognitive engineering.</em> In User Centered System
-              Design, 31–61. Lawrence Erlbaum.</span></div>
-          <div class="ref"><b>[6]</b><span>Shneiderman, B. (1983). <em>Direct manipulation: A step beyond programming
-                languages.</em> Computer, 16(8), 57–69. doi:10.1109/MC.1983.1654471.</span></div>
-          <div class="ref"><b>[7]</b><span>Amershi, S., et al. (2019). <em>Guidelines for human-AI interaction.</em>
-              CHI ’19, Paper 3. doi:10.1145/3290605.3300233.</span></div>
-          <div class="ref"><b>[8]</b><span>Heer, J. (2019). <em>Agency plus automation: Designing artificial
-                intelligence into interactive systems.</em> PNAS, 116(6), 1844–1850.</span></div>
-          <div class="ref"><b>[9]</b><span>Hutchins, E. L., Hollan, J. D., &amp; Norman, D. A. (1985). <em>Direct
-                manipulation interfaces.</em> Human–Computer Interaction, 1(4), 311–338.</span></div>
-          <div class="ref"><b>[10]</b><span>LaViola, J. J., Kruijff, E., McMahan, R. P., Bowman, D. A., &amp; Poupyrev,
-              I. (2017). <em>3D User Interfaces: Theory and Practice</em> (2nd ed.). Addison-Wesley.</span></div>
-          <div class="ref"><b>[11]</b><span>Cornelio, P., et al. (2022). <em>The sense of agency in emerging
-                technologies for human–computer integration: A review.</em> Frontiers in Neuroscience, 16,
-              949138.</span></div>
-        </div>
-      </section>
-
-      <!-- 15 · References II -->
-      <section class="slide references-slide">
-        <div class="eyebrow">References · 2/3</div>
-        <h2>Related work · Generative 3D systems</h2>
-
-        <div class="refs dense">
-          <div class="ref"><b>[12]</b><span>Poole, B., Jain, A., Barron, J. T., &amp; Mildenhall, B. (2023).
-              <em>DreamFusion: Text-to-3D using 2D diffusion.</em> ICLR.</span></div>
-          <div class="ref"><b>[13]</b><span>Zhang, L., Rao, A., &amp; Agrawala, M. (2023). <em>Adding conditional control
-                to text-to-image diffusion models.</em> ICCV, 3836–3847.</span></div>
-          <div class="ref"><b>[14]</b><span>Schult, J., et al. (2024). <em>ControlRoom3D: Room generation using semantic
-                proxy rooms.</em> CVPR 2024.</span></div>
-          <div class="ref"><b>[15]</b><span>Fedele, E., et al. (2025). <em>SpaceControl: Introducing test-time spatial
-                control to 3D generative modeling.</em> arXiv preprint.</span></div>
-          <div class="ref"><b>[16]</b><span>Chen, Y., et al. (2024). <em>GaussianEditor: Swift and controllable 3D
-                editing with Gaussian splatting.</em> CVPR 2024.</span></div>
-          <div class="ref"><b>[17]</b><span>Mikaeili, A., Perel, O., Safaee, M., Cohen-Or, D., &amp; Mahdavi-Amiri, A.
-              (2023). <em>SKED: Sketch-guided text-based 3D editing.</em> ICCV 2023.</span></div>
-          <div class="ref"><b>[18]</b><span>Xu, Y., et al. (2024). <em>Sketch2Scene: Automatic generation of interactive
-                3D game scenes from users’ casual sketches.</em> arXiv preprint.</span></div>
-          <div class="ref"><b>[19]</b><span>Lee, I., et al. (2026). <em>SimuScene: Simulation-ready compositional 3D
-                scene reconstruction from a single image.</em> arXiv:2606.03994.</span></div>
-          <div class="ref"><b>[20]</b><span>Guo, C., Li, J., Li, Y., &amp; Huang, Z. (2026). <em>WorldClaw: Agentic 3D
-                open-world generation at scale.</em> arXiv preprint.</span></div>
-          <div class="ref"><b>[21]</b><span>Pfaff, N., Cohn, T., Zakharov, S., Cory, R., &amp; Tedrake, R. (2026).
-              <em>SceneSmith: Agentic generation of simulation-ready indoor scenes.</em> arXiv preprint.</span></div>
-          <div class="ref"><b>[22]</b><span>Haque, A., Tancik, M., Efros, A. A., Holynski, A., &amp; Kanazawa, A.
-              (2023). <em>Instruct-NeRF2NeRF: Editing 3D scenes with instructions.</em> ICCV, 19740–19750.</span></div>
-          <div class="ref"><b>[23]</b><span>Höllein, L., Cao, A., Owens, A., Johnson, J., &amp; Nießner, M. (2023).
-              <em>Text2Room: Extracting textured 3D meshes from 2D text-to-image models.</em> ICCV, 7909–7920.</span>
-          </div>
-          <div class="ref"><b>[24]</b><span>Zhai, G., et al. (2023). <em>CommonScenes: Generating commonsense 3D indoor
-                scenes with scene graph diffusion.</em> NeurIPS 2023.</span></div>
-          <div class="ref"><b>[25]</b><span>Chen, M., et al. (2025). <em>Layout2Scene: 3D semantic layout guided scene
-                generation via geometry and appearance diffusion priors.</em> arXiv preprint.</span></div>
-          <div class="ref"><b>[26]</b><span>Wang, D., et al. (2026). <em>WorldGen: From text to traversable and
-                interactive 3D worlds.</em> CVPR 2026, 27124–27135.</span></div>
-        </div>
-      </section>
-
-      <!-- 16 · References III -->
-      <section class="slide references-slide">
-        <div class="eyebrow">References · 3/3</div>
-        <h2>Methods used · Models, measures &amp; implementation</h2>
-
-        <div class="refs dense">
-          <div class="ref"><b>[27]</b><span>Tochilkin, D., et al. (2024). <em>TripoSR: Fast 3D object reconstruction
-                from a single image.</em> arXiv:2403.02151.</span></div>
-          <div class="ref"><b>[28]</b><span>Team Hunyuan3D, et al. (2025). <em>Hunyuan3D 2.1: From images to
-                high-fidelity 3D assets with production-ready PBR material.</em> arXiv:2506.15442.</span></div>
-          <div class="ref"><b>[29]</b><span>Hart, S. G., &amp; Staveland, L. E. (1988). <em>Development of NASA-TLX:
-                Results of empirical and theoretical research.</em> In Human Mental Workload, 139–183.</span></div>
-          <div class="ref"><b>[30]</b><span>Hart, S. G. (2006). <em>NASA-TLX: 20 years later.</em> Proceedings of the
-              Human Factors and Ergonomics Society Annual Meeting, 50(9), 904–908.</span></div>
-          <div class="ref"><b>[31]</b><span>Sauro, J., &amp; Dumas, J. S. (2009). <em>Comparison of three one-question,
-                post-task usability questionnaires.</em> CHI ’09, 1599–1608. doi:10.1145/1518701.1518946.</span></div>
-          <div class="ref"><b>[32]</b><span>Paas, F. (1992). <em>Training strategies for attaining transfer of
-                problem-solving skill in statistics.</em> Journal of Educational Psychology, 84(4), 429–434.</span>
-          </div>
-          <div class="ref"><b>[33]</b><span>Lewis, J. R., Utesch, B. S., &amp; Maher, D. E. (2013). <em>UMUX-LITE: When
-                there’s no time for the SUS.</em> CHI ’13, 2099–2102. doi:10.1145/2470654.2481287.</span></div>
-          <div class="ref"><b>[34]</b><span>Cherry, E., &amp; Latulipe, C. (2014). <em>Quantifying the creativity
-                support of digital tools through the Creativity Support Index.</em> ACM TOCHI, 21(4), Article 21.</span>
-          </div>
-          <div class="ref"><b>[35]</b><span>Three.js. <em>GLTFExporter.</em> Documentation.</span></div>
-          <div class="ref"><b>[36]</b><span>Three.js. <em>BufferGeometry.</em> Documentation.</span></div>
-          <div class="ref"><b>[37]</b><span>Khronos Group. <em>glTF 2.0 Specification.</em></span></div>
-        </div>
-      </section>
-
-      <!-- 17 · End -->
-      <section class="slide title closing-slide hero">
-        <div class="title-wrap">
-          <div class="eyebrow">Thank you</div>
-          <h1>Questions &amp; discussion</h1>
-
-          <p class="sub" style="max-width:780px">Augmenting Text Prompts with Spatial Proxy Controls in
-            AI-Assisted 3D Scene Generation within Unity</p>
-          <div class="meta">
-            <b>Luojinxuan Wang</b><br>Advisor: Dr. Michael Schmitz<br>
-            Saarland University &middot; Experimental Media Lab, HBKsaar
-          </div>
-        </div>
-      </section>
-
     </main>
   </div>
   <div id="deckProgress" class="deck-progress" aria-hidden="true"></div>
 
+  <script src="assets/animations/fx-runtime.js" defer></script>
   <script src="dist/presentation.js" defer></script>
 </body>
 

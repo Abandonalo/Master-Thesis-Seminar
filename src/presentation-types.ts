@@ -1,9 +1,11 @@
-export type MotionType =
+export type AnimationType =
   | "fade-up"
+  | "fade-down"
   | "fade-left"
   | "fade-right"
-  | "scale"
-  | "draw"
+  | "rise-in"
+  | "zoom-pop"
+  | "blur-in"
   | "none";
 
 export interface SlideLifecycleDetail {

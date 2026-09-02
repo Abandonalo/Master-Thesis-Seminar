@@ -1,7 +1,7 @@
 import { MarketSceneComparison } from "./market-scenes";
 import { LocalMeshSurgeryScene } from "./local-mesh-surgery-scene";
 import { SlideMotionController } from "./slide-motion";
-import type { MotionType, SlideLifecycleDetail } from "./presentation-types";
+import type { AnimationType, SlideLifecycleDetail } from "./presentation-types";
 
 interface ShowSlideOptions {
   updateHash?: boolean;
@@ -19,6 +19,9 @@ class SlidePresentation {
   private readonly stage: HTMLElement;
   private readonly progress: HTMLElement;
   private readonly slides: HTMLElement[];
+  private readonly mainSlides: HTMLElement[];
+  private readonly appendixSlides: HTMLElement[];
+  private readonly closingIndex: number;
 
   private currentIndex = -1;
   private touchStartX: number | null = null;
@@ -27,7 +30,17 @@ class SlidePresentation {
   constructor() {
     this.stage = this.requireElement("deckStage");
     this.progress = this.requireElement("deckProgress");
+    this.moveAppendixAfterClosing();
     this.slides = Array.from(document.querySelectorAll<HTMLElement>(".slide"));
+    this.mainSlides = this.slides.filter(
+      (slide) => !slide.hasAttribute("data-appendix"),
+    );
+    this.appendixSlides = this.slides.filter((slide) =>
+      slide.hasAttribute("data-appendix"),
+    );
+    const closingSlide = this.mainSlides[this.mainSlides.length - 1];
+    if (!closingSlide) throw new Error("The main deck has no closing slide.");
+    this.closingIndex = this.slides.indexOf(closingSlide);
 
     this.prepareSlides();
     this.bindNavigation();
@@ -37,18 +50,21 @@ class SlidePresentation {
 
   /** Add numbering, accessibility labels, and default motion metadata. */
   private prepareSlides(): void {
-    const numberedSlides = this.slides.filter(
-      (slide) => !slide.classList.contains("hero"),
-    );
+    const titleSlide = this.mainSlides[0];
+    const numberedSlides = this.mainSlides.filter((slide) => slide !== titleSlide);
     const total = String(numberedSlides.length).padStart(2, "0");
     let numberedIndex = 0;
 
     this.slides.forEach((slide, slideIndex) => {
       const heading = slide.querySelector<HTMLElement>("h1, h2, .eyebrow");
       const label = heading?.textContent?.trim() || `Slide ${slideIndex + 1}`;
+      const appendixIndex = this.appendixSlides.indexOf(slide);
+      const mainIndex = this.mainSlides.indexOf(slide);
 
       slide.dataset.slideIndex = String(slideIndex);
-      if (slide.classList.contains("hero")) {
+      if (appendixIndex >= 0) {
+        slide.dataset.slideNumber = `A${appendixIndex + 1} / A${this.appendixSlides.length}`;
+      } else if (slide === titleSlide) {
         slide.dataset.slideNumber = "";
       } else {
         numberedIndex += 1;
@@ -58,53 +74,56 @@ class SlidePresentation {
       slide.setAttribute("aria-roledescription", "slide");
       slide.setAttribute(
         "aria-label",
-        `${slideIndex + 1} of ${this.slides.length}: ${label}`,
+        appendixIndex >= 0
+          ? `Appendix ${appendixIndex + 1} of ${this.appendixSlides.length}: ${label}`
+          : `${mainIndex + 1} of ${this.mainSlides.length}: ${label}`,
       );
 
-      this.prepareDefaultMotion(slide);
+      this.prepareDefaultAnimations(slide);
     });
   }
 
   /**
-   * Top-level elements receive a subtle fade-up by default. Authors can override
-   * a target with data-motion or stagger a container with data-motion-group.
+   * Top-level elements receive a subtle CSS entrance by default. Authors can
+   * override a target with data-anim or stagger a container with data-anim-group.
    */
-  private prepareDefaultMotion(slide: HTMLElement): void {
+  private prepareDefaultAnimations(slide: HTMLElement): void {
     this.elementChildren(slide).forEach((element, order) => {
-      if (element.hasAttribute("data-motion-group")) {
-        element.dataset.motion = "none" satisfies MotionType;
-        this.prepareMotionGroup(element);
+      if (element.hasAttribute("data-anim-group")) {
+        element.dataset.anim = "none" satisfies AnimationType;
+        this.prepareAnimationGroup(element);
         return;
       }
 
-      if (!element.hasAttribute("data-motion")) {
-        element.dataset.motion = "fade-up" satisfies MotionType;
+      if (!element.hasAttribute("data-anim")) {
+        element.dataset.anim = "fade-up" satisfies AnimationType;
       }
-      this.setMotionOrder(element, order);
+      this.setAnimationOrder(element, order);
     });
 
     slide
-      .querySelectorAll<HTMLElement>("[data-motion-group]")
+      .querySelectorAll<HTMLElement>("[data-anim-group]")
       .forEach((group) => {
-        this.prepareMotionGroup(group);
+        this.prepareAnimationGroup(group);
       });
   }
 
-  private prepareMotionGroup(group: HTMLElement): void {
-    const motionType = (group.dataset.motionGroup || "fade-up") as MotionType;
+  private prepareAnimationGroup(group: HTMLElement): void {
+    const animationType = (group.dataset.animGroup ||
+      "fade-up") as AnimationType;
 
     this.elementChildren(group).forEach((element, order) => {
-      if (!element.hasAttribute("data-motion")) {
-        element.dataset.motion = motionType;
+      if (!element.hasAttribute("data-anim")) {
+        element.dataset.anim = animationType;
       }
-      this.setMotionOrder(element, order);
+      this.setAnimationOrder(element, order);
     });
   }
 
-  private setMotionOrder(element: HTMLElement, fallbackOrder: number): void {
-    const order = element.dataset.motionOrder || String(fallbackOrder);
-    element.dataset.motionOrder = order;
-    element.style.setProperty("--motion-order", order);
+  private setAnimationOrder(element: HTMLElement, fallbackOrder: number): void {
+    const order = element.dataset.animOrder || String(fallbackOrder);
+    element.dataset.animOrder = order;
+    element.style.setProperty("--anim-order", order);
   }
 
   private bindNavigation(): void {
@@ -149,6 +168,7 @@ class SlidePresentation {
     this.slides.forEach((slide, slideIndex) => {
       const isCurrent = slideIndex === nextIndex;
       slide.classList.toggle("active", isCurrent);
+      slide.classList.toggle("is-active", isCurrent);
       slide.classList.toggle("visible", isCurrent);
       slide.setAttribute("aria-hidden", String(!isCurrent));
     });
@@ -200,8 +220,15 @@ class SlidePresentation {
   }
 
   private updateProgress(): void {
-    const denominator = Math.max(1, this.slides.length - 1);
-    this.progress.style.width = `${(this.currentIndex / denominator) * 100}%`;
+    const activeSlide = this.slides[this.currentIndex];
+    if (activeSlide?.hasAttribute("data-appendix")) {
+      this.progress.style.width = "100%";
+      return;
+    }
+
+    const mainIndex = this.mainSlides.indexOf(activeSlide);
+    const denominator = Math.max(1, this.mainSlides.length - 1);
+    this.progress.style.width = `${(Math.max(0, mainIndex) / denominator) * 100}%`;
   }
 
   private fitStage(): void {
@@ -222,14 +249,23 @@ class SlidePresentation {
     if (nextKeys.includes(event.key)) {
       event.preventDefault();
       if (slideMotionController?.advanceActiveSequence()) return;
-      this.showSlide(this.currentIndex + 1);
+      this.navigateRelative(1);
     } else if (previousKeys.includes(event.key)) {
       event.preventDefault();
-      this.showSlide(this.currentIndex - 1);
+      this.navigateRelative(-1);
     } else if (event.key === "Home") {
-      this.showSlide(0);
+      this.showCollectionBoundary("start");
     } else if (event.key === "End") {
-      this.showSlide(this.slides.length - 1);
+      this.showCollectionBoundary("end");
+    } else if (event.key.toLowerCase() === "a") {
+      event.preventDefault();
+      this.toggleAppendix();
+    } else if (
+      event.key === "Escape" &&
+      this.slides[this.currentIndex]?.hasAttribute("data-appendix")
+    ) {
+      event.preventDefault();
+      this.showSlide(this.closingIndex);
     } else if (event.key.toLowerCase() === "f") {
       this.toggleFullscreen();
     }
@@ -249,10 +285,7 @@ class SlidePresentation {
     )
       return;
 
-    const usesPromptPolicyHandoff =
-      slideMotionController?.preparePromptPolicyHandoff(target) ?? false;
-    const direction = usesPromptPolicyHandoff ? 1 : rawDirection;
-    this.showSlide(this.currentIndex + direction);
+    this.navigateRelative(rawDirection);
   }
 
   private handleWheel(event: WheelEvent): void {
@@ -263,7 +296,7 @@ class SlidePresentation {
       return;
 
     this.wheelLocked = true;
-    this.showSlide(this.currentIndex + (event.deltaY > 0 ? 1 : -1));
+    this.navigateRelative(event.deltaY > 0 ? 1 : -1);
     window.setTimeout(() => {
       this.wheelLocked = false;
     }, 420);
@@ -292,7 +325,7 @@ class SlidePresentation {
         this.touchStartX = null;
         return;
       }
-      this.showSlide(this.currentIndex + (distance < 0 ? 1 : -1));
+      this.navigateRelative(distance < 0 ? 1 : -1);
     }
     this.touchStartX = null;
   }
@@ -308,6 +341,52 @@ class SlidePresentation {
   private readHash(): number {
     const requestedSlide = Number.parseInt(window.location.hash.slice(1), 10);
     return Number.isNaN(requestedSlide) ? 0 : requestedSlide - 1;
+  }
+
+  /** Keep appendix source blocks maintainable while presenting them after the closing slide. */
+  private moveAppendixAfterClosing(): void {
+    const slides = Array.from(document.querySelectorAll<HTMLElement>(".slide"));
+    const closing = slides.find((slide) =>
+      slide.classList.contains("closing-slide"),
+    );
+    const parent = closing?.parentElement;
+    if (!closing || !parent) return;
+
+    slides
+      .filter((slide) => slide.hasAttribute("data-appendix"))
+      .forEach((slide) => parent.append(slide));
+  }
+
+  private navigateRelative(direction: -1 | 1): void {
+    const activeSlide = this.slides[this.currentIndex];
+    const collection = activeSlide?.hasAttribute("data-appendix")
+      ? this.appendixSlides
+      : this.mainSlides;
+    const position = collection.indexOf(activeSlide);
+    const nextPosition = this.clamp(position + direction, 0, collection.length - 1);
+    const nextSlide = collection[nextPosition];
+    if (nextSlide) this.showSlide(this.slides.indexOf(nextSlide));
+  }
+
+  private showCollectionBoundary(boundary: "start" | "end"): void {
+    const activeSlide = this.slides[this.currentIndex];
+    const collection = activeSlide?.hasAttribute("data-appendix")
+      ? this.appendixSlides
+      : this.mainSlides;
+    const nextSlide =
+      boundary === "start" ? collection[0] : collection[collection.length - 1];
+    if (nextSlide) this.showSlide(this.slides.indexOf(nextSlide));
+  }
+
+  private toggleAppendix(): void {
+    const activeSlide = this.slides[this.currentIndex];
+    if (activeSlide?.hasAttribute("data-appendix")) {
+      this.showSlide(this.closingIndex);
+      return;
+    }
+
+    const firstAppendix = this.appendixSlides[0];
+    if (firstAppendix) this.showSlide(this.slides.indexOf(firstAppendix));
   }
 
   private elementChildren(element: HTMLElement): HTMLElement[] {
