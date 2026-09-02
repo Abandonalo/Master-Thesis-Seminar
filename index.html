@@ -23,7 +23,6 @@
 
       <!-- 1 · Title -->
       <section class="slide title hero">
-        <div class="canvas-fx-layer hero-fx" data-fx="constellation" aria-hidden="true"></div>
         <img class="hero-background-logo" src="uds_owl.png" alt="" aria-hidden="true" data-anim="none">
         <div class="title-wrap">
           <div class="eyebrow">Master's Thesis Seminar &middot; Saarland University</div>
@@ -40,10 +39,10 @@
       <!-- 2 · Problem: story -->
       <section class="slide problem-story-slide">
         <div class="eyebrow">Problem statement · game scene setup</div>
-        <h2>A story every studio knows by now</h2>
+        <h2 data-anim="blur-in">A story every studio knows by now</h2>
 
-        <div class="spatial-story" data-anim-group="zoom-pop">
-          <figure class="scene-plan intended">
+        <div class="spatial-story">
+          <figure class="scene-plan intended" data-anim="fade-left">
             <span class="tag a">What the designer means</span>
             <div class="market-scene-viewport" data-market-scene-viewport="intended" data-state="loading">
               <canvas data-market-scene="intended"
@@ -60,10 +59,10 @@
           <div class="prompt-bottleneck">
             <blockquote class="tag n">&quot;Two market stalls around a well. Crates beside the left stall. Keep a clear
               route to the gate.&quot;</blockquote>
-            <div class="guess-arrow" aria-hidden="true">→</div>
+            <div class="guess-arrow" data-anim="zoom-pop" aria-hidden="true">→</div>
           </div>
 
-          <figure class="scene-plan guessed">
+          <figure class="scene-plan guessed" data-anim="fade-right">
             <span class="tag r">What the model may guess</span>
             <div class="market-scene-viewport" data-market-scene-viewport="guessed" data-state="loading">
               <canvas data-market-scene="guessed"
@@ -88,7 +87,7 @@
       <!-- 3 · Related work: human foundations -->
       <section class="slide human-foundations-slide">
         <div class="eyebrow">Related work · Human foundations</div>
-        <h2>Hmmm...How to describe it?</h2>
+        <h2 data-anim="blur-in">Hmmm...How to describe it?</h2>
 
         <div class="human-foundations-flow" data-anim-group="fade-up">
           <article class="human-foundation language">
@@ -124,7 +123,7 @@
           </article>
         </div>
 
-        <div class="human-foundation-requirement" data-anim="zoom-pop">
+        <div class="human-foundation-requirement" data-anim="fade-up">
           <span>Generation inspiration</span>
           <strong>Reuse the designer’s greybox as an explicit, editable spatial condition for AI generation.</strong>
         </div>
@@ -133,10 +132,10 @@
       <!-- 4 · Related work: generative capabilities -->
       <section class="slide related-capabilities-slide">
         <div class="eyebrow">Related work · Model capabilities</div>
-        <h2>What can models do?</h2>
+        <h2 data-anim="blur-in">What can models do?</h2>
 
         <div class="research-direction-list" aria-label="Three directions in generative 3D research">
-          <article class="research-direction generation-direction">
+          <article class="research-direction generation-direction" data-anim="fade-left">
             <header>
               <span class="research-direction-index">01</span>
               <div><span>Sketch2Scene</span><h3>Author through a viewpoint-dependent 2D sketch</h3></div>
@@ -148,7 +147,7 @@
             </div>
           </article>
 
-          <article class="research-direction conditioning-direction">
+          <article class="research-direction conditioning-direction" data-anim="fade-left">
             <header>
               <span class="research-direction-index">02</span>
               <div><span>ControlRoom3D · SpaceControl</span><h3>Condition generation with explicit geometry</h3></div>
@@ -160,7 +159,7 @@
             </div>
           </article>
 
-          <article class="research-direction validation-direction">
+          <article class="research-direction validation-direction" data-anim="fade-left">
             <header>
               <span class="research-direction-index">03</span>
               <div><span>SimuScene · WorldGen · SceneSmith</span><h3>Inspect or repair generated 3D scenes</h3></div>
@@ -173,7 +172,7 @@
           </article>
         </div>
 
-        <div class="research-synthesis" data-research-synthesis>
+        <div class="research-synthesis" data-research-synthesis data-anim="fade-left">
           <span>Cross-paper synthesis</span>
           <strong>Asset generation is established <span class="cite">[13–17,38,39]</span>; designer-facing spatial control remains underexplored.</strong>
         </div>
@@ -182,10 +181,10 @@
       <!-- 5 · Related work: refinement and positioning -->
       <section class="slide related-positioning-slide">
         <div class="eyebrow">Related work · Refinement and initiative</div>
-        <h2>Who controls the change?</h2>
+        <h2 data-anim="blur-in">Who controls the change?</h2>
 
         <div class="research-direction-list refinement-landscape" aria-label="Refinement and authoring approaches">
-          <article class="research-direction refinement-direction local-editing">
+          <article class="research-direction refinement-direction local-editing" data-anim="fade-left">
             <header>
               <span class="research-direction-index">01</span>
               <div><span>Instruct-NeRF2NeRF · SKED · GaussianEditor · NeRFiller</span><h3>Instruction, sketch and inpainting edits</h3></div>
@@ -196,7 +195,7 @@
               <p><strong>Authoring limit</strong><span>Controls remain tied to NeRF or Gaussian representations</span></p>
             </div>
           </article>
-          <article class="research-direction refinement-direction continuity-editing">
+          <article class="research-direction refinement-direction continuity-editing" data-anim="fade-left">
             <header>
               <span class="research-direction-index">02</span>
               <div><span>BlockFusion · WorldGrow</span><h3>Condition on neighbouring structure</h3></div>
@@ -207,7 +206,7 @@
               <p><strong>Authoring limit</strong><span>No interactive object-level selection is exposed</span></p>
             </div>
           </article>
-          <article class="research-direction refinement-direction initiative-editing">
+          <article class="research-direction refinement-direction initiative-editing" data-anim="fade-left">
             <header>
               <span class="research-direction-index">03</span>
               <div><span>3D-GPT · SceneCode · WorldClaw · SceneSmith</span><h3>Programs preserve structure; agents repair automatically</h3></div>
@@ -220,7 +219,7 @@
           </article>
         </div>
 
-        <div class="positioning-gap" data-positioning-gap>
+        <div class="positioning-gap" data-positioning-gap data-anim="fade-left">
           <span>Research gap</span>
           <strong>How should user-authored spatial constraints be integrated and evaluated inside an established 3D editor?</strong>
         </div>
@@ -230,9 +229,9 @@
       <!-- 6 · Related work: practical precedent -->
       <section class="slide practical-precedent-slide">
         <div class="eyebrow">Related work · Practical precedent</div>
-        <h2>Practical inspiration</h2>
+        <h2 data-anim="blur-in">Practical inspiration</h2>
         <div class="precedent-comparison" aria-label="Hyper3D and thesis positioning">
-          <article class="precedent hyper3d-precedent">
+          <article class="precedent hyper3d-precedent" data-anim="fade-left">
             <h3>Hyper3D Rodin <span class="cite">[28,29]</span></h3>
             <p class="precedent-interaction">
               <span>Local modification</span>
@@ -257,8 +256,8 @@
               </div>
             </div>
           </article>
-          <div class="precedent-vs" aria-hidden="true">→</div>
-          <article class="precedent thesis-precedent">
+          <div class="precedent-vs" data-anim="fade-right" aria-hidden="true">→</div>
+          <article class="precedent thesis-precedent" data-anim="fade-right">
             <h3>This thesis</h3>
             <p>Unity-integrated spatial interaction</p>
             <p>Editable authoring workflow</p>
@@ -270,11 +269,11 @@
       <!-- 7 · Architecture: generation -->
       <section class="slide generation-architecture-slide">
         <div class="eyebrow">Implementation · Generation architecture</div>
-        <h2>From spatial proxy to a fitted mesh</h2>
+        <h2 data-anim="blur-in">From spatial proxy to a fitted mesh</h2>
 
         <div class="generation-arch two-layer-arch" data-anim-group="fade-up"
           aria-label="Two-layer generation architecture connecting Unity and the FastAPI plus ComfyUI service">
-          <section class="generation-arch-tier unity-tier">
+          <section class="generation-arch-tier unity-tier" data-anim="fade-up">
             <header class="generation-tier-name">
               <span>Unity</span>
             </header>
@@ -318,7 +317,7 @@
             </div>
           </div>
 
-          <section class="generation-arch-tier service-tier">
+          <section class="generation-arch-tier service-tier" data-anim="fade-up">
             <header class="generation-tier-name">
               <span>ComfyUI</span>
             </header>
@@ -352,23 +351,22 @@
 
       <!-- 8 · Research questions -->
       <section class="slide research-questions-slide">
-        <div class="eyebrow">Research questions · What to test</div>
+        <div class="eyebrow">Research questions</div>
 
-        <div class="central-rq" data-central-rq>
-          <div class="central-rq-fx" data-fx="orbit-ring" aria-hidden="true"></div>
-          <span>Central research question</span>
+        <div class="central-rq" data-central-rq data-anim="zoom-pop">
+          <span>Central RQ</span>
           <p>How do editable spatial proxies affect <strong>control</strong>, <strong>workload</strong> and
             <strong>output quality</strong> in 3D scene generation and refinement?</p>
         </div>
 
         <div class="rq-phase-grid" aria-label="Generation and refinement research questions">
-          <article class="rq-phase generation-rq">
+          <article class="rq-phase generation-rq" data-anim="fade-left">
             <span>Generation</span>
             <h3>Proxy-guided generation <span class="rq-vs">vs.</span> text-only prompting</h3>
             <p>How does proxy guidance affect <strong>spatial fit</strong>, <strong>effort</strong> and
               <strong>predictability</strong>?</p>
           </article>
-          <article class="rq-phase refinement-rq">
+          <article class="rq-phase refinement-rq" data-anim="fade-right">
             <span>Refinement</span>
             <h3>3D region selection <span class="rq-vs">vs.</span> global regeneration</h3>
             <p>How does region selection affect <strong>edit locality</strong>, <strong>preservation</strong> and
@@ -382,24 +380,24 @@
         <div class="eyebrow">Hypotheses · Expected effects</div>
 
         <div class="hypothesis-map" aria-label="Three study hypotheses">
-          <article class="hypothesis-row h1">
+          <article class="hypothesis-row h1" data-anim="fade-left">
             <span class="hypothesis-index">H1</span>
             <div class="hypothesis-phase"><span>Generation</span><strong>Spatial fit</strong></div>
-            <p>Proxy-guided generation produces objects that fit the intended layout more closely than text-only prompting.</p>
+            <p>Proxy-guided generation produces objects that <span class="hypothesis-keyword">fit the intended layout more closely</span> than text-only prompting.</p>
           </article>
-          <article class="hypothesis-row h2">
+          <article class="hypothesis-row h2" data-anim="fade-left">
             <span class="hypothesis-index">H2</span>
             <div class="hypothesis-phase"><span>Interaction</span><strong>Control</strong></div>
-            <p>Spatial controls increase predictability and agency and reduce mental demand or frustration.</p>
+            <p>Spatial controls <span class="hypothesis-keyword">increase predictability</span> and <span class="hypothesis-keyword">agency</span> and <span class="hypothesis-keyword">reduce mental demand</span> or frustration.</p>
           </article>
-          <article class="hypothesis-row h3">
+          <article class="hypothesis-row h3" data-anim="fade-left">
             <span class="hypothesis-index">H3</span>
             <div class="hypothesis-phase"><span>Refinement</span><strong>Locality</strong></div>
-            <p>Region-based refinement changes more inside the selection, preserves more outside it and is preferred over global regeneration.</p>
+            <p>Region-based refinement is preferred over global regeneration for its <span class="hypothesis-keyword">higher edit locality</span> and preservation of surrounding structure.</p>
           </article>
         </div>
 
-        <div class="hypothesis-caveat">
+        <div class="hypothesis-caveat" data-anim="fade-left">
           <span>Trade-off to test</span>
           <strong>More direct manipulation may be worthwhile if it reduces translation effort and uncertainty.</strong>
         </div>
@@ -408,7 +406,7 @@
       <!-- Appendix A1 · Generation engineering detail -->
       <section class="slide generation-detail-slide appendix-slide" data-appendix="A1">
         <div class="eyebrow">Appendix A1 · Generation engineering</div>
-        <h2>Internal textual prompt</h2>
+        <h2 data-anim="blur-in">Internal textual prompt</h2>
 
         <div class="source-image-comparison" data-anim-group="fade-up">
           <article class="source-option photograph-source">
@@ -422,11 +420,11 @@
             </div>
           </article>
 
-          <div class="source-comparison-mid" aria-hidden="true">
+          <div class="source-comparison-mid" data-anim="fade-left" aria-hidden="true">
             <span>→</span>
           </div>
 
-          <article class="source-option lowpoly-source">
+          <article class="source-option lowpoly-source" data-anim="fade-left">
             <img src="lowpoly.png" alt="Low-poly pink house on a plain background" draggable="false">
             <div class="source-option-copy">
               <span class="source-option-kicker prompt-kicker">
@@ -437,11 +435,11 @@
             </div>
           </article>
 
-          <div class="source-comparison-but" aria-hidden="true">
+          <div class="source-comparison-but" data-anim="fade-left" aria-hidden="true">
             <span>But</span>
           </div>
 
-          <figure class="source-option tilted-output">
+          <figure class="source-option tilted-output" data-anim="fade-left">
             <img src="tilted.png" alt="Tilted reconstructed mesh of a pink house" draggable="false">
             <figcaption class="source-option-copy">
               <h3>Tilt baked into the mesh</h3>
@@ -459,18 +457,18 @@
               <strong>Estimate up</strong>
               <p>Wall normals: smallest eigenvector of the scatter matrix</p>
             </div>
-            <i aria-hidden="true"></i>
-            <div class="recovery-step">
+            <i data-anim="fade-left" aria-hidden="true"></i>
+            <div class="recovery-step" data-anim="fade-left">
               <strong>Align yaw</strong>
               <p>Find the minimum-area footprint</p>
             </div>
-            <i aria-hidden="true"></i>
-            <div class="recovery-step">
+            <i data-anim="fade-left" aria-hidden="true"></i>
+            <div class="recovery-step" data-anim="fade-left">
               <strong>Apply transforms in order</strong>
               <p>Rotate mesh children, then scale the root</p>
             </div>
-            <i aria-hidden="true"></i>
-            <div class="recovery-step">
+            <i data-anim="fade-left" aria-hidden="true"></i>
+            <div class="recovery-step" data-anim="fade-left">
               <strong>Fill proxy</strong>
               <p>Use non-uniform scaling</p>
               <small>Fit with upright geometry</small>
@@ -504,17 +502,17 @@
       <!-- Appendix A2 · Refinement inference architecture -->
       <section class="slide refinement-architecture-slide appendix-slide" data-appendix="A2">
         <div class="eyebrow">Appendix A2 · Refinement architecture</div>
-        <h2>Multi-view guided local replacement</h2>
+        <h2 data-anim="blur-in">Multi-view guided local replacement</h2>
 
         <div class="generation-arch refinement-arch two-layer-arch" data-anim-group="fade-up"
           aria-label="Two-layer local refinement architecture connecting Unity and ComfyUI">
-          <section class="generation-arch-tier unity-tier refinement-unity-tier">
+          <section class="generation-arch-tier unity-tier refinement-unity-tier" data-anim="zoom-pop">
             <header class="generation-tier-name">
               <span>Unity</span>
             </header>
 
             <div class="generation-tier-cells refinement-unity-cells">
-              <article class="generation-arch-cell refinement-select-cell">
+              <article class="generation-arch-cell refinement-select-cell" data-anim="zoom-pop">
                 <figure class="refinement-evidence-image selected-evidence">
                   <img src="selected.png" alt="Roof region selected with an oriented bounding box in Unity"
                     draggable="false">
@@ -665,17 +663,17 @@
       <section class="slide study-design-slide">
         <div class="eyebrow">Study design</div>
 
-        <section class="study-primary" aria-label="Main study">
+        <section class="study-primary" data-anim="zoom-pop" aria-label="Main study">
           <header class="study-primary-header">
             <div>
               <span class="study-section-label">Main study</span>
             </div>
-            <div class="study-meta" aria-label="Main study setup">
+            <div class="study-meta" data-anim="fade-right" aria-label="Main study setup">
               <span>Within-subjects · counterbalanced</span>
             </div>
           </header>
 
-          <div class="condition-comparison" data-anim-group="zoom-pop">
+          <div class="condition-comparison" data-anim="zoom-pop" data-anim-group="zoom-pop">
             <div class="study-condition text-only">
               <div>
                 <h3>Text only</h3>
@@ -691,7 +689,7 @@
 
           <div class="same-shell">Equivalent goals · same Unity shell</div>
 
-          <div class="study-phase-line" data-anim-group="zoom-pop" aria-label="Main study timeline">
+          <div class="study-phase-line" data-anim="zoom-pop" data-anim-group="zoom-pop" aria-label="Main study timeline">
             <div class="study-phase creation">
               <span class="tag a">Generation</span>
               <h3>Match layout</h3>
@@ -712,7 +710,7 @@
       <section class="slide measurement-slide">
         <div class="eyebrow">Study design · Measures</div>
 
-        <section class="hypothesis-scorecard" aria-label="Measures mapped to hypotheses">
+        <section class="hypothesis-scorecard" data-anim="zoom-pop" aria-label="Measures mapped to hypotheses">
           <header class="measurement-block-header">
             <span class="study-section-label">Phase evidence</span>
             <span class="measurement-timing">Collected after generation and refinement</span>
@@ -760,16 +758,16 @@
       <!-- 12 · Procedure and analysis -->
       <section class="slide study-procedure-slide">
         <div class="eyebrow">Study design · Procedure and analysis</div>
-        <h2>Two phases support one paired comparison</h2>
+        <h2 data-anim="blur-in">Two phases support one paired comparison</h2>
 
         <div class="procedure-phase-track" aria-label="Generation and refinement study phases">
-          <article class="procedure-phase generation-phase">
+          <article class="procedure-phase generation-phase" data-anim="fade-left">
             <span>Generation phase</span>
             <h3>Set up a multi-object scene</h3>
             <p>Equivalent goal and authoring environment in both conditions</p>
           </article>
-          <div class="procedure-arrow" aria-hidden="true">→</div>
-          <article class="procedure-phase refinement-phase">
+          <div class="procedure-arrow" data-anim="fade-right" aria-hidden="true">→</div>
+          <article class="procedure-phase refinement-phase" data-anim="fade-right">
             <span>Refinement phase</span>
             <h3>Modify one bounded region</h3>
             <p>Preserve the surrounding geometry</p>
@@ -795,14 +793,14 @@
       <!-- 13 · Study plan and current status -->
       <section class="slide study-roadmap-slide">
         <div class="eyebrow">Study plan · Current status</div>
-        <h2>From working prototype to main study</h2>
+        <h2 data-anim="blur-in">From working prototype to main study</h2>
 
-        <div class="study-roadmap" data-anim="fade-up"
+        <div class="study-roadmap" data-anim="zoom-pop"
           aria-label="Study roadmap showing completed, current and upcoming work">
           <div class="roadmap-phase-labels">
-            <span class="complete">Implementation · Complete</span>
-            <span class="current">Current</span>
-            <span class="upcoming">Evaluation · Next</span>
+            <span class="complete" data-anim="zoom-pop">Implementation · Complete</span>
+            <span class="current" data-anim="fade-down">Current</span>
+            <span class="upcoming" data-anim="fade-down">Evaluation · Next</span>
           </div>
 
           <div class="roadmap-rail" data-anim-group="zoom-pop">
@@ -864,16 +862,16 @@
       <!-- 14 · Three.js considered alternative -->
       <section class="slide threejs-consideration-slide">
         <div class="eyebrow">Implementation option · Under consideration</div>
-        <h2>A procedural path for geometry that needs predictable structure</h2>
+        <h2 data-anim="blur-in">A procedural path for geometry that needs predictable structure</h2>
 
         <div class="threejs-consideration-layout">
-          <section class="threejs-problem" data-threejs-problem>
+          <section class="threejs-problem" data-threejs-problem data-anim="zoom-pop">
             <span>Current difficulty</span>
             <h3>Image-to-3D output can be difficult to refine reliably</h3>
             <p>Perspective · background geometry · irregular topology · unstable dimensions</p>
           </section>
 
-          <div class="threejs-candidate-flow" aria-label="Considered Three.js procedural workflow">
+          <div class="threejs-candidate-flow" data-anim="fade-left" aria-label="Considered Three.js procedural workflow">
             <article><span>Prompt</span><strong>“two-storey gabled house”</strong></article>
             <i aria-hidden="true">→</i>
             <article class="spec-node"><span>Validated specification</span><strong>Parts + dimensions</strong></article>
@@ -890,7 +888,7 @@
             <p><strong>Semantic components</strong><small>Roof · door · windows</small></p>
           </div>
 
-          <div class="hybrid-direction" data-hybrid-direction>
+          <div class="hybrid-direction" data-hybrid-direction data-anim="zoom-pop">
             <span>Considered hybrid</span>
             <p><strong>Procedural generation</strong> where structure can be specified</p>
             <i aria-hidden="true">+</i>
@@ -903,7 +901,7 @@
       <!-- 15 · References I -->
       <section class="slide references-slide">
         <div class="eyebrow">References · 1/3</div>
-        <h2>Foundations · Production and interaction</h2>
+        <h2 data-anim="blur-in">Foundations · Production and interaction</h2>
 
         <div class="refs dense">
           <div class="ref"><b>[1]</b><span>Landau &amp; Jackendoff (1993). <em>“What” and “where” in spatial language and cognition.</em> BBS 16(2).</span></div>
@@ -924,7 +922,7 @@
       <!-- 16 · References II -->
       <section class="slide references-slide">
         <div class="eyebrow">References · 2/3</div>
-        <h2>Related work · Generative and controllable 3D</h2>
+        <h2 data-anim="blur-in">Related work · Generative and controllable 3D</h2>
 
         <div class="refs dense">
           <div class="ref"><b>[13]</b><span>Poole et al. (2023). <em>DreamFusion: Text-to-3D using 2D diffusion.</em> ICLR.</span></div>
@@ -950,7 +948,7 @@
       <!-- 17 · References III -->
       <section class="slide references-slide">
         <div class="eyebrow">References · 3/3</div>
-        <h2>Editing, models and evaluation methods</h2>
+        <h2 data-anim="blur-in">Editing, models and evaluation methods</h2>
 
         <div class="refs dense">
           <div class="ref"><b>[30]</b><span>Haque et al. (2023). <em>Instruct-NeRF2NeRF: Editing 3D scenes with instructions.</em> ICCV.</span></div>
@@ -977,7 +975,6 @@
 
       <!-- 18 · End -->
       <section class="slide title closing-slide hero">
-        <div class="canvas-fx-layer hero-fx closing-fx" data-fx="constellation" aria-hidden="true"></div>
         <div class="title-wrap">
           <div class="eyebrow">Thank you</div>
           <h1>Questions &amp; discussion</h1>
@@ -995,17 +992,17 @@
       <!-- Appendix A4 · Model choice -->
       <section class="slide model-choice-slide appendix-slide" data-appendix="A4">
         <div class="eyebrow">Appendix A4 · Model choice</div>
-        <h2>Quality or iteration speed?</h2>
+        <h2 data-anim="blur-in">Quality or iteration speed?</h2>
 
         <div class="appendix-model-comparison" aria-label="TripoSR and Hunyuan3D implementation trade-off">
-          <article class="appendix-model-option tripo-model">
+          <article class="appendix-model-option tripo-model" data-anim="fade-left">
             <span>Speed</span>
             <h3>TripoSR <span class="cite">[38]</span></h3>
             <p>Fast feedback</p>
             <small>Lower fidelity · unreliable for refinement</small>
           </article>
-          <div class="appendix-model-vs" aria-hidden="true">VS.</div>
-          <article class="appendix-model-option hunyuan-model">
+          <div class="appendix-model-vs" data-anim="fade-right" aria-hidden="true">VS.</div>
+          <article class="appendix-model-option hunyuan-model" data-anim="fade-right">
             <span>Quality</span>
             <h3>Hunyuan3D 2.1 <span class="cite">[39]</span></h3>
             <p>Higher fidelity</p>
@@ -1013,7 +1010,7 @@
           </article>
         </div>
 
-        <div class="appendix-model-question">
+        <div class="appendix-model-question" data-anim="zoom-pop">
           <span>Secondary implementation question</span>
           <strong>Do users prefer rapid iteration or the higher-quality result?</strong>
         </div>
@@ -1022,11 +1019,11 @@
       <!-- Appendix A5 · Detailed Three.js feasibility -->
       <section class="slide threejs-option-slide appendix-slide" data-appendix="A5">
         <div class="eyebrow">Appendix A5 · Three.js feasibility</div>
-        <h2>Architectural refinement with procedural geometry</h2>
+        <h2 data-anim="blur-in">Architectural refinement with procedural geometry</h2>
         <p class="threejs-kicker">A detailed implementation path for the hybrid option.</p>
 
         <div class="threejs-rationale">
-          <article class="threejs-panel benefit" data-anim-group="zoom-pop">
+          <article class="threejs-panel benefit" data-anim="zoom-pop" data-anim-group="zoom-pop">
             <header class="threejs-panel-heading">
               <span class="tag g">Benefit</span>
               <h3>Generate predictable geometry <span class="cite">[47]</span></h3>
@@ -1061,33 +1058,33 @@
             <p class="threejs-panel-takeaway">A local edit updates parameters instead of reconstructing the asset.</p>
           </article>
 
-          <article class="threejs-panel feasibility" data-anim-group="fade-up">
+          <article class="threejs-panel feasibility" data-anim="fade-right" data-anim-group="fade-right">
             <header class="threejs-panel-heading">
               <span class="tag a">Feasibility</span>
               <h3>Fits the current pipeline</h3>
             </header>
 
             <div class="threejs-flow" aria-label="Three.js procedural asset generation and Unity integration">
-              <div class="threejs-flow-row">
+              <div class="threejs-flow-row" data-anim="fade-right">
                 <div class="threejs-flow-node">Prompt</div>
                 <span class="threejs-flow-arrow" aria-hidden="true">→</span>
                 <div class="threejs-flow-node accent">Model Spec <small>validated JSON</small></div>
                 <span class="threejs-flow-arrow" aria-hidden="true">→</span>
                 <div class="threejs-flow-node warm">Three.js <small>parametric + rules</small></div>
               </div>
-              <div class="threejs-quality-gate">
+              <div class="threejs-quality-gate" data-anim="zoom-pop">
                 <span aria-hidden="true">✓</span>
                 <div><strong>Mesh validity gate</strong><small>indexed · triangulated · watertight · consistent orientation and scale <span class="cite">[48]</span></small></div>
               </div>
-              <div class="threejs-export-row">
+              <div class="threejs-export-row" data-anim="zoom-pop">
                 <strong>GLTFExporter <span class="cite">[46]</span></strong><span aria-hidden="true">→</span><strong>GLB</strong><span aria-hidden="true">→</span><strong>Unity</strong>
               </div>
             </div>
 
             <div class="threejs-feasibility-checks">
-              <span><b>✓</b> glTFast already imports GLB</span>
-              <span><b>✓</b> OBB clip · fit · weld · rollback remain reusable</span>
-              <span><b>+</b> Custom Three.js adapter · fixed Unity orientation · no model/API fee</span>
+              <span data-anim="zoom-pop"><b>✓</b> glTFast already imports GLB</span>
+              <span data-anim="zoom-pop"><b>✓</b> OBB clip · fit · weld · rollback remain reusable</span>
+              <span data-anim="zoom-pop"><b>+</b> Custom Three.js adapter · fixed Unity orientation · no model/API fee</span>
             </div>
           </article>
         </div>
@@ -1097,7 +1094,6 @@
   </div>
   <div id="deckProgress" class="deck-progress" aria-hidden="true"></div>
 
-  <script src="assets/animations/fx-runtime.js" defer></script>
   <script src="dist/presentation.js" defer></script>
 </body>
 

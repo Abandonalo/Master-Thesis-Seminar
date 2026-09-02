@@ -90,7 +90,9 @@ class SlidePresentation {
   private prepareDefaultAnimations(slide: HTMLElement): void {
     this.elementChildren(slide).forEach((element, order) => {
       if (element.hasAttribute("data-anim-group")) {
-        element.dataset.anim = "none" satisfies AnimationType;
+        if (!element.hasAttribute("data-anim")) {
+          element.dataset.anim = "none" satisfies AnimationType;
+        }
         this.prepareAnimationGroup(element);
         return;
       }

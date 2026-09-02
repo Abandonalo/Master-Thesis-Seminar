@@ -153,7 +153,10 @@ export class SlideMotionController {
         targets.push({ element: eyebrow, animation: "fade-down" });
       }
       if (heading && !heading.classList.contains("hpx-progressive")) {
-        targets.push({ element: heading, animation: "rise-in" });
+        targets.push({
+          element: heading,
+          animation: this.animationFor(heading.dataset.anim),
+        });
       }
 
       if (!isProgressive) {
@@ -207,11 +210,11 @@ export class SlideMotionController {
   private problemStorySequence(slide: HTMLElement): SlideSequence {
     return {
       steps: [
-        this.step(slide, ".scene-plan.intended", "fade-left"),
-        this.step(slide, ".prompt-bottleneck > .tag", "fade-up"),
-        this.step(slide, ".prompt-bottleneck > .guess-arrow", "zoom-pop"),
-        this.step(slide, ".scene-plan.guessed", "fade-right"),
-        this.step(slide, ".production-evidence", "fade-up"),
+        this.step(slide, ".scene-plan.intended"),
+        this.step(slide, ".prompt-bottleneck > .tag"),
+        this.step(slide, ".prompt-bottleneck > .guess-arrow"),
+        this.step(slide, ".scene-plan.guessed"),
+        this.step(slide, ".production-evidence"),
       ],
     };
   }
@@ -219,10 +222,10 @@ export class SlideMotionController {
   private humanFoundationsSequence(slide: HTMLElement): SlideSequence {
     return {
       steps: [
-        this.stepMany(slide, ["h2", ".human-foundation.language"], "fade-up"),
-        this.step(slide, ".human-foundation.blockout", "fade-up"),
-        this.step(slide, ".human-foundation.manipulation", "fade-up"),
-        this.step(slide, ".human-foundation-requirement", "zoom-pop"),
+        this.stepMany(slide, ["h2", ".human-foundation.language"]),
+        this.step(slide, ".human-foundation.blockout"),
+        this.step(slide, ".human-foundation.manipulation"),
+        this.step(slide, ".human-foundation-requirement"),
       ],
     };
   }
@@ -231,8 +234,8 @@ export class SlideMotionController {
     const rows = this.elements(slide, ".research-direction");
     return {
       steps: [
-        ...rows.map((row) => this.stepFromElements([row], "fade-left")),
-        this.step(slide, ".research-synthesis", "fade-up"),
+        ...rows.map((row) => this.stepFromElements([row])),
+        this.step(slide, ".research-synthesis"),
       ],
     };
   }
@@ -241,8 +244,8 @@ export class SlideMotionController {
     const rows = this.elements(slide, ".refinement-direction");
     return {
       steps: [
-        ...rows.map((row) => this.stepFromElements([row], "fade-up")),
-        this.step(slide, ".positioning-gap", "zoom-pop"),
+        ...rows.map((row) => this.stepFromElements([row])),
+        this.step(slide, ".positioning-gap"),
       ],
     };
   }
@@ -250,8 +253,8 @@ export class SlideMotionController {
   private practicalPrecedentSequence(slide: HTMLElement): SlideSequence {
     return {
       steps: [
-        this.step(slide, ".hyper3d-precedent", "fade-left"),
-        this.stepMany(slide, [".precedent-vs", ".thesis-precedent"], "fade-right"),
+        this.step(slide, ".hyper3d-precedent"),
+        this.stepMany(slide, [".precedent-vs", ".thesis-precedent"]),
       ],
     };
   }
@@ -260,9 +263,9 @@ export class SlideMotionController {
     const phases = this.elements(slide, ".rq-phase");
     return {
       steps: [
-        this.step(slide, ".central-rq", "zoom-pop"),
-        this.stepFromElements(phases.slice(0, 1), "fade-left"),
-        this.stepFromElements(phases.slice(1, 2), "fade-right"),
+        this.step(slide, ".central-rq"),
+        this.stepFromElements(phases.slice(0, 1)),
+        this.stepFromElements(phases.slice(1, 2)),
       ],
     };
   }
@@ -271,8 +274,8 @@ export class SlideMotionController {
     const rows = this.elements(slide, ".hypothesis-row");
     return {
       steps: [
-        ...rows.map((row) => this.stepFromElements([row], "fade-left")),
-        this.step(slide, ".hypothesis-caveat", "zoom-pop"),
+        ...rows.map((row) => this.stepFromElements([row])),
+        this.step(slide, ".hypothesis-caveat"),
       ],
     };
   }
@@ -301,22 +304,21 @@ export class SlideMotionController {
         transfers.forEach((transfer) => transfer.classList.remove("hpx-transfer"));
       },
       steps: [
-        this.step(slide, ".unity-tier", "zoom-pop"),
-        this.step(slide, ".proxy-cell", "fade-up"),
-        this.step(slide, ".textual-prompt-cell", "fade-up", showArrow(".proxy-cell")),
-        this.step(slide, ".constraints-cell", "fade-up", showArrow(".textual-prompt-cell")),
-        this.step(slide, ".service-tier", "zoom-pop"),
-        this.stepMany(slide, [".prompt-flow", ".policy-cell"], "fade-up"),
+        this.step(slide, ".unity-tier"),
+        this.step(slide, ".proxy-cell"),
+        this.step(slide, ".textual-prompt-cell", showArrow(".proxy-cell")),
+        this.step(slide, ".constraints-cell", showArrow(".textual-prompt-cell")),
+        this.step(slide, ".service-tier"),
+        this.stepMany(slide, [".prompt-flow", ".policy-cell"]),
         this.stepMany(
           slide,
           [".constraints-flow", ".image-generation-cell"],
-          "fade-up",
           showArrow(".policy-cell"),
         ),
-        this.step(slide, ".extraction-cell", "fade-up", showArrow(".image-generation-cell")),
-        this.step(slide, ".lifting-cell", "fade-up", showArrow(".extraction-cell")),
-        this.step(slide, ".fit-cell", "fade-up", showArrow(".lifting-cell")),
-        this.stepMany(slide, [".up-flow", ".result-cell"], "fade-up"),
+        this.step(slide, ".extraction-cell", showArrow(".image-generation-cell")),
+        this.step(slide, ".lifting-cell", showArrow(".extraction-cell")),
+        this.step(slide, ".fit-cell", showArrow(".lifting-cell")),
+        this.stepMany(slide, [".up-flow", ".result-cell"]),
       ],
     };
   }
@@ -345,16 +347,15 @@ export class SlideMotionController {
         transfers.forEach((transfer) => transfer.classList.remove("hpx-transfer"));
       },
       steps: [
-        this.stepMany(slide, [".refinement-unity-tier", ".refinement-select-cell"], "zoom-pop"),
-        this.step(slide, ".refinement-capture-cell", "fade-up", showArrow(".refinement-select-cell")),
+        this.stepMany(slide, [".refinement-unity-tier", ".refinement-select-cell"]),
+        this.step(slide, ".refinement-capture-cell", showArrow(".refinement-select-cell")),
         this.stepMany(
           slide,
           [".refinement-service-tier", ".refinement-capture-flow", ".refinement-inpaint-cell"],
-          "fade-up",
         ),
-        this.step(slide, ".refinement-prepare-cell", "fade-up", showArrow(".refinement-inpaint-cell")),
-        this.step(slide, ".refinement-lift-cell", "fade-up", showArrow(".refinement-prepare-cell")),
-        this.stepMany(slide, [".refinement-replacement-flow", ".refinement-result-cell"], "fade-up"),
+        this.step(slide, ".refinement-prepare-cell", showArrow(".refinement-inpaint-cell")),
+        this.step(slide, ".refinement-lift-cell", showArrow(".refinement-prepare-cell")),
+        this.stepMany(slide, [".refinement-replacement-flow", ".refinement-result-cell"]),
       ],
     };
   }
@@ -395,29 +396,25 @@ export class SlideMotionController {
         slide.style.removeProperty("--detail-initial-y");
       },
       steps: [
-        this.step(slide, ".photograph-source h3", "fade-up"),
+        this.step(slide, ".photograph-source h3"),
         this.stepMany(
           slide,
           [".source-comparison-mid", ".lowpoly-source"],
-          "fade-left",
           revealComparison,
         ),
-        this.stepMany(slide, [".source-comparison-but", ".tilted-output"], "fade-left"),
-        this.step(slide, ".orientation-recovery", "zoom-pop"),
-        this.stepFromElements(recoverySteps.slice(0, 1), "fade-up"),
+        this.stepMany(slide, [".source-comparison-but", ".tilted-output"]),
+        this.step(slide, ".orientation-recovery"),
+        this.stepFromElements(recoverySteps.slice(0, 1)),
         this.stepFromElements(
           [...recoveryArrows.slice(0, 1), ...recoverySteps.slice(1, 2)],
-          "fade-left",
         ),
         this.stepFromElements(
           [...recoveryArrows.slice(1, 2), ...recoverySteps.slice(2, 3)],
-          "fade-left",
         ),
         this.stepFromElements(
           [...recoveryArrows.slice(2, 3), ...recoverySteps.slice(3, 4)],
-          "fade-left",
         ),
-        this.step(slide, ".recovery-result", "zoom-pop"),
+        this.step(slide, ".recovery-result"),
       ],
     };
   }
@@ -425,10 +422,10 @@ export class SlideMotionController {
   private studyDesignSequence(slide: HTMLElement): SlideSequence {
     return {
       steps: [
-        this.stepMany(slide, [".study-primary", ".condition-comparison"], "zoom-pop"),
-        this.step(slide, ".study-meta", "fade-right"),
-        this.step(slide, ".same-shell", "fade-up"),
-        this.stepMany(slide, [".study-phase-line", ".study-phase"], "zoom-pop"),
+        this.stepMany(slide, [".study-primary", ".condition-comparison"]),
+        this.step(slide, ".study-meta"),
+        this.step(slide, ".same-shell"),
+        this.stepMany(slide, [".study-phase-line", ".study-phase"]),
       ],
     };
   }
@@ -437,10 +434,10 @@ export class SlideMotionController {
     const evidence = this.elements(slide, ".hypothesis-evidence");
     return {
       steps: [
-        this.step(slide, ".hypothesis-scorecard", "zoom-pop"),
-        this.step(slide, ".measurement-shared", "zoom-pop"),
-        ...evidence.map((item) => this.stepFromElements([item], "fade-up")),
-        this.step(slide, ".condition-measures", "fade-up"),
+        this.step(slide, ".hypothesis-scorecard"),
+        this.step(slide, ".measurement-shared"),
+        ...evidence.map((item) => this.stepFromElements([item])),
+        this.step(slide, ".condition-measures"),
       ],
     };
   }
@@ -450,12 +447,11 @@ export class SlideMotionController {
     const analysis = this.elements(slide, ".procedure-analysis");
     return {
       steps: [
-        this.stepFromElements(phases.slice(0, 1), "fade-left"),
+        this.stepFromElements(phases.slice(0, 1)),
         this.stepFromElements(
           [...this.elements(slide, ".procedure-arrow"), ...phases.slice(1, 2)],
-          "fade-right",
         ),
-        ...analysis.map((item) => this.stepFromElements([item], "fade-up")),
+        ...analysis.map((item) => this.stepFromElements([item])),
       ],
     };
   }
@@ -477,21 +473,20 @@ export class SlideMotionController {
       initialize: () => rail?.style.setProperty("--roadmap-line-mask", "100%"),
       cleanup: () => rail?.style.removeProperty("--roadmap-line-mask"),
       steps: [
-        this.stepMany(slide, [".study-roadmap", ".roadmap-phase-labels .complete"], "zoom-pop"),
+        this.stepMany(slide, [".study-roadmap", ".roadmap-phase-labels .complete"]),
         ...completed.map((milestone, index) =>
-          this.stepFromElements([milestone], "zoom-pop", revealRailTo(index)),
+          this.stepFromElements([milestone], revealRailTo(index)),
         ),
-        this.step(slide, ".roadmap-phase-labels .current", "fade-down"),
-        this.step(slide, ".roadmap-milestone.active", "zoom-pop", revealRailTo(completed.length)),
-        this.step(slide, ".roadmap-phase-labels .upcoming", "fade-down"),
+        this.step(slide, ".roadmap-phase-labels .current"),
+        this.step(slide, ".roadmap-milestone.active", revealRailTo(completed.length)),
+        this.step(slide, ".roadmap-phase-labels .upcoming"),
         ...upcoming.map((milestone, index) =>
           this.stepFromElements(
             [milestone],
-            "zoom-pop",
             revealRailTo(completed.length + index + 1),
           ),
         ),
-        this.step(slide, ".roadmap-focus", "fade-up"),
+        this.step(slide, ".roadmap-focus"),
       ],
     };
   }
@@ -499,10 +494,10 @@ export class SlideMotionController {
   private threeJsConsiderationSequence(slide: HTMLElement): SlideSequence {
     return {
       steps: [
-        this.step(slide, ".threejs-problem", "zoom-pop"),
-        this.step(slide, ".threejs-candidate-flow", "fade-left"),
-        this.step(slide, ".threejs-benefit-line", "fade-up"),
-        this.step(slide, ".hybrid-direction", "zoom-pop"),
+        this.step(slide, ".threejs-problem"),
+        this.step(slide, ".threejs-candidate-flow"),
+        this.step(slide, ".threejs-benefit-line"),
+        this.step(slide, ".hybrid-direction"),
       ],
     };
   }
@@ -511,12 +506,11 @@ export class SlideMotionController {
     const options = this.elements(slide, ".appendix-model-option");
     return {
       steps: [
-        this.stepFromElements(options.slice(0, 1), "fade-left"),
+        this.stepFromElements(options.slice(0, 1)),
         this.stepFromElements(
           [...this.elements(slide, ".appendix-model-vs"), ...options.slice(1, 2)],
-          "fade-right",
         ),
-        this.step(slide, ".appendix-model-question", "zoom-pop"),
+        this.step(slide, ".appendix-model-question"),
       ],
     };
   }
@@ -525,7 +519,7 @@ export class SlideMotionController {
     const checks = this.elements(slide, ".threejs-feasibility-checks > span");
     return {
       steps: [
-        this.step(slide, ".threejs-kicker", "fade-up"),
+        this.step(slide, ".threejs-kicker"),
         this.stepMany(
           slide,
           [
@@ -533,10 +527,9 @@ export class SlideMotionController {
             ".threejs-panel.benefit .threejs-panel-heading",
             ".threejs-panel.benefit .threejs-benefit-grid",
           ],
-          "zoom-pop",
         ),
-        this.step(slide, ".threejs-component-tree", "zoom-pop"),
-        this.step(slide, ".threejs-panel-takeaway", "zoom-pop"),
+        this.step(slide, ".threejs-component-tree"),
+        this.step(slide, ".threejs-panel-takeaway"),
         this.stepMany(
           slide,
           [
@@ -544,11 +537,10 @@ export class SlideMotionController {
             ".threejs-panel.feasibility .threejs-panel-heading",
             ".threejs-flow-row",
           ],
-          "fade-right",
         ),
-        this.step(slide, ".threejs-quality-gate", "zoom-pop"),
-        this.step(slide, ".threejs-export-row", "zoom-pop"),
-        ...checks.map((check) => this.stepFromElements([check], "zoom-pop")),
+        this.step(slide, ".threejs-quality-gate"),
+        this.step(slide, ".threejs-export-row"),
+        ...checks.map((check) => this.stepFromElements([check])),
       ],
     };
   }
@@ -556,32 +548,32 @@ export class SlideMotionController {
   private step(
     slide: HTMLElement,
     selector: string,
-    animation: RevealAnimation,
     after?: () => void,
   ): RevealStep {
-    return this.stepFromElements(this.elements(slide, selector), animation, after);
+    return this.stepFromElements(this.elements(slide, selector), after);
   }
 
   private stepMany(
     slide: HTMLElement,
     selectors: string[],
-    animation: RevealAnimation,
     after?: () => void,
   ): RevealStep {
     return this.stepFromElements(
       selectors.flatMap((selector) => this.elements(slide, selector)),
-      animation,
       after,
     );
   }
 
   private stepFromElements(
     elements: HTMLElement[],
-    animation: RevealAnimation,
     after?: () => void,
   ): RevealStep {
     return {
-      items: Array.from(new Set(elements)).map((element) => ({ element, animation })),
+      // Animation style belongs to the markup; this controller only sequences it.
+      items: Array.from(new Set(elements)).map((element) => ({
+        element,
+        animation: this.animationFor(element.dataset.anim),
+      })),
       after,
     };
   }

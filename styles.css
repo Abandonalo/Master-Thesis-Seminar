@@ -2920,24 +2920,12 @@ strong {
   isolation: isolate;
 }
 
-.central-rq::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 138px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent-2), var(--green));
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
 .central-rq > span {
   position: relative;
   z-index: 1;
   display: block;
   margin-bottom: 14px;
-  color: var(--accent-2);
+  color: var(--green);
   font-size: var(--type-label-size);
   font-weight: var(--type-label-weight);
   letter-spacing: 0.16em;
@@ -2981,7 +2969,7 @@ strong {
 .rq-phase-grid {
   display: grid;
   min-height: 0;
-  flex: 1;
+  flex: .8;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
   gap: 36px;
@@ -3043,22 +3031,23 @@ strong {
 }
 
 .hypothesis-row {
+  --hypothesis-accent: var(--accent-2);
   display: grid;
   grid-template-columns: 55px 130px minmax(0, 1fr);
   align-items: center;
   gap: 20px;
   padding: 15px 20px;
   background: #fff;
-  border-left: 4px solid var(--accent-2);
+  border-left: 4px solid var(--hypothesis-accent);
   box-shadow: var(--panel-shadow);
 }
 
 .hypothesis-row.h2 {
-  border-left-color: var(--green);
+  --hypothesis-accent: var(--green);
 }
 
 .hypothesis-row.h3 {
-  border-left-color: var(--warm);
+  --hypothesis-accent: var(--warm);
 }
 
 .hypothesis-index {
@@ -3099,6 +3088,11 @@ strong {
   font-size: var(--type-primary-size);
   font-weight: 550;
   line-height: 1.4;
+}
+
+.hypothesis-keyword {
+  color: var(--hypothesis-accent);
+  font-weight: 750;
 }
 
 .hypothesis-outcome {
