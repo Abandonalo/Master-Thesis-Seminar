@@ -102,7 +102,9 @@ My thesis takes a different position: the model generates detail, while the desi
 
 The research gap is therefore not whether AI can use spatial information. It is how user-authored spatial constraints can be integrated into an established 3D authoring environment and evaluated as interaction techniques.
 
-*[Click: practical inspiration]*
+*Transition: “A practical system shows that this kind of spatial control is technically possible.”*
+
+## Slide 6 — Practical inspiration
 
 Hyper3D Rodin provides a practical inspiration for addressing this gap. Its CLAY research supports generation from spatial inputs such as bounding boxes, voxels, and point clouds. Its BANG method extends this direction to controlled part-level decomposition using bounding boxes and surface regions.
 
@@ -114,7 +116,7 @@ Hyper3D demonstrates the technical potential of spatially controlled generation.
 
 *Transition: “I implemented this division of control in the following workflow.”*
 
-## Slide 6 — Generation workflow
+## Slide 7 — Generation workflow
 
 *[Reveal the Unity layer]*
 
@@ -152,7 +154,7 @@ Although the pipeline contains several technical stages, the important design pr
 
 *Transition: “The implementation demonstrates a possible mechanism. The research question is whether that mechanism improves the workflow.”*
 
-## Slide 7 — Research questions
+## Slide 8 — Research questions
 
 My central research question is:
 
@@ -164,7 +166,7 @@ For refinement, I ask how 3D region selection affects edit locality, preservatio
 
 *Transition: “These questions lead to three hypotheses.”*
 
-## Slide 8 — Hypotheses
+## Slide 9 — Hypotheses
 
 H1 concerns generation. I expect proxy-guided generation to produce objects that fit the intended spatial layout more closely than text-only prompting.
 
@@ -176,7 +178,7 @@ H3 concerns refinement. I expect region-based refinement to produce more intende
 
 *Transition: “The study will compare these workflows directly.”*
 
-## Slide 9 — Study design
+## Slide 10 — Study design
 
 The study will use a within-subjects, counterbalanced design.
 
@@ -194,47 +196,49 @@ Lightweight measures are collected after each phase, followed by overall measure
 
 *Transition: “The evaluation separates phase-specific effects from the overall workflow experience.”*
 
-## Slide 10 — Measures and hypothesis mapping
+## Slide 11 — Evidence after each phase
 
-After each phase, I use the same three lightweight measures.
+The evaluation separates outcomes, experience, and explanations. It also distinguishes four sources of evidence.
 
-SEQ captures perceived task difficulty. The Paas scale captures mental effort. CSI captures creativity support.
+First, the questionnaires produce **quantitative participant ratings**. After both generation and refinement, SEQ captures task ease and the Paas item captures mental effort. I will also use an adapted perceived-control measure: one item asks whether participants could steer the system toward their goal, following the AI Chains controllability item, and one asks whether the outcome of an edit or generation step behaved as expected. This is not a single established scale, so I label it as an adapted measure of perceived control rather than giving it a new scale name.
 
-For H1, generation is evaluated through spatial agreement, including 3D IoU, Chamfer distance, blind spatial-fit ratings, completion time, and number of attempts.
+Second, the system records **quantitative interaction logs**. Completion time measures duration. AI runs count each submitted generation or refinement request. Authoring edits count meaningful prompt revisions and completed proxy or OBB manipulations—not every mouse event. Similar 3D authoring studies such as SceneSuggest and LumiMood use time, search or interaction counts to show not only whether participants finish, but how much iteration each workflow requires.
 
-For H2, I combine predictability and agency ratings with interaction logs and overall workload and usability measures.
+These shared phase measures provide the main evidence for H2. H2 predicts a change in control experience: greater predictability and agency, and lower mental demand, even if spatial controls require more direct interaction. The Paas item and perceived-control ratings test that experience directly; time, AI runs, and authoring edits help explain the cost of achieving it.
 
-For H3, I measure whether the requested edit was achieved inside the selected region, how much unintended change occurred outside it, and whether the connection between the retained and replacement geometry remains valid.
+The objective outcome then changes by phase. For generation, spatial fit is measured through object-box overlap, position, rotation and scale error, and whether intended relations and clearances are satisfied. These measures describe scene layout more directly than a single surface-distance score.
 
-At condition level, NASA-TLX, UMUX-LITE, overall output ratings, agency, and preference describe the complete experience.
+For refinement, edit locality is measured through the intended change inside the selected OBB, displacement outside it, and seam validity.
 
-This separation should help identify which phase produces a difference instead of reducing the whole workflow to one score.
+*Transition: “These phase measures show where a difference occurs. The next slide evaluates the complete workflow.”*
 
-*Transition: “These measurements are collected around two corresponding study phases.”*
+## Slide 12 — Whole-workflow evidence
 
-## Slide 11 — Study procedure and analysis
+After each complete condition, another set of **quantitative questionnaire scores** captures the whole workflow. NASA-TLX and agency or ownership ratings provide condition-level evidence for H2. UMUX-LITE provides broader usability context, while CSI tests whether spatial controls preserve creativity support. Final preference is collected after both conditions.
 
-I will begin with a pilot involving one or two participants. The pilot will identify unclear instructions, logging problems, and tasks that are obviously too easy or too difficult.
+The outputs are also judged independently and blindly. These are **quantitative ratings**, but they come from evaluators rather than the participant who created the scene. They provide perceptual evidence for H1 and H3 through spatial fit, visual quality, edit success, and preservation of the unchanged scene.
 
-The main analysis will use paired comparisons between conditions. I will also account for condition order and combine spatial logs, questionnaires, and participants’ qualitative comments.
+Finally, a semi-structured debrief provides the **qualitative evidence** for H2 and H3. Here I ask participants to explain when they felt in control, what made results predictable or surprising, which strategies they used, where the workflow broke down, and why they preferred one condition.
 
-*Transition: “The prototype is working, and the next step is testing it through a complete scene workflow.”*
+This keeps numeric questionnaire ratings separate from interview comments, while the logs and geometry measures provide behavioral and objective evidence.
 
-## Slide 12 — Current status and next steps
+*Transition: “With the study design defined, here is where the implementation and preparation currently stand.”*
+
+## Slide 13 — Current status and next steps
 
 The Unity frontend, proxy-based generation, region-based refinement, Linux backend, and study logging are implemented.
 
-The implementation still has two constraints.
+The current step is setting up target scenes. I will then test the complete workflow for multi-object scene construction.
 
-First, image lifting can reconstruct background content, bake perspective into the mesh, produce irregular topology, and make dimensions difficult to reproduce.
+After that, I will run a pilot with one or two participants. The pilot will reveal unclear instructions, logging problems, and tasks that are obviously too easy or too difficult. I will use those findings to revise the procedure and prepare the main study.
 
-Second, backend cost remains a practical constraint. The Linux pipeline works through Colab, but repeated use—particularly with the higher-quality model—is expensive.
+The main constraint began with image-lifting quality. TripoSR was not producing meshes of sufficient quality, so I moved to the higher-quality Hunyuan3D 2mv model.
 
-The current step is setting up target scenes. I will then test the complete workflow for multi-object scene construction, run the pilot, revise the procedure, and prepare the main study.
+That choice creates a second constraint: Hunyuan3D 2mv requires a Linux backend. My current access to that environment is through Colab, which works technically, but repeated high-quality generation is expensive.
 
-*Transition: “I am considering one alternative approach to reduce the geometry problems.”*
+*Transition: “These constraints led to one solution idea I am considering: a procedural generation path for structured assets.”*
 
-## Slide 13 — Three.js as a considered alternative
+## Slide 14 — Three.js as a considered alternative
 
 Image-to-3D output can be difficult to refine reliably in general.
 
@@ -248,11 +252,13 @@ It would not replace generative models. The possible direction is hybrid: proced
 
 *Transition: “The remaining slides collect the sources behind these decisions.”*
 
-## Slides 14–16 — References
+## Slides 15–16 — References
 
-These references are grouped into three areas: human interaction and spatial authoring, generative and editable 3D systems, and the models and measures used in the implementation and evaluation.
+The first reference slide collects the foundations, generative systems, and editing research discussed in the related-work section.
 
-*Advance these slides quickly without reading the individual entries.*
+The second collects the models and technical standards used in the implementation, followed by the evaluation instruments and study precedents.
+
+*Advance both slides quickly without reading the individual entries.*
 
 ## Slide 17 — Closing
 

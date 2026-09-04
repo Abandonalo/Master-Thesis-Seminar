@@ -22,7 +22,7 @@
     <main id="deckStage" class="deck-stage" aria-label="Master's thesis seminar presentation">
 
       <!-- 1 · Title -->
-      <section class="slide title hero">
+      <section class="slide title hero title-slide">
         <img class="hero-background-logo" src="uds_owl.png" alt="" aria-hidden="true" data-anim="none">
         <div class="title-wrap">
           <div class="eyebrow">Master's Thesis Seminar &middot; Saarland University</div>
@@ -369,7 +369,7 @@
           <article class="rq-phase refinement-rq" data-anim="fade-right">
             <span>Refinement</span>
             <h3>3D region selection <span class="rq-vs">vs.</span> global regeneration</h3>
-            <p>How does region selection affect <strong>edit locality</strong>, <strong>preservation</strong> and
+            <p>How does region selection affect <strong>edit locality</strong> and
               <strong>predictability</strong>?</p>
           </article>
         </div>
@@ -663,147 +663,174 @@
       <section class="slide study-design-slide">
         <div class="eyebrow">Study design</div>
 
-        <section class="study-primary" data-anim="zoom-pop" aria-label="Main study">
+        <section class="study-primary" data-anim="fade-up" aria-label="Main study">
           <header class="study-primary-header">
             <div>
               <span class="study-section-label">Main study</span>
             </div>
             <div class="study-meta" data-anim="fade-right" aria-label="Main study setup">
-              <span>Within-subjects · counterbalanced</span>
+              <span>Within-subjects</span>
+              <span>Randomised order</span>
             </div>
           </header>
 
-          <div class="condition-comparison" data-anim="zoom-pop" data-anim-group="zoom-pop">
+          <div class="condition-comparison" data-anim="fade-up">
             <div class="study-condition text-only">
-              <div>
-                <h3>Text only</h3>
-              </div>
+              <span>Condition A</span>
+              <h3>Text-only interaction</h3>
+              <p>Describe the scene and requested edit</p>
             </div>
-            <div class="condition-vs">VS.</div>
+            <div class="condition-vs"><span>same participant</span><strong>VS.</strong></div>
             <div class="study-condition spatial-controls">
-              <div>
-                <h3>Spatial controls</h3>
-              </div>
+              <span>Condition B</span>
+              <h3>Spatial controls</h3>
+              <p>Place proxies and select the edit region</p>
             </div>
           </div>
 
-          <div class="same-shell">Equivalent goals · same Unity shell</div>
+          <div class="same-shell" data-anim="fade-left">
+            <span>Controlled comparison</span>
+            <strong>Equivalent goals · same authoring environment</strong>
+          </div>
 
-          <div class="study-phase-line" data-anim="zoom-pop" data-anim-group="zoom-pop" aria-label="Main study timeline">
+          <div class="study-phase-line" data-anim="fade-up" data-anim-group="fade-up" aria-label="Main study timeline">
+            <div class="study-phase-intro">
+              <span>Within each condition</span>
+            </div>
             <div class="study-phase creation">
               <span class="tag a">Generation</span>
-              <h3>Match layout</h3>
+              <h3>Multi-object scene setup</h3>
+              <p>Reproduce a target arrangement</p>
+              <div class="study-task-visual generation-task-visual" aria-hidden="true">
+                <span class="task-object object-a"></span>
+                <span class="task-object object-b"></span>
+                <span class="task-object object-c"></span>
+                <i></i>
+              </div>
+              <small>Lightweight phase measures</small>
             </div>
+            <i class="study-phase-arrow" aria-hidden="true">→</i>
             <div class="study-phase refinement">
               <span class="tag w">Refinement</span>
-              <h3>Edit one region</h3>
+              <h3>Bounded regional edit</h3>
+              <p>Preserve surrounding geometry</p>
+              <div class="study-task-visual refinement-task-visual" aria-hidden="true">
+                <span class="retained-object"></span>
+                <span class="edit-region"></span>
+              </div>
+              <small>Lightweight phase measures</small>
             </div>
+            <i class="study-phase-arrow" aria-hidden="true">→</i>
             <div class="study-phase condition-end">
               <span class="tag g">Condition end</span>
-              <h3>Overall measures</h3>
+              <h3>Overall workflow</h3>
+              <p>Collected after the condition</p>
+              <div class="study-task-visual measure-task-visual" aria-hidden="true">
+                <span>Workload</span><span>Usability</span><span>Preference</span>
+              </div>
+              <small>Overall measures</small>
             </div>
           </div>
         </section>
       </section>
 
-      <!-- 11 · Evaluation plan -->
-      <section class="slide measurement-slide">
-        <div class="eyebrow">Study design · Measures</div>
+      <!-- 11 · Evaluation after each phase -->
+      <section class="slide measurement-slide measurement-phase-slide">
+        <div class="eyebrow">Study design · Phase evidence</div>
 
-        <section class="hypothesis-scorecard" data-anim="zoom-pop" aria-label="Measures mapped to hypotheses">
+        <section class="evaluation-phase-panel" data-anim="fade-up" aria-label="Evidence collected after each phase">
           <header class="measurement-block-header">
-            <span class="study-section-label">Phase evidence</span>
-            <span class="measurement-timing">Collected after generation and refinement</span>
+            <span class="study-section-label">After each phase</span>
           </header>
 
-          <div class="measurement-shared" data-anim="zoom-pop">
-            <div class="measurement-shared-copy"><strong>Common phase measures</strong></div>
-            <div class="measurement-instruments">
-              <p><strong>SEQ <span class="cite">[42]</span></strong><span>Task ease</span></p>
-              <p><strong>Paas <span class="cite">[43]</span></strong><span>Mental effort</span></p>
-              <p><strong>CSI <span class="cite">[45]</span></strong><span>Creative support</span></p>
-            </div>
+
+          <div class="evaluation-common-evidence" data-anim="fade-up">
+            <article class="evaluation-source questionnaire-source" data-anim="fade-left">
+              <header><span>Quantitative · questionnaire</span><h3>How did the phase feel?</h3></header>
+              <div class="evaluation-measure-row">
+                <p><strong><span>SEQ</span><span class="cite">[45]</span></strong><small>Task ease</small></p>
+                <p><strong><span>Paas</span><span class="cite">[46]</span></strong><small>Mental effort</small></p>
+                <p><strong><span>Perceived control</span><span class="cite">[52,56]</span></strong><small>Steerability · outcome predictability</small></p>
+              </div>
+            </article>
+            <article class="evaluation-source log-source" data-anim="fade-left">
+              <header><span>Quantitative · interaction logs</span><h3>What did participants do?</h3></header>
+              <div class="evaluation-measure-row">
+                <p><strong>Time</strong><small>Completion</small></p>
+                <p><strong>AI runs</strong><small>Submitted generations · refinements</small></p>
+                <p><strong><span>Authoring edits</span><span class="cite">[49,50,53]</span></strong><small>Prompt revisions · proxy / OBB edits</small></p>
+              </div>
+            </article>
           </div>
 
-          <div class="hypothesis-evidence-grid">
-            <article class="hypothesis-evidence h1-evidence">
-              <header><span>H1</span><h3>Spatial fit</h3></header>
-              <p><strong>Generation</strong><span>3D IoU · Chamfer distance · blind fit rating · time · attempts</span></p>
+          <div class="evaluation-phase-outcomes">
+            <article class="evaluation-phase-outcome generation-outcome" data-anim="fade-left">
+              <span>Generation · H1</span>
+              <strong>Spatial fit</strong>
+              <p><span>OBB IoU · position / rotation / scale error · relation and clearance pass rate</span><span class="cite">[54]</span></p>
             </article>
-            <article class="hypothesis-evidence h2-evidence">
-              <header><span>H2</span><h3>Control experience</h3></header>
-              <p><strong>Both phases</strong><span>Predictability · agency · phase measures · interaction logs</span></p>
+            <article class="evaluation-phase-outcome evaluation-h2-map" data-anim="fade-left">
+              <span>Both phases · H2</span>
+              <strong>Control experience</strong>
+              <p>Mental effort · predictability · controllability · iteration cost</p>
             </article>
-            <article class="hypothesis-evidence h3-evidence">
-              <header><span>H3</span><h3>Edit locality</h3></header>
-              <p><strong>Refinement</strong><span>Change inside OBB · change outside OBB · seam validity · preference</span></p>
+            <article class="evaluation-phase-outcome refinement-outcome" data-anim="fade-left">
+              <span>Refinement · H3</span>
+              <strong>Edit locality</strong>
+              <p>Target change inside OBB · displacement outside OBB · seam validity</p>
             </article>
-          </div>
-        </section>
-
-        <section class="condition-measures" aria-label="Whole-workflow condition measures">
-          <header class="measurement-block-header">
-            <span class="study-section-label">Whole workflow</span>
-            <span class="measurement-timing">After each condition · final preference at study end</span>
-          </header>
-          <div class="condition-measure-grid">
-            <p><span>H2</span><strong>NASA-TLX <span class="cite">[40,41]</span></strong><small>Workload</small></p>
-            <p><span>H2</span><strong>UMUX-LITE <span class="cite">[44]</span></strong><small>Usability</small></p>
-            <p><span>H1</span><strong>Blind output rating</strong><small>Fit · visual quality</small></p>
-            <p><span>H2/H3</span><strong>Agency + preference <span class="cite">[12]</span></strong><small>Ownership · choice</small></p>
           </div>
         </section>
       </section>
 
-      <!-- 12 · Procedure and analysis -->
-      <section class="slide study-procedure-slide">
-        <div class="eyebrow">Study design · Procedure and analysis</div>
-        <h2 data-anim="blur-in">Two phases support one paired comparison</h2>
+      <!-- 12 · Evaluation of the whole workflow -->
+      <section class="slide measurement-slide measurement-workflow-slide">
+        <div class="eyebrow">Study design · Whole-workflow evidence</div>
 
-        <div class="procedure-phase-track" aria-label="Generation and refinement study phases">
-          <article class="procedure-phase generation-phase" data-anim="fade-left">
-            <span>Generation phase</span>
-            <h3>Set up a multi-object scene</h3>
-            <p>Equivalent goal and authoring environment in both conditions</p>
-          </article>
-          <div class="procedure-arrow" data-anim="fade-right" aria-hidden="true">→</div>
-          <article class="procedure-phase refinement-phase" data-anim="fade-right">
-            <span>Refinement phase</span>
-            <h3>Modify one bounded region</h3>
-            <p>Preserve the surrounding geometry</p>
-          </article>
-        </div>
-
-        <div class="procedure-analysis-grid" aria-label="Pilot, main study and analysis plan">
-          <article class="procedure-analysis pilot-plan">
-            <span>First</span><h3>Pilot · 1–2 participants</h3>
-            <p>Check instructions · logging · obvious difficulty problems</p>
-          </article>
-          <article class="procedure-analysis main-plan">
-            <span>Then</span><h3>Main study</h3>
-            <p>Both conditions · counterbalanced order · final sample after pilot</p>
-          </article>
-          <article class="procedure-analysis analysis-plan">
-            <span>Analyse</span><h3>Paired comparisons</h3>
-            <p>Order effects · spatial logs · questionnaires · qualitative comments</p>
-          </article>
-        </div>
+        <section class="evaluation-study-panel" data-anim="fade-up" aria-label="Condition-level ratings and qualitative debrief">
+          <header class="measurement-block-header">
+            <span class="study-section-label">Condition and study level</span>
+          </header>
+          <div class="evaluation-study-grid">
+            <article class="evaluation-study-source questionnaire-source" data-anim="fade-up">
+              <span>Quantitative · questionnaire</span>
+              <strong>H2 · Workflow experience</strong>
+              <p>
+                <span class="workflow-measure-line"><span>NASA-TLX workload</span><span class="cite">[43,44]</span></span>
+                <span class="workflow-measure-line"><span>Agency</span><span class="cite">[12,51,52]</span></span>
+                <span class="workflow-measure-line"><span>UMUX-LITE usability</span><span class="cite">[47]</span></span>
+                <span class="workflow-measure-line"><span>CSI creative support</span><span class="cite">[48,51]</span></span>
+                <span class="workflow-measure-line"><span>Final preference</span></span>
+              </p>
+            </article>
+            <article class="evaluation-study-source rating-source" data-anim="fade-up">
+              <span>Quantitative · independent rating</span>
+              <strong>H1/H3 · Blind output judgment</strong>
+              <p><span>Spatial fit · Visual quality · Edit success</span><span class="cite">[53,55]</span></p>
+            </article>
+            <article class="evaluation-study-source interview-source" data-anim="fade-up">
+              <span>Qualitative · interview</span>
+              <strong>H2/H3 · Why did it work or fail?</strong>
+              <p>Control experience · predictability · strategies · breakdowns · preference</p>
+            </article>
+          </div>
+        </section>
       </section>
+
 
       <!-- 13 · Study plan and current status -->
       <section class="slide study-roadmap-slide">
         <div class="eyebrow">Study plan · Current status</div>
-        <h2 data-anim="blur-in">From working prototype to main study</h2>
 
-        <div class="study-roadmap" data-anim="zoom-pop"
+        <div class="study-roadmap" data-anim="fade-up"
           aria-label="Study roadmap showing completed, current and upcoming work">
           <div class="roadmap-phase-labels">
-            <span class="complete" data-anim="zoom-pop">Implementation · Complete</span>
-            <span class="current" data-anim="fade-down">Current</span>
-            <span class="upcoming" data-anim="fade-down">Evaluation · Next</span>
+            <span class="complete" data-anim="fade-up">Implementation · Complete</span>
+            <span class="current" data-anim="fade-up">Current</span>
+            <span class="upcoming" data-anim="fade-up">Evaluation · Next</span>
           </div>
 
-          <div class="roadmap-rail" data-anim-group="zoom-pop">
+          <div class="roadmap-rail" data-anim-group="blur-in">
             <article class="roadmap-milestone done">
               <span class="roadmap-status-mark" aria-hidden="true">✓</span>
               <h3>Unity frontend</h3>
@@ -852,22 +879,22 @@
           </div>
         </div>
 
-        <div class="roadmap-focus" data-anim="fade-up">
+        <div class="roadmap-focus" data-anim="fade-left">
           <span>Current constraints</span>
-          <p><strong>Image lifting</strong><small>Background, perspective and irregular topology can enter the mesh.</small></p>
-          <p><strong>Backend cost</strong><small>Colab works, but sustained high-quality generation is expensive.</small></p>
+          <p class="lifting-constraint" data-anim="fade-left"><strong>Image-lifting quality</strong><small>TripoSR was insufficient; Hunyuan3D 2mv gives better output.</small></p>
+          <p class="backend-constraint" data-anim="fade-left"><strong>Linux compute cost</strong><small>2mv requires Linux; my available route is Colab, where repeated runs are expensive.</small></p>
         </div>
       </section>
 
       <!-- 14 · Three.js considered alternative -->
       <section class="slide threejs-consideration-slide">
         <div class="eyebrow">Implementation option · Under consideration</div>
-        <h2 data-anim="blur-in">A procedural path for geometry that needs predictable structure</h2>
+        <h2 data-anim="blur-in">Three.js for geometry</h2>
 
         <div class="threejs-consideration-layout">
-          <section class="threejs-problem" data-threejs-problem data-anim="zoom-pop">
+          <section class="threejs-problem" data-threejs-problem data-anim="fade-left">
             <span>Current difficulty</span>
-            <h3>Image-to-3D output can be difficult to refine reliably</h3>
+            <h3>Image-to-3D output difficult to refine reliably</h3>
             <p>Perspective · background geometry · irregular topology · unstable dimensions</p>
           </section>
 
@@ -881,104 +908,136 @@
             <article><span>GLB</span><strong>Editable in Unity</strong></article>
           </div>
 
-          <div class="threejs-benefit-line" data-threejs-benefits>
+          <div class="threejs-benefit-line" data-threejs-benefits data-anim="fade-left">
             <span>Potential benefit</span>
             <p><strong>Cleaner topology</strong><small>More reliable refinement</small></p>
             <p><strong>Repeatable dimensions</strong><small>Predictable fit</small></p>
             <p><strong>Semantic components</strong><small>Roof · door · windows</small></p>
           </div>
 
-          <div class="hybrid-direction" data-hybrid-direction data-anim="zoom-pop">
+          <div class="hybrid-direction" data-hybrid-direction data-anim="fade-left">
             <span>Considered hybrid</span>
-            <p><strong>Procedural generation</strong> where structure can be specified</p>
+            <p><strong>Three.js</strong><small>Where structure can be specified</small></p>
             <i aria-hidden="true">+</i>
-            <p><strong>Hunyuan3D</strong> for open-ended forms</p>
-            <span class="cite">[39,46–48]</span>
+            <p><strong>Hunyuan3D</strong><small>For open-ended forms</small></p>
+            <span class="cite">[39–42]</span>
           </div>
         </div>
       </section>
 
-      <!-- 15 · References I -->
-      <section class="slide references-slide">
-        <div class="eyebrow">References · 1/3</div>
-        <h2 data-anim="blur-in">Foundations · Production and interaction</h2>
+      <!-- 15 · References: related work -->
+      <section class="slide references-slide references-related-slide">
+        <div class="eyebrow">References · 1/2</div>
+        <h2 data-anim="blur-in">Related work</h2>
 
-        <div class="refs dense">
-          <div class="ref"><b>[1]</b><span>Landau &amp; Jackendoff (1993). <em>“What” and “where” in spatial language and cognition.</em> BBS 16(2).</span></div>
-          <div class="ref"><b>[2]</b><span>Egenhofer &amp; Shariff (1998). <em>Metric details for natural-language spatial relations.</em> ACM TOIS 16(4).</span></div>
-          <div class="ref"><b>[3]</b><span>Totten (2019). <em>An Architectural Approach to Level Design</em> (2nd ed.). CRC Press.</span></div>
-          <div class="ref"><b>[4]</b><span>Fukaya, Daylamani-Zad &amp; Agius (2025). <em>Heuristics for AI-driven graphical asset generation tools in game pipelines.</em> arXiv:2503.02703.</span></div>
-          <div class="ref"><b>[5]</b><span>Liapis, Smith &amp; Shaker (2016). <em>Mixed-initiative content creation.</em> In Procedural Content Generation in Games.</span></div>
-          <div class="ref"><b>[6]</b><span>Norman (1986). <em>Cognitive engineering.</em> In User Centered System Design.</span></div>
-          <div class="ref"><b>[7]</b><span>Shneiderman (1983). <em>Direct manipulation: A step beyond programming languages.</em> Computer 16(8).</span></div>
-          <div class="ref"><b>[8]</b><span>Amershi et al. (2019). <em>Guidelines for human–AI interaction.</em> CHI ’19.</span></div>
-          <div class="ref"><b>[9]</b><span>Heer (2019). <em>Agency plus automation.</em> PNAS 116(6).</span></div>
-          <div class="ref"><b>[10]</b><span>Hutchins, Hollan &amp; Norman (1985). <em>Direct manipulation interfaces.</em> HCI 1(4).</span></div>
-          <div class="ref"><b>[11]</b><span>LaViola et al. (2017). <em>3D User Interfaces: Theory and Practice</em> (2nd ed.).</span></div>
-          <div class="ref"><b>[12]</b><span>Cornelio et al. (2022). <em>The sense of agency in emerging technologies.</em> Frontiers in Neuroscience 16.</span></div>
+        <div class="reference-groups" data-anim="fade-up">
+          <section class="reference-group">
+            <h3>Spatial authoring and interaction</h3>
+            <div class="refs">
+              <div class="ref"><b>[1]</b><span>Landau &amp; Jackendoff (1993). <em>“What” and “where” in spatial language and cognition.</em> BBS 16(2).</span></div>
+              <div class="ref"><b>[2]</b><span>Egenhofer &amp; Shariff (1998). <em>Metric details for natural-language spatial relations.</em> ACM TOIS 16(4).</span></div>
+              <div class="ref"><b>[3]</b><span>Totten (2019). <em>An Architectural Approach to Level Design</em> (2nd ed.). CRC Press.</span></div>
+              <div class="ref"><b>[4]</b><span>Fukaya, Daylamani-Zad &amp; Agius (2025). <em>Heuristics for AI-driven graphical asset generation tools in game pipelines.</em> arXiv:2503.02703.</span></div>
+              <div class="ref"><b>[5]</b><span>Liapis, Smith &amp; Shaker (2016). <em>Mixed-initiative content creation.</em> In Procedural Content Generation in Games.</span></div>
+              <div class="ref"><b>[6]</b><span>Norman (1986). <em>Cognitive engineering.</em> In User Centered System Design.</span></div>
+              <div class="ref"><b>[7]</b><span>Shneiderman (1983). <em>Direct manipulation: A step beyond programming languages.</em> Computer 16(8).</span></div>
+              <div class="ref"><b>[8]</b><span>Amershi et al. (2019). <em>Guidelines for human–AI interaction.</em> CHI ’19.</span></div>
+              <div class="ref"><b>[9]</b><span>Heer (2019). <em>Agency plus automation.</em> PNAS 116(6).</span></div>
+              <div class="ref"><b>[10]</b><span>Hutchins, Hollan &amp; Norman (1985). <em>Direct manipulation interfaces.</em> HCI 1(4).</span></div>
+              <div class="ref"><b>[11]</b><span>LaViola et al. (2017). <em>3D User Interfaces: Theory and Practice</em> (2nd ed.).</span></div>
+              <div class="ref"><b>[12]</b><span>Cornelio et al. (2022). <em>The sense of agency in emerging technologies.</em> Frontiers in Neuroscience 16.</span></div>
+            </div>
+          </section>
+
+          <section class="reference-group">
+            <h3>Generative and controllable 3D</h3>
+            <div class="refs">
+              <div class="ref"><b>[13]</b><span>Poole et al. (2023). <em>DreamFusion: Text-to-3D using 2D diffusion.</em> ICLR.</span></div>
+              <div class="ref"><b>[14]</b><span>Lin et al. (2023). <em>Magic3D: High-resolution text-to-3D content creation.</em> CVPR.</span></div>
+              <div class="ref"><b>[15]</b><span>Shi et al. (2024). <em>MVDream: Multi-view diffusion for 3D generation.</em> ICLR.</span></div>
+              <div class="ref"><b>[16]</b><span>Li et al. (2024). <em>Instant3D: Fast text-to-3D with sparse-view generation.</em> ICLR.</span></div>
+              <div class="ref"><b>[17]</b><span>Tang et al. (2024). <em>LGM: Large multi-view Gaussian model.</em> ECCV.</span></div>
+              <div class="ref"><b>[18]</b><span>Zhang, Rao &amp; Agrawala (2023). <em>Adding conditional control to text-to-image diffusion models.</em> ICCV.</span></div>
+              <div class="ref"><b>[19]</b><span>Schult et al. (2024). <em>ControlRoom3D: Room generation using semantic proxy rooms.</em> CVPR.</span></div>
+              <div class="ref"><b>[20]</b><span>Fedele et al. (2025). <em>SpaceControl: Test-time spatial control for 3D generation.</em> arXiv.</span></div>
+              <div class="ref"><b>[21]</b><span>Xu et al. (2024). <em>Sketch2Scene: Interactive game scenes from casual sketches.</em> arXiv.</span></div>
+              <div class="ref"><b>[22]</b><span>Zhai et al. (2023). <em>CommonScenes: Commonsense 3D indoor scenes.</em> NeurIPS.</span></div>
+              <div class="ref"><b>[23]</b><span>Chen et al. (2025). <em>Layout2Scene: 3D semantic-layout-guided scene generation.</em> arXiv.</span></div>
+              <div class="ref"><b>[24]</b><span>Lee et al. (2026). <em>SimuScene: Simulation-ready compositional 3D reconstruction.</em> arXiv:2606.03994.</span></div>
+            </div>
+          </section>
+
+          <section class="reference-group">
+            <h3>Scene systems and editing</h3>
+            <div class="refs">
+              <div class="ref"><b>[25]</b><span>Wang et al. (2026). <em>WorldGen: Text to traversable and interactive 3D worlds.</em> CVPR.</span></div>
+              <div class="ref"><b>[26]</b><span>Guo et al. (2026). <em>WorldClaw: Agentic 3D open-world generation.</em> arXiv.</span></div>
+              <div class="ref"><b>[27]</b><span>Pfaff et al. (2026). <em>SceneSmith: Agentic generation of simulation-ready indoor scenes.</em> arXiv.</span></div>
+              <div class="ref"><b>[28]</b><span>Zhang et al. (2024). <em>CLAY: A controllable large-scale generative model for 3D assets.</em> ACM TOG.</span></div>
+              <div class="ref"><b>[29]</b><span>Zhang et al. (2025). <em>BANG: Dividing 3D assets via generative exploded dynamics.</em> ACM TOG 44(4).</span></div>
+              <div class="ref"><b>[30]</b><span>Haque et al. (2023). <em>Instruct-NeRF2NeRF: Editing 3D scenes with instructions.</em> ICCV.</span></div>
+              <div class="ref"><b>[31]</b><span>Mikaeili et al. (2023). <em>SKED: Sketch-guided text-based 3D editing.</em> ICCV.</span></div>
+              <div class="ref"><b>[32]</b><span>Chen et al. (2024). <em>GaussianEditor: Swift and controllable 3D editing.</em> CVPR.</span></div>
+              <div class="ref"><b>[33]</b><span>Weber et al. (2024). <em>NeRFiller: Completing scenes via generative 3D inpainting.</em> CVPR.</span></div>
+              <div class="ref"><b>[34]</b><span>Wu et al. (2024). <em>BlockFusion: Expandable 3D scene generation.</em> ACM TOG 43(4).</span></div>
+              <div class="ref"><b>[35]</b><span>Li et al. (2026). <em>WorldGrow: Generating infinite 3D world.</em> AAAI.</span></div>
+              <div class="ref"><b>[36]</b><span>Sun et al. (2023). <em>3D-GPT: Procedural 3D modeling with large language models.</em> arXiv.</span></div>
+              <div class="ref"><b>[37]</b><span>Wang et al. (2026). <em>SceneCode: Executable world programs for editable scenes.</em> arXiv.</span></div>
+            </div>
+          </section>
         </div>
       </section>
 
-      <!-- 16 · References II -->
-      <section class="slide references-slide">
-        <div class="eyebrow">References · 2/3</div>
-        <h2 data-anim="blur-in">Related work · Generative and controllable 3D</h2>
+      <!-- 16 · References: implementation and evaluation -->
+      <section class="slide references-slide references-methods-slide">
+        <div class="eyebrow">References · 2/2</div>
+        <h2 data-anim="blur-in">Implementation and evaluation</h2>
 
-        <div class="refs dense">
-          <div class="ref"><b>[13]</b><span>Poole et al. (2023). <em>DreamFusion: Text-to-3D using 2D diffusion.</em> ICLR.</span></div>
-          <div class="ref"><b>[14]</b><span>Lin et al. (2023). <em>Magic3D: High-resolution text-to-3D content creation.</em> CVPR.</span></div>
-          <div class="ref"><b>[15]</b><span>Shi et al. (2024). <em>MVDream: Multi-view diffusion for 3D generation.</em> ICLR.</span></div>
-          <div class="ref"><b>[16]</b><span>Li et al. (2024). <em>Instant3D: Fast text-to-3D with sparse-view generation.</em> ICLR.</span></div>
-          <div class="ref"><b>[17]</b><span>Tang et al. (2024). <em>LGM: Large multi-view Gaussian model.</em> ECCV.</span></div>
-          <div class="ref"><b>[18]</b><span>Zhang, Rao &amp; Agrawala (2023). <em>Adding conditional control to text-to-image diffusion models.</em> ICCV.</span></div>
-          <div class="ref"><b>[19]</b><span>Schult et al. (2024). <em>ControlRoom3D: Room generation using semantic proxy rooms.</em> CVPR.</span></div>
-          <div class="ref"><b>[20]</b><span>Fedele et al. (2025). <em>SpaceControl: Test-time spatial control for 3D generation.</em> arXiv.</span></div>
-          <div class="ref"><b>[21]</b><span>Xu et al. (2024). <em>Sketch2Scene: Interactive game scenes from casual sketches.</em> arXiv.</span></div>
-          <div class="ref"><b>[22]</b><span>Zhai et al. (2023). <em>CommonScenes: Commonsense 3D indoor scenes.</em> NeurIPS.</span></div>
-          <div class="ref"><b>[23]</b><span>Chen et al. (2025). <em>Layout2Scene: 3D semantic-layout-guided scene generation.</em> arXiv.</span></div>
-          <div class="ref"><b>[24]</b><span>Lee et al. (2026). <em>SimuScene: Simulation-ready compositional 3D reconstruction.</em> arXiv:2606.03994.</span></div>
-          <div class="ref"><b>[25]</b><span>Wang et al. (2026). <em>WorldGen: Text to traversable and interactive 3D worlds.</em> CVPR.</span></div>
-          <div class="ref"><b>[26]</b><span>Guo et al. (2026). <em>WorldClaw: Agentic 3D open-world generation.</em> arXiv.</span></div>
-          <div class="ref"><b>[27]</b><span>Pfaff et al. (2026). <em>SceneSmith: Agentic generation of simulation-ready indoor scenes.</em> arXiv.</span></div>
-          <div class="ref"><b>[28]</b><span>Zhang et al. (2024). <em>CLAY: A controllable large-scale generative model for 3D assets.</em> ACM TOG.</span></div>
-          <div class="ref"><b>[29]</b><span>Zhang et al. (2025). <em>BANG: Dividing 3D assets via generative exploded dynamics.</em> ACM TOG 44(4).</span></div>
+        <div class="reference-groups" data-anim="fade-up">
+          <section class="reference-group implementation-references">
+            <h3>Models and infrastructure</h3>
+            <div class="refs">
+              <div class="ref"><b>[38]</b><span>Tochilkin et al. (2024). <em>TripoSR: Fast 3D object reconstruction from one image.</em> arXiv:2403.02151.</span></div>
+              <div class="ref"><b>[39]</b><span>Team Hunyuan3D et al. (2025). <em>Hunyuan3D 2.1.</em> arXiv:2506.15442.</span></div>
+              <div class="ref"><b>[40]</b><span>Three.js. <em>GLTFExporter.</em> Documentation.</span></div>
+              <div class="ref"><b>[41]</b><span>Three.js. <em>BufferGeometry.</em> Documentation.</span></div>
+              <div class="ref"><b>[42]</b><span>Khronos Group. <em>glTF 2.0 Specification.</em></span></div>
+            </div>
+          </section>
+
+          <section class="reference-group measurement-references">
+            <h3>Evaluation instruments</h3>
+            <div class="refs">
+              <div class="ref"><b>[43]</b><span>Hart &amp; Staveland (1988). <em>Development of NASA-TLX.</em> Human Mental Workload.</span></div>
+              <div class="ref"><b>[44]</b><span>Hart (2006). <em>NASA-TLX: 20 years later.</em> HFES.</span></div>
+              <div class="ref"><b>[45]</b><span>Sauro &amp; Dumas (2009). <em>Comparison of one-question post-task questionnaires.</em> CHI.</span></div>
+              <div class="ref"><b>[46]</b><span>Paas (1992). <em>Training strategies and mental-effort measurement.</em> JEP 84(4).</span></div>
+              <div class="ref"><b>[47]</b><span>Lewis, Utesch &amp; Maher (2013). <em>UMUX-LITE.</em> CHI.</span></div>
+              <div class="ref"><b>[48]</b><span>Cherry &amp; Latulipe (2014). <em>Creativity Support Index.</em> ACM TOCHI 21(4).</span></div>
+            </div>
+          </section>
+
+          <section class="reference-group precedent-references">
+            <h3>Study precedents</h3>
+            <div class="refs">
+              <div class="ref"><b>[49]</b><span>Savva, Chang &amp; Agrawala (2017). <em>SceneSuggest: Context-driven 3D scene design.</em> arXiv:1703.00061.</span></div>
+              <div class="ref"><b>[50]</b><span>Oh, Kim &amp; Kim (2024). <em>LumiMood: A creativity support tool for designing the mood of a 3D scene.</em> CHI.</span></div>
+              <div class="ref"><b>[51]</b><span>Hesselbarth et al. (2026). <em>CreatureCreator: Co-creating 3D models with AI for video games.</em> C&amp;C.</span></div>
+              <div class="ref"><b>[52]</b><span>Park et al. (2026). <em>Bridging gulfs in UI generation through semantic guidance.</em> arXiv:2601.19171.</span></div>
+              <div class="ref"><b>[53]</b><span>Srinidhi et al. (2026). <em>GenAssist: Interactive prompt-driven XR program generation.</em> IEEE VR.</span></div>
+              <div class="ref"><b>[54]</b><span>Tam et al. (2026). <em>SceneEval: Evaluating semantic coherence in text-conditioned 3D indoor scene synthesis.</em> WACV.</span></div>
+              <div class="ref"><b>[55]</b><span>Chang et al. (2017). <em>SceneSeer: 3D scene design with natural language.</em> arXiv:1703.00050.</span></div>
+              <div class="ref"><b>[56]</b><span>Wu, Terry &amp; Cai (2022). <em>AI Chains: Transparent and controllable human-AI interaction by chaining LLM prompts.</em> CHI.</span></div>
+            </div>
+          </section>
         </div>
       </section>
 
-      <!-- 17 · References III -->
-      <section class="slide references-slide">
-        <div class="eyebrow">References · 3/3</div>
-        <h2 data-anim="blur-in">Editing, models and evaluation methods</h2>
-
-        <div class="refs dense">
-          <div class="ref"><b>[30]</b><span>Haque et al. (2023). <em>Instruct-NeRF2NeRF: Editing 3D scenes with instructions.</em> ICCV.</span></div>
-          <div class="ref"><b>[31]</b><span>Mikaeili et al. (2023). <em>SKED: Sketch-guided text-based 3D editing.</em> ICCV.</span></div>
-          <div class="ref"><b>[32]</b><span>Chen et al. (2024). <em>GaussianEditor: Swift and controllable 3D editing.</em> CVPR.</span></div>
-          <div class="ref"><b>[33]</b><span>Weber et al. (2024). <em>NeRFiller: Completing scenes via generative 3D inpainting.</em> CVPR.</span></div>
-          <div class="ref"><b>[34]</b><span>Wu et al. (2024). <em>BlockFusion: Expandable 3D scene generation.</em> ACM TOG 43(4).</span></div>
-          <div class="ref"><b>[35]</b><span>Li et al. (2026). <em>WorldGrow: Generating infinite 3D world.</em> AAAI.</span></div>
-          <div class="ref"><b>[36]</b><span>Sun et al. (2023). <em>3D-GPT: Procedural 3D modeling with large language models.</em> arXiv.</span></div>
-          <div class="ref"><b>[37]</b><span>Wang et al. (2026). <em>SceneCode: Executable world programs for editable scenes.</em> arXiv.</span></div>
-          <div class="ref"><b>[38]</b><span>Tochilkin et al. (2024). <em>TripoSR: Fast 3D object reconstruction from one image.</em> arXiv:2403.02151.</span></div>
-          <div class="ref"><b>[39]</b><span>Team Hunyuan3D et al. (2025). <em>Hunyuan3D 2.1.</em> arXiv:2506.15442.</span></div>
-          <div class="ref"><b>[40]</b><span>Hart &amp; Staveland (1988). <em>Development of NASA-TLX.</em> Human Mental Workload.</span></div>
-          <div class="ref"><b>[41]</b><span>Hart (2006). <em>NASA-TLX: 20 years later.</em> HFES.</span></div>
-          <div class="ref"><b>[42]</b><span>Sauro &amp; Dumas (2009). <em>Comparison of one-question post-task questionnaires.</em> CHI.</span></div>
-          <div class="ref"><b>[43]</b><span>Paas (1992). <em>Training strategies and mental-effort measurement.</em> JEP 84(4).</span></div>
-          <div class="ref"><b>[44]</b><span>Lewis, Utesch &amp; Maher (2013). <em>UMUX-LITE.</em> CHI.</span></div>
-          <div class="ref"><b>[45]</b><span>Cherry &amp; Latulipe (2014). <em>Creativity Support Index.</em> ACM TOCHI 21(4).</span></div>
-          <div class="ref"><b>[46]</b><span>Three.js. <em>GLTFExporter.</em> Documentation.</span></div>
-          <div class="ref"><b>[47]</b><span>Three.js. <em>BufferGeometry.</em> Documentation.</span></div>
-          <div class="ref"><b>[48]</b><span>Khronos Group. <em>glTF 2.0 Specification.</em></span></div>
-        </div>
-      </section>
-
-      <!-- 18 · End -->
+      <!-- 17 · End -->
       <section class="slide title closing-slide hero">
         <div class="title-wrap">
-          <div class="eyebrow">Thank you</div>
-          <h1>Questions &amp; discussion</h1>
-
+          <h1>Thank you</h1>
+          <div class="closing-confetti" data-replay-animation="anim-confetti-burst" aria-hidden="true"></div>
           <p class="sub" style="max-width:780px">Augmenting Text Prompts with Spatial Proxy Controls in
             AI-Assisted 3D Scene Generation within Unity</p>
           <div class="meta">
@@ -1026,7 +1085,7 @@
           <article class="threejs-panel benefit" data-anim="zoom-pop" data-anim-group="zoom-pop">
             <header class="threejs-panel-heading">
               <span class="tag g">Benefit</span>
-              <h3>Generate predictable geometry <span class="cite">[47]</span></h3>
+              <h3>Generate predictable geometry <span class="cite">[41]</span></h3>
             </header>
 
             <div class="threejs-benefit-grid">
@@ -1074,10 +1133,10 @@
               </div>
               <div class="threejs-quality-gate" data-anim="zoom-pop">
                 <span aria-hidden="true">✓</span>
-                <div><strong>Mesh validity gate</strong><small>indexed · triangulated · watertight · consistent orientation and scale <span class="cite">[48]</span></small></div>
+                <div><strong>Mesh validity gate</strong><small>indexed · triangulated · watertight · consistent orientation and scale <span class="cite">[42]</span></small></div>
               </div>
               <div class="threejs-export-row" data-anim="zoom-pop">
-                <strong>GLTFExporter <span class="cite">[46]</span></strong><span aria-hidden="true">→</span><strong>GLB</strong><span aria-hidden="true">→</span><strong>Unity</strong>
+                <strong>GLTFExporter <span class="cite">[40]</span></strong><span aria-hidden="true">→</span><strong>GLB</strong><span aria-hidden="true">→</span><strong>Unity</strong>
               </div>
             </div>
 

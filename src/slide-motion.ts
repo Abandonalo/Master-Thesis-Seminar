@@ -92,9 +92,16 @@ export class SlideMotionController {
     }
 
     this.playEntrance(slide, Boolean(sequence));
+    this.restartReplayAnimations(slide);
   }
 
   private teardown(): void {
+    this.activeSlide
+      ?.querySelectorAll<HTMLElement>("[data-replay-animation]")
+      .forEach((element) => {
+        const animationClass = element.dataset.replayAnimation;
+        if (animationClass) element.classList.remove(animationClass);
+      });
     this.activeCleanup?.();
     this.activeCleanup = null;
     this.activeSteps.flatMap((step) => step.items).forEach(({ element }) => {
@@ -105,6 +112,24 @@ export class SlideMotionController {
     this.activeSteps = [];
     this.progressiveStep = 0;
     this.activeSlide = null;
+  }
+
+  /** Restart authored one-shot effects whenever their slide becomes active. */
+  private restartReplayAnimations(slide: HTMLElement): void {
+    slide
+      .querySelectorAll<HTMLElement>("[data-replay-animation]")
+      .forEach((element) => {
+        const animationClass = element.dataset.replayAnimation;
+        if (!animationClass) return;
+
+        element.classList.remove(animationClass);
+        void element.offsetWidth;
+        window.requestAnimationFrame(() => {
+          if (this.activeSlide === slide && this.allowMotion) {
+            element.classList.add(animationClass);
+          }
+        });
+      });
   }
 
   private prepareProgressiveTargets(steps: RevealStep[]): void {
@@ -431,13 +456,24 @@ export class SlideMotionController {
   }
 
   private measurementSequence(slide: HTMLElement): SlideSequence {
-    const evidence = this.elements(slide, ".hypothesis-evidence");
+    if (slide.classList.contains("measurement-workflow-slide")) {
+      return {
+        steps: [
+          this.step(slide, ".evaluation-study-panel"),
+          this.step(slide, ".evaluation-study-source.questionnaire-source"),
+          this.step(slide, ".evaluation-study-source.rating-source"),
+          this.step(slide, ".evaluation-study-source.interview-source"),
+        ],
+      };
+    }
+
+    const phaseOutcomes = this.elements(slide, ".evaluation-phase-outcome");
     return {
       steps: [
-        this.step(slide, ".hypothesis-scorecard"),
-        this.step(slide, ".measurement-shared"),
-        ...evidence.map((item) => this.stepFromElements([item])),
-        this.step(slide, ".condition-measures"),
+        this.step(slide, ".evaluation-phase-panel"),
+        this.step(slide, ".evaluation-source.questionnaire-source"),
+        this.step(slide, ".evaluation-source.log-source"),
+        ...phaseOutcomes.map((item) => this.stepFromElements([item])),
       ],
     };
   }
@@ -486,7 +522,8 @@ export class SlideMotionController {
             revealRailTo(completed.length + index + 1),
           ),
         ),
-        this.step(slide, ".roadmap-focus"),
+        this.stepMany(slide, [".roadmap-focus", ".roadmap-focus .lifting-constraint"]),
+        this.step(slide, ".roadmap-focus .backend-constraint"),
       ],
     };
   }
