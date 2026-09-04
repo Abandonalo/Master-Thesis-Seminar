@@ -195,6 +195,14 @@ export class SlideMotionController {
             });
           });
       }
+
+      slide.querySelectorAll<HTMLElement>("[data-entry-anim]").forEach((element) => {
+        if (targets.some((target) => target.element === element)) return;
+        targets.push({
+          element,
+          animation: this.animationFor(element.dataset.entryAnim),
+        });
+      });
     }
 
     targets.forEach(({ element }) => {

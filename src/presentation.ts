@@ -24,6 +24,7 @@ class SlidePresentation {
   private readonly closingIndex: number;
 
   private currentIndex = -1;
+  private appendixReturnIndex: number | null = null;
   private touchStartX: number | null = null;
   private wheelLocked = false;
 
@@ -245,6 +246,18 @@ class SlidePresentation {
     const target = event.target instanceof Element ? event.target : null;
     if (this.isInteractiveTarget(target)) return;
 
+    const appendixTrigger = target?.closest<HTMLElement>(
+      "[data-appendix-target]",
+    );
+    if (
+      appendixTrigger &&
+      (event.key === "Enter" || event.key === " ") &&
+      this.activateAppendixEntry(appendixTrigger)
+    ) {
+      event.preventDefault();
+      return;
+    }
+
     const nextKeys = ["ArrowRight", "PageDown", " "];
     const previousKeys = ["ArrowLeft", "PageUp"];
 
@@ -267,7 +280,9 @@ class SlidePresentation {
       this.slides[this.currentIndex]?.hasAttribute("data-appendix")
     ) {
       event.preventDefault();
-      this.showSlide(this.closingIndex);
+      const returnIndex = this.appendixReturnIndex ?? this.closingIndex;
+      this.appendixReturnIndex = null;
+      this.showSlide(returnIndex);
     } else if (event.key.toLowerCase() === "f") {
       this.toggleFullscreen();
     }
@@ -277,14 +292,13 @@ class SlidePresentation {
     const target = event.target instanceof Element ? event.target : null;
     if (this.isInteractiveTarget(target)) return;
 
-    const rawDirection = event.clientX < window.innerWidth * 0.25 ? -1 : 1;
-    const isPromptPolicyClick = Boolean(
-      target?.closest(".generation-architecture-slide .policy-cell"),
+    const appendixTrigger = target?.closest<HTMLElement>(
+      "[data-appendix-target]",
     );
-    if (
-      (rawDirection > 0 || isPromptPolicyClick) &&
-      slideMotionController?.advanceActiveSequence()
-    )
+    if (appendixTrigger && this.activateAppendixEntry(appendixTrigger)) return;
+
+    const rawDirection = event.clientX < window.innerWidth * 0.25 ? -1 : 1;
+    if (rawDirection > 0 && slideMotionController?.advanceActiveSequence())
       return;
 
     this.navigateRelative(rawDirection);
@@ -383,12 +397,33 @@ class SlidePresentation {
   private toggleAppendix(): void {
     const activeSlide = this.slides[this.currentIndex];
     if (activeSlide?.hasAttribute("data-appendix")) {
+      this.appendixReturnIndex = null;
       this.showSlide(this.closingIndex);
       return;
     }
 
+    this.appendixReturnIndex = null;
     const firstAppendix = this.appendixSlides[0];
     if (firstAppendix) this.showSlide(this.slides.indexOf(firstAppendix));
+  }
+
+  /** Reveal the current diagram first, then follow its explicit appendix link. */
+  private activateAppendixEntry(trigger: HTMLElement): boolean {
+    const activeSlide = this.slides[this.currentIndex];
+    if (!activeSlide?.contains(trigger)) return false;
+
+    const appendixId = trigger.dataset.appendixTarget;
+    if (!appendixId) return false;
+    if (slideMotionController?.advanceActiveSequence()) return true;
+
+    const appendix = this.appendixSlides.find(
+      (slide) => slide.dataset.appendix === appendixId,
+    );
+    if (!appendix) return false;
+
+    this.appendixReturnIndex = this.currentIndex;
+    this.showSlide(this.slides.indexOf(appendix));
+    return true;
   }
 
   private elementChildren(element: HTMLElement): HTMLElement[] {

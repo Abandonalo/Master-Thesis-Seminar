@@ -278,11 +278,11 @@
               <span>Unity</span>
             </header>
             <div class="generation-tier-cells flow-grid">
-              <article class="generation-arch-cell proxy-cell">
+              <article class="generation-arch-cell proxy-cell" data-anim="fade-up">
                 <h3>Proxy placement</h3>
                 <p>Position<br>volume<br>rotation</p>
               </article>
-              <article class="generation-arch-cell textual-prompt-cell">
+              <article class="generation-arch-cell textual-prompt-cell" data-anim="fade-left">
                 <h3>Textual prompt</h3>
                 <div class="generation-prompt-value">
                   <span>Scene style</span><code>“cute”</code>
@@ -291,12 +291,12 @@
                   <span>Object</span><code>“pink house”</code>
                 </div>
               </article>
-              <article class="generation-arch-cell constraints-cell">
+              <article class="generation-arch-cell constraints-cell" data-anim="fade-left">
                 <h3>Render constraints</h3>
                 <p>Linear depth</p>
                 <p>Depth-derived edge map</p>
               </article>
-              <article class="generation-arch-cell result-cell">
+              <article class="generation-arch-cell result-cell" data-anim="fade-up">
                 <h3>Editable 3D mesh</h3>
                 <p>Ready in the scene</p>
               </article>
@@ -305,13 +305,13 @@
 
           <div class="generation-layer-transfer" aria-hidden="true">
             <div class="generation-layer-transfer-track">
-              <div class="generation-transfer-item down-flow prompt-flow">
+              <div class="generation-transfer-item down-flow prompt-flow" data-anim="fade-down">
                 <span>Text prompt</span><i></i>
               </div>
-              <div class="generation-transfer-item down-flow constraints-flow">
+              <div class="generation-transfer-item down-flow constraints-flow" data-anim="fade-down">
                 <span>Depth + edge</span><i></i>
               </div>
-              <div class="generation-transfer-item up-flow">
+              <div class="generation-transfer-item up-flow" data-anim="fade-up">
                 <span>Fitted mesh</span><i></i>
               </div>
             </div>
@@ -322,24 +322,25 @@
               <span>ComfyUI</span>
             </header>
             <div class="generation-tier-cells flow-grid">
-              <article class="generation-arch-cell policy-cell">
+              <article class="generation-arch-cell policy-cell" data-appendix-target="A1" data-anim="fade-down" role="button" tabindex="0"
+                aria-label="Open Appendix A1: generation engineering">
                 <h3>Prompt policy</h3>
                 <p><strong>Positive</strong> · low-poly 3D model</p>
                 <p><strong>Negative</strong> · scene · occlusion · wrong view</p>
               </article>
-              <article class="generation-arch-cell image-generation-cell">
+              <article class="generation-arch-cell image-generation-cell" data-anim="fade-left">
                 <h3>2D image generation <span class="cite">[18]</span></h3>
                 <p>Depth + edge controlled</p>
               </article>
-              <article class="generation-arch-cell extraction-cell">
+              <article class="generation-arch-cell extraction-cell" data-anim="fade-left">
                 <h3>Object extraction</h3>
                 <p>Isolated object image</p>
               </article>
-              <article class="generation-arch-cell lifting-cell">
+              <article class="generation-arch-cell lifting-cell" data-anim="fade-left">
                 <h3>3D mesh lifting</h3>
                 <p>Image → mesh</p>
               </article>
-              <article class="generation-arch-cell fit-cell">
+              <article class="generation-arch-cell fit-cell" data-anim="fade-left">
                 <h3>Orient + fit</h3>
                 <p>Upright correction</p>
                 <p>Fit to proxy volume</p>
@@ -409,7 +410,7 @@
         <h2 data-anim="blur-in">Internal textual prompt</h2>
 
         <div class="source-image-comparison" data-anim-group="fade-up">
-          <article class="source-option photograph-source">
+          <article class="source-option photograph-source" data-entry-anim="blur-in">
             <img src="photograph.png" alt="Photograph of a house surrounded by lawn and vegetation" draggable="false">
             <div class="source-option-copy">
               <span class="source-option-kicker prompt-kicker">
@@ -477,7 +478,7 @@
 
         </section>
 
-        <aside class="recovery-result" data-anim="zoom-pop" aria-label="Measured tilt after orientation recovery">
+        <aside class="recovery-result" data-anim="fade-up" aria-label="Measured tilt after orientation recovery">
           <div class="recovery-result-heading">
             <span class="recovery-result-title">Measured tilt</span>
             <small>from vertical · before → after correction</small>
@@ -506,13 +507,13 @@
 
         <div class="generation-arch refinement-arch two-layer-arch" data-anim-group="fade-up"
           aria-label="Two-layer local refinement architecture connecting Unity and ComfyUI">
-          <section class="generation-arch-tier unity-tier refinement-unity-tier" data-anim="zoom-pop">
+          <section class="generation-arch-tier unity-tier refinement-unity-tier" data-anim="fade-up">
             <header class="generation-tier-name">
               <span>Unity</span>
             </header>
 
             <div class="generation-tier-cells refinement-unity-cells">
-              <article class="generation-arch-cell refinement-select-cell" data-anim="zoom-pop">
+              <article class="generation-arch-cell refinement-select-cell" data-anim="fade-up">
                 <figure class="refinement-evidence-image selected-evidence">
                   <img src="selected.png" alt="Roof region selected with an oriented bounding box in Unity"
                     draggable="false">
@@ -522,7 +523,7 @@
                 </div>
               </article>
 
-              <article class="generation-arch-cell refinement-capture-cell">
+              <article class="generation-arch-cell refinement-capture-cell" data-anim="fade-left">
                 <div class="refinement-capture-heading">
                   <h3>Orthographic capture × 4</h3>
                 </div>
@@ -553,7 +554,7 @@
                 </div>
               </article>
 
-              <article class="generation-arch-cell refinement-result-cell">
+              <article class="generation-arch-cell refinement-result-cell" data-anim="fade-up">
                 <figure class="refinement-evidence-image result-evidence">
                   <img src="refined.png" alt="Refined roof mesh placed back into the house in Unity" draggable="false">
                 </figure>
@@ -567,32 +568,32 @@
 
           <div class="generation-layer-transfer refinement-layer-transfer" aria-hidden="true">
             <div class="generation-layer-transfer-track refinement-layer-transfer-track">
-              <div class="generation-transfer-item down-flow refinement-capture-flow">
+              <div class="generation-transfer-item down-flow refinement-capture-flow" data-anim="fade-down">
                 <span>4 views + masks</span><i></i>
               </div>
-              <div class="generation-transfer-item up-flow refinement-replacement-flow">
+              <div class="generation-transfer-item up-flow refinement-replacement-flow" data-anim="fade-up">
                 <span>Refined mesh</span><i></i>
               </div>
             </div>
           </div>
 
-          <section class="generation-arch-tier service-tier refinement-service-tier">
+          <section class="generation-arch-tier service-tier refinement-service-tier" data-anim="fade-up">
             <header class="generation-tier-name">
               <span>ComfyUI</span>
             </header>
 
             <div class="generation-tier-cells refinement-service-cells">
-              <article class="generation-arch-cell refinement-inpaint-cell">
+              <article class="generation-arch-cell refinement-inpaint-cell" data-anim="fade-down">
                 <h3>Masked inpaint × 4</h3>
                 <p>Edit Front · Left · Back · Right</p>
                 <p>Shared prompt, checkpoint + seed</p>
               </article>
-              <article class="generation-arch-cell refinement-prepare-cell">
+              <article class="generation-arch-cell refinement-prepare-cell" data-anim="fade-left">
                 <h3>Prepare four inputs</h3>
                 <p>Crop to projected OBB</p>
                 <p>Centre without distortion</p>
               </article>
-              <article class="generation-arch-cell refinement-lift-cell">
+              <article class="generation-arch-cell refinement-lift-cell" data-anim="fade-left">
                 <h3>Hunyuan3D-2mv Fast <span class="cite">[39]</span></h3>
                 <p>Tagged views</p>
               </article>
@@ -1069,7 +1070,7 @@
           </article>
         </div>
 
-        <div class="appendix-model-question" data-anim="zoom-pop">
+        <div class="appendix-model-question" data-anim="fade-left">
           <span>Secondary implementation question</span>
           <strong>Do users prefer rapid iteration or the higher-quality result?</strong>
         </div>
@@ -1082,7 +1083,7 @@
         <p class="threejs-kicker">A detailed implementation path for the hybrid option.</p>
 
         <div class="threejs-rationale">
-          <article class="threejs-panel benefit" data-anim="zoom-pop" data-anim-group="zoom-pop">
+          <article class="threejs-panel benefit" data-anim="fade-left" data-anim-group="fade-left">
             <header class="threejs-panel-heading">
               <span class="tag g">Benefit</span>
               <h3>Generate predictable geometry <span class="cite">[41]</span></h3>
@@ -1131,19 +1132,19 @@
                 <span class="threejs-flow-arrow" aria-hidden="true">→</span>
                 <div class="threejs-flow-node warm">Three.js <small>parametric + rules</small></div>
               </div>
-              <div class="threejs-quality-gate" data-anim="zoom-pop">
+              <div class="threejs-quality-gate" data-anim="fade-right">
                 <span aria-hidden="true">✓</span>
                 <div><strong>Mesh validity gate</strong><small>indexed · triangulated · watertight · consistent orientation and scale <span class="cite">[42]</span></small></div>
               </div>
-              <div class="threejs-export-row" data-anim="zoom-pop">
+              <div class="threejs-export-row" data-anim="fade-right">
                 <strong>GLTFExporter <span class="cite">[40]</span></strong><span aria-hidden="true">→</span><strong>GLB</strong><span aria-hidden="true">→</span><strong>Unity</strong>
               </div>
             </div>
 
             <div class="threejs-feasibility-checks">
-              <span data-anim="zoom-pop"><b>✓</b> glTFast already imports GLB</span>
-              <span data-anim="zoom-pop"><b>✓</b> OBB clip · fit · weld · rollback remain reusable</span>
-              <span data-anim="zoom-pop"><b>+</b> Custom Three.js adapter · fixed Unity orientation · no model/API fee</span>
+              <span data-anim="fade-up"><b>✓</b> glTFast already imports GLB</span>
+              <span data-anim="fade-up"><b>✓</b> OBB clip · fit · weld · rollback remain reusable</span>
+              <span data-anim="fade-up"><b>+</b> Custom Three.js adapter · fixed Unity orientation · no model/API fee</span>
             </div>
           </article>
         </div>

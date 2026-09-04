@@ -1309,6 +1309,15 @@ strong {
   border-top-width: 3px;
 }
 
+.generation-architecture-slide .policy-cell[data-appendix-target] {
+  cursor: zoom-in;
+}
+
+.generation-architecture-slide .policy-cell[data-appendix-target]:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 6px;
+}
+
 .generation-architecture-slide .policy-cell {
   grid-column: 2 / span 2;
   cursor: pointer;
@@ -3530,7 +3539,7 @@ strong {
 .model-choice-slide .appendix-model-comparison {
   display: grid;
   min-height: 0;
-  flex: 1;
+  flex: .8;
   grid-template-columns: minmax(0, 1fr) 70px minmax(0, 1fr);
   align-items: center;
   gap: 22px;
